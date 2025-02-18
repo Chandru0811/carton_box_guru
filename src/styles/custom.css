@@ -4,3 +4,27 @@
   box-sizing: border-box;
   font-family: "Outfit", serif;
 }
+:root {
+  --primary-color: #cd8245;
+  --secondary-color: #edd0b7;
+  --tertiary-color: #f0f0f0;
+  --quaternary-color: #e6e6e6;
+  --light-gray: #f7f7f7;
+  --dark-gray: #636363;
+  --light-blue: #0070c9;
+  --dark-hover: #7e0606;
+  --white: #fff;
+  --black: #000000;
+  --green: #00d46f;
+}
+.User__icon i {
+  font-size: 20px;
+  color: var(--secondary-color);
+  cursor: pointer;
+}
+.title_nav {
+  background: var(--primary-color);
+}
+.title_nav:hover {
+  background: var(--secondary-color) !important;
+}
