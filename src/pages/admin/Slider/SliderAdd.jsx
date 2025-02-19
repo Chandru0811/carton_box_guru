@@ -59,7 +59,6 @@ function SliderAdd() {
         const response = await api.post(`slider`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         if (response.status === 200) {

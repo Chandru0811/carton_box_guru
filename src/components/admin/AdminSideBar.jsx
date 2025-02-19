@@ -3,6 +3,7 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { BiLogOut, BiSolidCategory, BiSolidCategoryAlt } from "react-icons/bi";
+import { TbShoppingCartFilled } from "react-icons/tb";
 import { BsBarChartFill } from "react-icons/bs";
 import headerlogo from "../../assets/images/cb_logo.png";
 import { FaSliders } from "react-icons/fa6";
@@ -86,6 +87,12 @@ function AdminSideBar({ handleLogout }) {
               <NavLink className="nav-link title_nav" to="/dealcategories">
                 <MdCategory />
                 Deal Categories
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link title_nav" to="/products">
+                <TbShoppingCartFilled />
+                Deals
               </NavLink>
             </li>
           </ul>

@@ -13,22 +13,7 @@ function CategoryView() {
   // Fetch category data by id
   const getData = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      // Check if token is present
-      if (!token) {
-        toast.error("Authentication token is missing");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Fetching category data with token:", token);
-
-      const response = await api.get(`categories/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(`categories/${id}`);
 
       console.log("Category data response:", response);
       setData(response.data.data);
@@ -44,30 +29,10 @@ function CategoryView() {
     }
   };
 
-  // Handle activation of the category
   const handleActivate = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-
-      // Check if token is missing
-      if (!token) {
-        toast.error("Authentication token is missing");
-        setLoading(false);
-        return;
-      }
-
-      console.log("Activating category with token:", token);
-
-      const response = await api.post(
-        `category/${id}/approve`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.post(`category/${id}/approve`, {});
 
       if (response.status === 200) {
         getData();

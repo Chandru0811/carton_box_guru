@@ -7,8 +7,10 @@ import Admin from "./layouts/Admin";
 import Auth from "./layouts/Auth";
 
 function App() {
-  const [carton_box_guru_isAdminAuthenticated, setcarton_box_guru_isAdminAuthenticated] =
-    useState(false);
+  const [
+    carton_box_guru_isAdminAuthenticated,
+    setcarton_box_guru_isAdminAuthenticated,
+  ] = useState(false);
   // const [carton_box_guru_isVendorAuthenticated, setcarton_box_guru_isVendorAuthenticated] =
   //   useState(false);
 
@@ -36,6 +38,7 @@ function App() {
       localStorage.removeItem("carton_box_guru_email");
       localStorage.removeItem("carton_box_guru_role");
       localStorage.removeItem("carton_box_guru_mobile");
+      localStorage.removeItem("carton_box_guru_shop_id");
     } catch (e) {
       toast.error("Logout unsuccessful", e?.response?.data?.message);
     }
@@ -51,7 +54,7 @@ function App() {
 
     if (isAdminAuthFromStorage === "true") {
       setcarton_box_guru_isAdminAuthenticated(true);
-    } 
+    }
     // else if (isVendorAuthFromStorage === "true") {
     //   setcarton_box_guru_isVendorAuthenticated(true);
     // }
@@ -71,8 +74,8 @@ function App() {
         <Admin handleLogout={logout} />
       ) : (
         <Auth
-         loginAsAdmin={loginAsAdmin} 
-        // loginAsVendor={loginAsVendor} 
+          loginAsAdmin={loginAsAdmin}
+          // loginAsVendor={loginAsVendor}
         />
       )}
     </div>

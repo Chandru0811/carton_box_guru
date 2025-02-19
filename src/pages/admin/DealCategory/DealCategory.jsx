@@ -12,7 +12,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import api from "../../../config/URL";
 import toast from "react-hot-toast";
 
-function CategoryGroup() {
+function DealCategory() {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -46,8 +46,8 @@ function CategoryGroup() {
         ),
       },
       { accessorKey: "name", header: "Name" },
-      { accessorKey: "order", header: "Order" },
-      { accessorKey: "active", header: "Status" },
+      { accessorKey: "slug", header: "Slug" },
+      { accessorKey: "description", header: "Description" },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -81,7 +81,7 @@ function CategoryGroup() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("categoryGroup");
+      const response = await api.get("dealCategory");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
@@ -100,9 +100,9 @@ function CategoryGroup() {
     <div className="p-2">
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
-          <h6>Category Group</h6>
-          <Link to="/categorygroup/add" className="btn btn-sm">
-            Add Category Group
+          <h6>Deal Category</h6>
+          <Link to="/dealcategories/add" className="btn btn-sm">
+            Add Deal Category
           </Link>
         </div>
       </div>
@@ -126,7 +126,7 @@ function CategoryGroup() {
               enableFullScreenToggle={false}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () =>
-                  navigate(`/categorygroup/view/${row.original.id}`),
+                  navigate(`/dealcategories/view/${row.original.id}`),
                 style: { cursor: "pointer" },
               })}
             />
@@ -138,7 +138,7 @@ function CategoryGroup() {
           onClose={handleMenuClose}
         >
           <MenuItem
-            onClick={() => navigate(`/categorygroup/edit/${selectedId}`)}
+            onClick={() => navigate(`/dealcategories/edit/${selectedId}`)}
           >
             Edit
           </MenuItem>
@@ -151,7 +151,7 @@ function CategoryGroup() {
 
 import PropTypes from "prop-types";
 
-CategoryGroup.propTypes = {
+DealCategory.propTypes = {
   row: PropTypes.shape({
     original: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -159,4 +159,4 @@ CategoryGroup.propTypes = {
   }).isRequired,
 };
 
-export default CategoryGroup;
+export default DealCategory;

@@ -72,7 +72,6 @@ function CategoriesAdd() {
         const response = await api.post(`categories`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
         if (response.status === 200 || response.status === 201) {
@@ -107,14 +106,7 @@ function CategoriesAdd() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-
-        const response = await api.get("categoryGroup", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
+        const response = await api.get("categoryGroup");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -127,8 +119,7 @@ function CategoriesAdd() {
   useEffect(() => {
     const slug = formik.values.name.toLowerCase().replace(/\s+/g, "_");
     formik.setFieldValue("slug", slug);
-  }, [formik, formik.values.name]);
-
+  }, [formik.values.name]);
   const handleFileChange = (event) => {
     const file = event?.target?.files[0];
     if (file) {
@@ -290,63 +281,6 @@ function CategoriesAdd() {
                 )}
               </div>
 
-              {/* <div className="col-md-6 col-12 file-input">
-                <label className="form-label">
-                  Icon<span className="text-danger">*</span>
-                </label>
-                <input
-                  type="file"
-                  accept=".png, .jpg, .jpeg, .svg, .webp"
-                  className={`form-control ${
-                    formik.touched.icon && formik.errors.icon
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  onChange={handleFileChange}
-                />
-                <p style={{ fontSize: "13px" }}>
-                  Note: Maximum file size is 2MB. Allowed: .png, .jpg, .jpeg,
-                  .svg, .webp.
-                </p>
-                {formik.touched.icon && formik.errors.icon && (
-                  <div className="invalid-feedback">{formik.errors.icon}</div>
-                )}
-
-                {showCropper && (
-                  <div className="crop-container">
-                    <Cropper
-                      image={imageSrc}
-                      crop={crop}
-                      zoom={zoom}
-                      aspect={300 / 200}
-                      onCropChange={setCrop}
-                      onZoomChange={setZoom}
-                      onCropComplete={onCropComplete}
-                      cropShape="box"
-                      showGrid={false}
-                    />
-                  </div>
-                )}
-                {showCropper && (
-                  <div className="d-flex justify-content-start mt-3 gap-2">
-                    <button
-                      type="button"
-                      className="btn btn-primary mt-3"
-                      onClick={handleCropSave}
-                    >
-                      Save Cropped Image
-                    </button>
-
-                    <button
-                      type="button"
-                      className="btn btn-secondary mt-3"
-                      onClick={handleCropCancel}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                )}
-              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Icon

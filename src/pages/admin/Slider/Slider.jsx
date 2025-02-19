@@ -80,19 +80,10 @@ function Slider() {
   const getData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Unauthenticated");
-      }
-      const response = await api.get("sliders", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get("sliders");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
-      if (e.message === "Unauthenticated") {
-        navigate("/login");
-      }
     } finally {
       setLoading(false);
     }

@@ -81,19 +81,10 @@ function Categories() {
   const getData = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("Unauthenticated");
-      }
-      const response = await api.get("categories", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await api.get("categories");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
-      if (e.message === "Unauthenticated") {
-        navigate("/login");
-      }
     } finally {
       setLoading(false);
     }

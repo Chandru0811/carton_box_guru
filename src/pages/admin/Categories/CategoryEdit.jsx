@@ -42,7 +42,7 @@ function CategoryEdit() {
     });
 
   const validationSchema = Yup.object({
-    category_group_id: Yup.string().required("*Select a groupId"),
+    category_group_id: Yup.string().required("*Select an groupId"),
     name: Yup.string()
       .max(25, "Name must be 25 characters or less")
       .required("Name is required"),
@@ -77,7 +77,6 @@ function CategoryEdit() {
         const response = await api.post(`categories/update/${id}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
 
@@ -114,20 +113,10 @@ function CategoryEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        console.log("Token:", token);
-        const response = await api.get(`categories/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const { ...rest } = response.data.data;
+        const response = await api.get(`categories/${id}`);
+        const rest = response.data.data;
         formik.setValues(rest);
-        setPreviewImage(`${ImageURL}${response.data.data.icon}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        setPreviewImage(`${ImageURL}${response.data.data.icon}`);
       } catch (error) {
         console.error("Error fetching data ", error);
       }
@@ -140,16 +129,12 @@ function CategoryEdit() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await api.get("categoryGroup", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get("categoryGroup");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      setLoadIndicator(false);
     };
 
     fetchData();
@@ -158,7 +143,7 @@ function CategoryEdit() {
   useEffect(() => {
     const slug = formik.values.name.toLowerCase().replace(/\s+/g, "_");
     formik.setFieldValue("slug", slug);
-  }, [formik, formik.values.name]);
+  }, [formik.values.name]);
 
   const handleFileChange = (event) => {
     const file = event?.target?.files[0];
@@ -339,7 +324,81 @@ function CategoryEdit() {
                       </div>
                     )}
                   </div>
+                  {/* <div className="col-md-6 col-12 mb-3">
+                    <label className="form-label">
+                      Icon<span className="text-danger">*</span>
+                    </label>
+                    <input
+                      type="file"
+                      accept=".png, .jpg, .jpeg, .svg, .webp"
+                      className={`form-control ${
+                        formik.touched.image && formik.errors.image
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      onChange={handleFileChange}
+                      onBlur={formik.handleBlur}
+                    />
+                    <p style={{ fontSize: "13px" }}>
+                      Note: Maximum file size is 2MB. Allowed: .png, .jpg,
+                      .jpeg, .svg, .webp.
+                    </p>
 
+                    {formik.touched.image && formik.errors.image && (
+                      <div className="invalid-feedback">
+                        {formik.errors.image}
+                      </div>
+                    )}
+
+                    {previewImage && (
+                      <div className="my-3">
+                        <img
+                          src={previewImage}
+                          alt="Selected"
+                          style={{ maxWidth: "100px", maxHeight: "100px" }}
+                        />
+                      </div>
+                    )}
+
+                    {showCropper && (
+                      <div
+                        className="position-relative"
+                        style={{ height: 400 }}
+                      >
+                        <Cropper
+                          image={imageSrc}
+                          crop={crop}
+                          zoom={zoom}
+                          aspect={300 / 200}
+                          onCropChange={setCrop}
+                          onZoomChange={setZoom}
+                          onCropComplete={onCropComplete}
+                          cropShape="box"
+                          showGrid={false}
+                        />
+                      </div>
+                    )}
+
+                    {previewImage && showCropper && (
+                      <div className="d-flex justify-content-start mt-3 gap-2">
+                        <button
+                          type="button"
+                          className="btn btn-primary mt-3"
+                          onClick={handleCropSave}
+                        >
+                          Save Cropped Image
+                        </button>
+
+                        <button
+                          type="button"
+                          className="btn btn-secondary mt-3"
+                          onClick={handleCropCancel}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    )}
+                  </div> */}
                   <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Icon

@@ -16,6 +16,14 @@ import Categories from "../pages/admin/Categories/Categories";
 import CategoryAdd from "../pages/admin/Categories/CategoryAdd";
 import CategoryView from "../pages/admin/Categories/CategoryView";
 import CategoryEdit from "../pages/admin/Categories/CategoryEdit";
+import DealCategoryView from "../pages/admin/DealCategory/DealCategoryView";
+import DealCategory from "../pages/admin/DealCategory/DealCategory";
+import DealCategoryAdd from "../pages/admin/DealCategory/DealCategoryAdd";
+import DealCategoryEdit from "../pages/admin/DealCategory/DealCategoryEdit";
+import Products from "../pages/admin/Products/Products";
+import ProductAdd from "../pages/admin/Products/ProductAdd";
+import ProductView from "../pages/admin/Products/ProductView";
+import ProductEdit from "../pages/admin/Products/ProductEdit";
 
 function Admin({ handleLogout }) {
   return (
@@ -65,6 +73,33 @@ function Admin({ handleLogout }) {
                     <Route
                       path="/categories/edit/:id"
                       element={<CategoryEdit />}
+                    />
+
+                    {/* Deal Categories */}
+                    <Route path="/dealcategories" element={<DealCategory />} />
+                    <Route
+                      path="/dealcategories/add"
+                      element={<DealCategoryAdd />}
+                    />
+                    <Route
+                      path="/dealcategories/edit/:id"
+                      element={<DealCategoryEdit />}
+                    />
+                    <Route
+                      path="/dealcategories/view/:id"
+                      element={<DealCategoryView />}
+                    />
+
+                    {/* Products  */}
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/products/add" element={<ProductAdd />} />
+                    <Route
+                      path="/products/view/:id"
+                      element={<ProductView />}
+                    />
+                    <Route
+                      path="/products/edit/:id"
+                      element={<ProductEdit />}
                     />
                   </Routes>
                 </div>

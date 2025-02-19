@@ -63,17 +63,7 @@ function SliderEdit() {
 
       setLoadIndicator(true);
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
-        const response = await api.post(`slider/update/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.post(`slider/update/${id}`, formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/slider");

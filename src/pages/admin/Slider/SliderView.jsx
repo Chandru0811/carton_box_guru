@@ -12,19 +12,7 @@ function SliderView() {
   const getData = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from local storage
-      if (!token) {
-        toast.error("Authentication token is missing");
-        setLoading(false);
-        return;
-      }
-
-      const response = await api.get(`slider/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Add token to request
-        },
-      });
-
+      const response = await api.get(`slider/${id}`);
       setData(response.data.data);
     } catch {
       toast.error("Error Fetching Data");

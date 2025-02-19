@@ -48,12 +48,13 @@ const Login = ({ loginAsAdmin }) => {
           if (userDetails.role === "1") {
             toast.success(response.data.message);
             loginAsAdmin(values);
-            localStorage.setItem("token", response.data.data.token);
-            localStorage.setItem("name", userDetails.name);
-            localStorage.setItem("id", userDetails.id);
-            localStorage.setItem("email", userDetails.email);
-            localStorage.setItem("role", userDetails.role);
-            localStorage.setItem("active", userDetails.active);
+            localStorage.setItem("carton_box_guru_token", response.data.data.token);
+            localStorage.setItem("carton_box_guru_name", userDetails.name);
+            localStorage.setItem("carton_box_guru_id", userDetails.id);
+            localStorage.setItem("carton_box_guru_email", userDetails.email);
+            localStorage.setItem("carton_box_guru_role", userDetails.role);
+            localStorage.setItem("carton_box_guru_active", userDetails.active);
+            localStorage.setItem("carton_box_guru_shop_id", userDetails.shop_id);
             navigate("/");
           } else {
             toast.error("You are not a Vendor");
@@ -72,7 +73,7 @@ const Login = ({ loginAsAdmin }) => {
   return (
     <div
       className="container-fluid m-0 vh-100"
-      style={{ minHeight: "100vh", backgroundColor: "#cd8245" }}
+      style={{ minHeight: "fit-content", backgroundColor: "#cd8245" }}
     >
       <div
         className="d-flex justify-content-center align-items-center pt-5"

@@ -2,26 +2,26 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FiAlertTriangle } from "react-icons/fi";
-import toast from "react-hot-toast";
-import Cropper from "react-easy-crop";
 import api from "../../../config/URL";
-import "../../../styles/admin.css";
 import ImageURL from "../../../config/ImageURL";
 
-function CategoryGroupEdit() {
+import toast from "react-hot-toast";
+import Cropper from "react-easy-crop";
+
+function DealCategoryEdit() {
   const [loadIndicator, setLoadIndicator] = useState(false);
   const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  const [originalFileName, setOriginalFileName] = useState("");
-  const [originalFileType, setOriginalFileType] = useState("");
   const [imageSrc, setImageSrc] = useState(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [originalFileName, setOriginalFileName] = useState("");
+  const [originalFileType, setOriginalFileType] = useState("");
+
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const SUPPORTED_FORMATS = [
     "image/png",
@@ -39,81 +39,73 @@ function CategoryGroupEdit() {
     .test("fileSize", "File size is too large. Max 2MB.", (value) => {
       return !value || (value && value.size <= MAX_FILE_SIZE);
     });
-
   const validationSchema = Yup.object({
     name: Yup.string()
-      .max(85, "Name must be 85 characters or less")
+      .max(25, "Name must be 25 characters or less")
       .required("Name is required"),
-    image: imageValidation,
-    // icon: Yup.mixed().required("*Icon is required"),
-    order: Yup.string().required("*Select an order"),
-    // active: Yup.string().required("*Select an active"),
+    image_path: imageValidation,
     description: Yup.string().max(825, "Maximum 825 characters allowed"),
   });
 
   const formik = useFormik({
     initialValues: {
       name: "",
+      image_path: null,
       slug: "",
-      icon: "",
-      image: null,
-      order: "",
-      active: "",
+      // active: "",
       description: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async (values) => {
+      setLoadIndicator(true);
       const formData = new FormData();
       formData.append("_method", "PUT");
+      formData.append("slug", values.slug);
 
       formData.append("name", values.name);
-      formData.append("slug", values.slug);
-      formData.append("icon", values.icon);
-      formData.append("order", values.order);
-      formData.append("active", values.active);
+      // formData.append("active", values.active);
       formData.append("description", values.description);
-      if (values.image) {
-        formData.append("image", values.image);
+      if (values.image_path) {
+        formData.append("image", values.image_path);
       }
 
-      setLoadIndicator(true);
       try {
-        const response = await api.post(
-          `categoryGroup/update/${id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await api.post(`dealCategory/update/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
         if (response.status === 200) {
           toast.success(response.data.message);
-          navigate("/categorygroup");
-          resetForm();
-          setPreviewImage(null);
+          navigate("/dealcategories");
         }
       } catch (error) {
-        if (error.response && error.response.status === 422) {
-          const errors = error.response.data.error;
-          if (errors) {
-            Object.keys(errors).forEach((key) => {
-              errors[key].forEach((errorMsg) => {
-                toast(errorMsg, {
-                  icon: <FiAlertTriangle className="text-warning" />,
-                });
-              });
-            });
-          }
-        } else {
-          console.error("API Error", error);
-          toast.error("An unexpected error occurred.");
-        }
+        toast.error(error.message);
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const response = await api.get(`dealCategory/${id}`);
+        formik.setValues({
+          name: response.data.data.name || "",
+          // active: response.data.data.active || "",
+          slug: response.data.data.slug || "",
+          description: response.data.data.description || "",
+        });
+        setPreviewImage(`${ImageURL}${response.data.data.image_path}`);
+      } catch (error) {
+        toast.error("Error Fetching Data", error.message);
+      }
+      setLoading(false);
+    };
+    getData();
+  }, [id]);
 
   useEffect(() => {
     const slug = formik.values.name
@@ -124,40 +116,14 @@ function CategoryGroupEdit() {
     formik.setFieldValue("slug", slug);
   }, [formik.values.name]);
 
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get(`categoryGroup/${id}`);
-        const categoryGroupData = response.data.data;
-        formik.setValues({
-          name: categoryGroupData.name || "",
-          slug: categoryGroupData.slug || "",
-          icon: categoryGroupData.icon || null,
-          order: categoryGroupData.order || "",
-          active: categoryGroupData.active || "",
-          description: categoryGroupData.description || "",
-          image: null,
-        });
-        setPreviewImage(`${ImageURL}${categoryGroupData.image_path}`);
-      } catch (error) {
-        const errorMessage =
-          error.response?.data?.message || "Error Fetching Data";
-        toast.error(errorMessage);
-      }
-      setLoading(false);
-    };
-    getData();
-  }, [id]);
-
   const handleFileChange = (event) => {
     const file = event?.target?.files[0];
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
-        formik.setFieldError(`image`, "File size is too large. Max 2MB.");
+        formik.setFieldError(`image_path`, "File size is too large. Max 2MB.");
         return;
       }
-      formik.setFieldError(`image`, "");
+      formik.setFieldError(`image_path`, "");
 
       // Read file as data URL for cropping
       const reader = new FileReader();
@@ -187,8 +153,8 @@ function CategoryGroupEdit() {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
-        const targetWidth = 50;
-        const targetHeight = 50;
+        const targetWidth = 300;
+        const targetHeight = 200;
         canvas.width = targetWidth;
         canvas.height = targetHeight;
 
@@ -227,11 +193,11 @@ function CategoryGroupEdit() {
         type: originalFileType,
       });
 
-      formik.setFieldValue("image", file);
+      formik.setFieldValue("image_path", file);
+
       // Create a URL for the cropped image and set it as the preview image
       const croppedImageURL = URL.createObjectURL(croppedImageBlob);
       setPreviewImage(croppedImageURL);
-
       setShowCropper(false);
     } catch (error) {
       console.error("Error cropping the image:", error);
@@ -241,7 +207,7 @@ function CategoryGroupEdit() {
   const handleCropCancel = () => {
     setShowCropper(false);
     setImageSrc(null);
-    formik.setFieldValue("image", "");
+    formik.setFieldValue("image_path", "");
     document.querySelector("input[type='file']").value = "";
   };
 
@@ -253,7 +219,7 @@ function CategoryGroupEdit() {
     };
   }, [previewImage]);
   return (
-    <div className="container-fluid minHeight m-0">
+    <div className="container-fluid minHeight m-">
       <form onSubmit={formik.handleSubmit}>
         {loading ? (
           <div className="loader-container">
@@ -264,20 +230,20 @@ function CategoryGroupEdit() {
             </div>
           </div>
         ) : (
-          <>
+          <div className="">
             <div className="card shadow border-0 mb-2 top-header">
               <div className="container-fluid py-4">
                 <div className="row align-items-center">
                   <div className="col">
                     <div className="d-flex align-items-center gap-4">
                       <h1 className="h4 ls-tight headingColor">
-                        Edit Category Group
+                        Edit Deal Category
                       </h1>
                     </div>
                   </div>
                   <div className="col-auto">
                     <div className="hstack gap-2 justify-content-end">
-                      <Link to="/categorygroup">
+                      <Link to="/dealcategories">
                         <button type="button" className="btn btn-light btn-sm">
                           Back
                         </button>
@@ -287,11 +253,13 @@ function CategoryGroupEdit() {
                 </div>
               </div>
             </div>
-
             <div
               className="card shadow border-0 my-2"
               style={{ minHeight: "80vh" }}
             >
+              <div className="row mt-3 me-2">
+                <div className="col-12 text-end"></div>
+              </div>
               <div className="container mb-5">
                 <div className="row py-4">
                   <div className="col-md-6 col-12 mb-3">
@@ -316,63 +284,16 @@ function CategoryGroupEdit() {
 
                   <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
-                      Order<span className="text-danger">*</span>
-                    </label>
-                    <select
-                      className={`form-select ${
-                        formik.touched.order && formik.errors.order
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("order")}
-                    >
-                      <option value="">Select an order</option>
-                      {Array.from({ length: 15 }, (_, i) => (
-                        <option key={i + 1} value={i + 1}>
-                          {i + 1}
-                        </option>
-                      ))}
-                    </select>
-                    {formik.touched.order && formik.errors.order && (
-                      <div className="invalid-feedback">
-                        {formik.errors.order}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="col-md-6 col-12 mb-3">
-                    <label className="form-label">
-                      Icon<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={`form-control ${
-                        formik.touched.icon && formik.errors.icon
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      {...formik.getFieldProps("icon")}
-                    />
-                    {formik.touched.icon && formik.errors.icon && (
-                      <div className="invalid-feedback">
-                        {formik.errors.icon}
-                      </div>
-                    )}
-                  </div>
-                  <div className="col-md-6 col-12 mb-3">
-                    <label className="form-label">
-                      Image
-                      <span className="text-danger">*</span>
+                      Image<span className="text-danger">*</span>
                     </label>
                     <input
                       type="file"
-                      accept=".png,.jpeg,.jpg,.svg,.webp"
+                      // accept=".png, .jpg, .jpeg, .svg, .webp"
                       className={`form-control ${
-                        formik.touched.image && formik.errors.image
+                        formik.touched.image_path && formik.errors.image_path
                           ? "is-invalid"
                           : ""
                       }`}
-                      name="image"
                       onChange={handleFileChange}
                       onBlur={formik.handleBlur}
                     />
@@ -380,9 +301,10 @@ function CategoryGroupEdit() {
                       Note: Maximum file size is 2MB. Allowed: .png, .jpg,
                       .jpeg, .svg, .webp.
                     </p>
-                    {formik.touched.image && formik.errors.image && (
+
+                    {formik.touched.image_path && formik.errors.image_path && (
                       <div className="invalid-feedback">
-                        {formik.errors.image}
+                        {formik.errors.image_path}
                       </div>
                     )}
 
@@ -395,23 +317,27 @@ function CategoryGroupEdit() {
                         />
                       </div>
                     )}
-                    {showCropper && imageSrc && (
-                      <div className="crop-container">
+
+                    {showCropper && (
+                      <div
+                        className="position-relative"
+                        style={{ height: 400 }}
+                      >
                         <Cropper
                           image={imageSrc}
                           crop={crop}
                           zoom={zoom}
-                          aspect={50 / 50}
+                          aspect={300 / 200}
                           onCropChange={setCrop}
                           onZoomChange={setZoom}
                           onCropComplete={onCropComplete}
-                          cropShape="rect"
+                          cropShape="box"
                           showGrid={false}
                         />
                       </div>
                     )}
 
-                    {showCropper && (
+                    {previewImage && showCropper && (
                       <div className="d-flex justify-content-start mt-3 gap-2">
                         <button
                           type="button"
@@ -420,6 +346,7 @@ function CategoryGroupEdit() {
                         >
                           Save Cropped Image
                         </button>
+
                         <button
                           type="button"
                           className="btn btn-secondary mt-3"
@@ -430,6 +357,7 @@ function CategoryGroupEdit() {
                       </div>
                     )}
                   </div>
+
                   <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">Description</label>
                     <textarea
@@ -447,10 +375,10 @@ function CategoryGroupEdit() {
                   </div>
                 </div>
               </div>
-              <div className="hstack p-2">
+              <div className="hstack p-2 mt-5 mb-3">
                 <button
                   type="submit"
-                  className="btn btn-sm btn-button"
+                  className="btn btn-sm btn-button mt-5"
                   disabled={loadIndicator}
                 >
                   {loadIndicator && (
@@ -463,11 +391,11 @@ function CategoryGroupEdit() {
                 </button>
               </div>
             </div>
-          </>
+          </div>
         )}
       </form>
     </div>
   );
 }
 
-export default CategoryGroupEdit;
+export default DealCategoryEdit;
