@@ -101,7 +101,7 @@ function CategoryGroup() {
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
           <h6>Category Group</h6>
-          <Link to="/categorygroup/add" className="btn btn-sm">
+          <Link to="/categorygroup/add" className="btn btn-sm add_btn">
             Add Category Group
           </Link>
         </div>

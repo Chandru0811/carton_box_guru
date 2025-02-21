@@ -7,6 +7,7 @@ const api = axios.create({
 api.interceptors.request.use(
   function (config) {
     const token = localStorage.getItem("carton_box_guru_token");
+    
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;

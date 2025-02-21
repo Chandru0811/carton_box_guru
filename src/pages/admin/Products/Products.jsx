@@ -102,7 +102,7 @@ function Products() {
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
           <h6>Deals</h6>
-          <Link to="/products/add" className="btn btn-sm">
+          <Link to="/products/add" className="btn btn-sm add_btn">
             Add Deal
           </Link>
         </div>

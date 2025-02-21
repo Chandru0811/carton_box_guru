@@ -28,3 +28,13 @@
 .title_nav:hover {
   background: var(--secondary-color) !important;
 }
+.add_btn {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+.add_btn:hover {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}

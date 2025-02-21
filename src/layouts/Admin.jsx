@@ -24,6 +24,10 @@ import Products from "../pages/admin/Products/Products";
 import ProductAdd from "../pages/admin/Products/ProductAdd";
 import ProductView from "../pages/admin/Products/ProductView";
 import ProductEdit from "../pages/admin/Products/ProductEdit";
+import Countries from "../pages/admin/Country/Countries";
+import CountryAdd from "../pages/admin/Country/CountryAdd";
+import CountryEdit from "../pages/admin/Country/CountryEdit";
+import CountryView from "../pages/admin/Country/CountryView";
 
 function Admin({ handleLogout }) {
   return (
@@ -101,6 +105,12 @@ function Admin({ handleLogout }) {
                       path="/products/edit/:id"
                       element={<ProductEdit />}
                     />
+
+                    {/* countries  */}
+                    <Route path="/countries" element={<Countries />} />
+                    <Route path="/country/add" element={<CountryAdd />} />
+                    <Route path="/country/edit/:id" element={<CountryEdit />} />
+                    <Route path="/country/view/:id" element={<CountryView />} />
                   </Routes>
                 </div>
                 <AdminFooter />

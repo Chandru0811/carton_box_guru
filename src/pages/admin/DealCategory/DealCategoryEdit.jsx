@@ -41,7 +41,7 @@ function DealCategoryEdit() {
     });
   const validationSchema = Yup.object({
     name: Yup.string()
-      .max(25, "Name must be 25 characters or less")
+      .max(45, "Name must be 45 characters or less")
       .required("Name is required"),
     image_path: imageValidation,
     description: Yup.string().max(825, "Maximum 825 characters allowed"),

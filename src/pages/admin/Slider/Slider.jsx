@@ -100,7 +100,7 @@ function Slider() {
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
           <h6>Slider</h6>
-          <Link to="/slider/add" className="btn btn-sm">
+          <Link to="/slider/add" className="btn btn-sm add_btn">
             Add Slider
           </Link>
         </div>

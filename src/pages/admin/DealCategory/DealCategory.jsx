@@ -101,7 +101,7 @@ function DealCategory() {
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
           <h6>Deal Category</h6>
-          <Link to="/dealcategories/add" className="btn btn-sm">
+          <Link to="/dealcategories/add" className="btn btn-sm add_btn">
             Add Deal Category
           </Link>
         </div>

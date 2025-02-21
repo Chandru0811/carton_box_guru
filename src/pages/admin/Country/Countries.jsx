@@ -12,7 +12,7 @@ import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import api from "../../../config/URL";
 import toast from "react-hot-toast";
 
-function Categories() {
+function Countries() {
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -25,9 +25,6 @@ function Categories() {
         accessorFn: (row, index) => index + 1,
         header: "S.NO",
         size: 40,
-        cell: ({ cell }) => (
-          <span style={{ textAlign: "center" }}>{cell.getValue()}</span>
-        ),
       },
       {
         accessorKey: "id",
@@ -45,9 +42,10 @@ function Categories() {
           </IconButton>
         ),
       },
-      { accessorKey: "name", header: "Name" },
-      { accessorKey: "description", header: "Description" },
-      { accessorKey: "active", header: "Status" },
+      { accessorKey: "country_name", header: "Country Name" },
+      { accessorKey: "email", header: "Email" },
+      { accessorKey: "phone", header: "Phone" },
+      { accessorKey: "address", header: "Address" },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -56,7 +54,8 @@ function Categories() {
       {
         accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+        Cell: ({ cell }) =>
+          cell.getValue() ? cell.getValue().substring(0, 10) : "",
       },
     ],
     []
@@ -81,7 +80,7 @@ function Categories() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("categories");
+      const response = await api.get("country");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
@@ -100,23 +99,23 @@ function Categories() {
     <div className="p-2">
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
-          <h6>Categories</h6>
-          <Link to="/categories/add" className="btn btn-sm add_btn">
-            Add Categories
+          <h6>Country</h6>
+          <Link to="/country/add" className="btn btn-sm add_btn">
+            Add Country
           </Link>
         </div>
       </div>
       <div className="card border-0 p-3" style={{ minHeight: "90vh" }}>
-        <ThemeProvider theme={theme}>
-          {loading ? (
-            <div className="loader-container">
-              <div className="loader">
-                <svg viewBox="0 0 80 80">
-                  <circle cx="40" cy="40" r="32"></circle>
-                </svg>
-              </div>
+        {loading ? (
+          <div className="loader-container">
+            <div className="loader">
+              <svg viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="32"></circle>
+              </svg>
             </div>
-          ) : (
+          </div>
+        ) : (
+          <ThemeProvider theme={theme}>
             <MaterialReactTable
               columns={columns}
               data={data}
@@ -125,18 +124,18 @@ function Categories() {
               enableDensityToggle={false}
               enableFullScreenToggle={false}
               muiTableBodyRowProps={({ row }) => ({
-                onClick: () => navigate(`/categories/view/${row.original.id}`),
+                onClick: () => navigate(`/country/view/${row.original.id}`),
                 style: { cursor: "pointer" },
               })}
             />
-          )}
-        </ThemeProvider>
+          </ThemeProvider>
+        )}
         <Menu
           anchorEl={menuAnchor}
           open={Boolean(menuAnchor)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={() => navigate(`/categories/edit/${selectedId}`)}>
+          <MenuItem onClick={() => navigate(`/country/edit/${selectedId}`)}>
             Edit
           </MenuItem>
           <MenuItem>Delete</MenuItem>
@@ -148,7 +147,7 @@ function Categories() {
 
 import PropTypes from "prop-types";
 
-Categories.propTypes = {
+Countries.propTypes = {
   row: PropTypes.shape({
     original: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -156,4 +155,4 @@ Categories.propTypes = {
   }).isRequired,
 };
 
-export default Categories;
+export default Countries;

@@ -39,6 +39,7 @@ function App() {
       localStorage.removeItem("carton_box_guru_role");
       localStorage.removeItem("carton_box_guru_mobile");
       localStorage.removeItem("carton_box_guru_shop_id");
+      localStorage.removeItem("carton_box_guru_active");
     } catch (e) {
       toast.error("Logout unsuccessful", e?.response?.data?.message);
     }

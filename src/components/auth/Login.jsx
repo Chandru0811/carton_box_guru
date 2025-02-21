@@ -48,13 +48,19 @@ const Login = ({ loginAsAdmin }) => {
           if (userDetails.role === "1") {
             toast.success(response.data.message);
             loginAsAdmin(values);
-            localStorage.setItem("carton_box_guru_token", response.data.data.token);
+            localStorage.setItem(
+              "carton_box_guru_token",
+              response.data.data.token
+            );
             localStorage.setItem("carton_box_guru_name", userDetails.name);
             localStorage.setItem("carton_box_guru_id", userDetails.id);
             localStorage.setItem("carton_box_guru_email", userDetails.email);
             localStorage.setItem("carton_box_guru_role", userDetails.role);
             localStorage.setItem("carton_box_guru_active", userDetails.active);
-            localStorage.setItem("carton_box_guru_shop_id", userDetails.shop_id);
+            localStorage.setItem(
+              "carton_box_guru_shop_id",
+              userDetails.shop_id
+            );
             navigate("/");
           } else {
             toast.error("You are not a Vendor");

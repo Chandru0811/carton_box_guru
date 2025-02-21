@@ -39,7 +39,7 @@ function ProductAdd() {
     shop_id: Yup.string().required("Category Group is required"),
     category_id: Yup.string().required("Category is required"),
     name: Yup.string()
-      .max(25, "Name must be 25 characters or less")
+      .max(45, "Name must be 45 characters or less")
       .required("Name is required"),
     deal_type: Yup.string().required("Deal Type is required"),
     delivery_days: Yup.string()
@@ -202,7 +202,7 @@ function ProductAdd() {
           },
         });
         console.log("Response", response);
-        if (response.status === 201) {
+        if (response.status === 200) {
           toast.success(response.data.message);
           navigate(`/products`);
         } else {

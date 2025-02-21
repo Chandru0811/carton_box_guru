@@ -37,10 +37,9 @@ function DealCategoryAdd() {
     });
   const validationSchema = Yup.object({
     name: Yup.string()
-      .max(25, "Name must be 25 characters or less")
-      .required("Name is required"), // active: Yup.string().required("*Select an active"),
-    image: imageValidation, // Ensure image is required
-    // description: Yup.string().max(825, "Maximum 825 characters allowed"),
+      .max(45, "Name must be 45 characters or less")
+      .required("Name is required"),
+    image: imageValidation,
   });
 
   const formik = useFormik({
