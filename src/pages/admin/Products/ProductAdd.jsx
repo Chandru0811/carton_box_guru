@@ -19,6 +19,7 @@ function ProductAdd() {
   const [originalFileName, setOriginalFileName] = useState([]);
   const MAX_FILE_SIZE = 2 * 1024 * 1024;
   const [allCategorgroup, setAllCategorgroup] = useState([]);
+  const [allCountry, setAllCountry] = useState([]);
   const [category, setCategory] = useState([]);
   const shopId = localStorage.getItem("carton_box_guru_shop_id");
   const [couponCode, setCouponCode] = useState("CBG");
@@ -36,16 +37,16 @@ function ProductAdd() {
   };
 
   const validationSchema = Yup.object({
-    shop_id: Yup.string().required("Category Group is required"),
-    category_id: Yup.string().required("Category is required"),
+    shop_id: Yup.string().required("Category Group is required*"),
+    category_id: Yup.string().required("Category is required*"),
     name: Yup.string()
       .max(45, "Name must be 45 characters or less")
-      .required("Name is required"),
-    deal_type: Yup.string().required("Deal Type is required"),
+      .required("Name is required*"),
+    deal_type: Yup.string().required("Deal Type is required*"),
     delivery_days: Yup.string()
       .test(
         "delivery-days-required",
-        "Delivery Days is required",
+        "Delivery Days is required*",
         function (value) {
           const { deal_type } = this.parent;
           if (deal_type === "1") {
@@ -56,7 +57,7 @@ function ProductAdd() {
       )
       .notRequired(),
     original_price: Yup.string()
-      .test("Original Price is required", function (value) {
+      .test("Original Price is required*", function (value) {
         const { deal_type } = this.parent;
         if (deal_type === "1") {
           return !!value;
@@ -65,7 +66,7 @@ function ProductAdd() {
       })
       .notRequired(),
     discounted_price: Yup.string()
-      .test("Discounted Price is required", function (value) {
+      .test("Discounted Price is required*", function (value) {
         const { deal_type } = this.parent;
         if (deal_type === "1") {
           return !!value;
@@ -74,7 +75,7 @@ function ProductAdd() {
       })
       .notRequired(),
     discounted_percentage: Yup.string()
-      .test("Discounted Percentage is required", function (value) {
+      .test("Discounted Percentage is required*", function (value) {
         const { deal_type } = this.parent;
         if (deal_type === "1") {
           return !!value;
@@ -82,9 +83,9 @@ function ProductAdd() {
         return true;
       })
       .notRequired(),
-    start_date: Yup.string().required("Start Date is required"),
+    start_date: Yup.string().required("Start Date is required*"),
     end_date: Yup.date()
-      .required("End date is required")
+      .required("End date is required*")
       .test(
         "endDateValidation",
         "End date must be the same or after the start date",
@@ -95,11 +96,11 @@ function ProductAdd() {
         }
       ),
     description: Yup.string()
-      .required("Description is required")
+      .required("Description is required*")
       .min(10, "Description must be at least 10 characters long")
       .max(250, "Description cannot be more than 250 characters long"),
     specifications: Yup.string()
-      .notRequired("Specification is required")
+      .notRequired("Specification is required*")
       .min(10, "Specification must be at least 10 characters long")
       .max(250, "Specification cannot be more than 250 characters long"),
     brand: Yup.string()
@@ -113,21 +114,41 @@ function ProductAdd() {
           .notRequired(),
       })
     ),
+    pack: Yup.string().required("Pack is required*"),
+    box_length: Yup.number()
+      .typeError("Box length must be a number")
+      .positive("Box length must be greater than zero")
+      .required("Box length is required*"),
+    box_width: Yup.number()
+      .typeError("Box width must be a number")
+      .positive("Box width must be greater than zero")
+      .required("Box width is required*"),
+    box_height: Yup.number()
+      .typeError("Box height must be a number")
+      .positive("Box height must be greater than zero")
+      .required("Box height is required*"),
+    stock_quantity: Yup.number()
+      .typeError("Stock quantity must be a number")
+      .integer("Stock quantity must be an integer")
+      .positive("Stock quantity must be greater than zero")
+      .required("Stock quantity is required*"),
+    country_id: Yup.string().required("Country is required*"),
+    unit: Yup.string().required("Unit is required*"),
     coupon_code: Yup.string()
       .matches(
         /^[A-Za-z]+[0-9]{0,4}$/,
         "Coupon code must end with up to 4 digits"
       )
-      .required("Coupon code is required"),
+      .required("Coupon code is required*"),
     ...mediaFields.reduce((acc, field, index) => {
       if (field.selectedType === "image") {
         acc[`image-${index}`] = Yup.mixed().required(
-          `Image ${index + 1} is required`
+          `Image ${index + 1} is required*`
         );
       } else if (field.selectedType === "video") {
         acc[`video-${index}`] = Yup.string()
           .url(`Youtube ${index + 1} must be a valid URL`)
-          .required(`Youtube ${index + 1} is required`);
+          .required(`Youtube ${index + 1} is required*`);
       }
       return acc;
     }, {}),
@@ -152,6 +173,13 @@ function ProductAdd() {
       specifications: "",
       variants: [{ id: Date.now(), value: "" }],
       delivery_days: "",
+      pack: "",
+      box_length: "",
+      box_width: "",
+      box_height: "",
+      stock_quantity: "",
+      country_id: "",
+      unit: "",
       ...mediaFields.reduce((acc, _, index) => {
         acc[`image-${index}`] = null;
         acc[`video-${index}`] = "";
@@ -182,7 +210,13 @@ function ProductAdd() {
       formData.append("sku", values.sku);
       formData.append("description", values.description);
       formData.append("delivery_days", values.delivery_days);
-      formData.append("specifications", values.specifications);
+      formData.append("pack", values.pack);
+      formData.append("box_length", values.box_length);
+      formData.append("box_width", values.box_width);
+      formData.append("box_height", values.box_height);
+      formData.append("stock_quantity", values.stock_quantity);
+      formData.append("country_id", values.country_id);
+      formData.append("unit", values.unit);
       mediaFields.forEach((field, index) => {
         if (field.selectedType === "image" && values[`image-${index}`]) {
           formData.append(`media[${index + 1}]`, values[`image-${index}`]);
@@ -251,6 +285,13 @@ function ProductAdd() {
         sku: true,
         description: true,
         specifications: true,
+        pack: true,
+        box_length: true,
+        box_width: true,
+        box_height: true,
+        stock_quantity: true,
+        country_id: true,
+        unit: true,
         ...mediaFields.reduce((acc, _, index) => {
           acc[`image-${index}`] = true;
           acc[`video-${index}`] = true;
@@ -326,6 +367,19 @@ function ProductAdd() {
         const response = await api.get(`categorygroups`);
 
         setAllCategorgroup(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
       } catch (error) {
         toast.error("Error Fetching Data ", error);
       }
@@ -908,6 +962,160 @@ function ProductAdd() {
                 <div className="invalid-feedback">{formik.errors.sku}</div>
               )}
             </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">Pack</label>
+              <input
+                type="text"
+                className={`form-control form-control-sm ${
+                  formik.touched.pack && formik.errors.pack ? "is-invalid" : ""
+                }`}
+                {...formik.getFieldProps("pack")}
+              />
+              {formik.touched.pack && formik.errors.pack && (
+                <div className="invalid-feedback">{formik.errors.pack}</div>
+              )}
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">Stock In Quantity</label>
+              <input
+                type="text"
+                className={`form-control form-control-sm ${
+                  formik.touched.stock_quantity && formik.errors.stock_quantity
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("stock_quantity")}
+              />
+              {formik.touched.stock_quantity &&
+                formik.errors.stock_quantity && (
+                  <div className="invalid-feedback">
+                    {formik.errors.stock_quantity}
+                  </div>
+                )}
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                Country<span className="text-danger">*</span>
+              </label>
+              <select
+                className={`form-select form-select-sm ${
+                  formik.touched.country_id && formik.errors.country_id
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("country_id")}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  handleCategorygroupChange(e); // Ensure this function is defined
+                }}
+              >
+                <option value="">Select a Country</option>
+                {allCountry &&
+                  allCountry.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.country_name}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.country_id && formik.errors.country_id && (
+                <div className="invalid-feedback">
+                  {formik.errors.country_id}
+                </div>
+              )}
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                LWH<span className="text-danger">*</span>
+              </label>
+              <div className="input-group input-group-sm mb-1">
+                <span className="input-group-text">Length</span>
+                <input
+                  type="number"
+                  className={`form-control ${
+                    formik.touched.box_length && formik.errors.box_length
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  placeholder="Length"
+                  aria-label="Length"
+                  {...formik.getFieldProps("box_length")}
+                  min="0"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                />
+                <span className="input-group-text">Width</span>
+                <input
+                  type="number"
+                  className={`form-control ${
+                    formik.touched.box_width && formik.errors.box_width
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  placeholder="Width"
+                  aria-label="Width"
+                  {...formik.getFieldProps("box_width")}
+                  min="0"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                />
+                <span className="input-group-text">Height</span>
+                <input
+                  type="number"
+                  className={`form-control ${
+                    formik.touched.box_height && formik.errors.box_height
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  placeholder="Height"
+                  aria-label="Height"
+                  {...formik.getFieldProps("box_height")}
+                  min="0"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                />
+              </div>
+
+              {/* Validation Errors */}
+              <div className="d-flex">
+                {formik.touched.box_length && formik.errors.box_length && (
+                  <div className="invalid-feedback d-block">
+                    {formik.errors.box_length}
+                  </div>
+                )}
+                {formik.touched.box_width && formik.errors.box_width && (
+                  <div className="invalid-feedback d-block">
+                    {formik.errors.box_width}
+                  </div>
+                )}
+                {formik.touched.box_height && formik.errors.box_height && (
+                  <div className="invalid-feedback d-block">
+                    {formik.errors.box_height}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-md-6 col-12 mb-5">
+              <label className="form-label">
+                Unit<span className="text-danger">*</span>
+              </label>
+              <select
+                type="text"
+                className={`form-select form-select-sm ${
+                  formik.touched.unit && formik.errors.unit ? "is-invalid" : ""
+                }`}
+                {...formik.getFieldProps("unit")}
+              >
+                <option value="">Select a Unit</option>
+                <option value="m">Meters(m)</option>
+                <option value="cm">Centimeters(cm)</option>
+                <option value="in">Inches(in)</option>
+                <option value="ft">Feet(ft)</option>
+              </select>
+              {formik.touched.unit && formik.errors.unit && (
+                <div className="invalid-feedback">{formik.errors.unit}</div>
+              )}
+            </div>
+
             <>
               {mediaFields.map((field, index) => (
                 <div key={index} className="row">

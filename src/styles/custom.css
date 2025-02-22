@@ -38,3 +38,19 @@
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
 }
+/* input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+}
+input:-webkit-autofill:focus-within {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+} */

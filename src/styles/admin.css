@@ -464,3 +464,19 @@
   border-radius: 50%;
   background-color: var(--admin-primary-color);
 }
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+}
+input:-webkit-autofill:focus-within {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: black;
+}

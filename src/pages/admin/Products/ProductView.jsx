@@ -67,7 +67,7 @@ function ProductView() {
             <div className="d-flex justify-content-between align-items-center">
               <h1 className="h4 ls-tight">View Deals</h1>
               <div>
-                <Link to={`/product/edit/${id}`}>
+                <Link to={`/products/edit/${id}`}>
                   <button type="button" className="btn btn-light btn-sm me-2">
                     <span>Edit</span>
                   </button>
@@ -112,16 +112,6 @@ function ProductView() {
                 </span>
               </div>
               <div className="row mt-5 p-3">
-                {/* <div className="col-md-6 col-12">
-      <div className="row mb-3">
-        <div className="col-6 d-flex justify-content-start align-items-center">
-          <p className="text-sm">Category Group</b>
-        </div>
-        <div className="col-6">
-          <p className="text-muted text-sm">: {data.category_group}</p>
-        </div>
-      </div>
-    </div> */}
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
@@ -167,7 +157,6 @@ function ProductView() {
                     </div>
                   </div>
                 </div>
-
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
@@ -350,6 +339,68 @@ function ProductView() {
                   </div>
                 </div>
               </div> */}
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Pack</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data?.pack}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Length</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data?.box_length}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Width</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data?.box_width}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Height</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data?.box_height}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Stock In Quantity</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">
+                        : {data?.stock_quantity}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6 col-12">
+                  <div className="row mb-3">
+                    <div className="col-6 d-flex justify-content-start align-items-center">
+                      <p className="text-sm">Unit</p>
+                    </div>
+                    <div className="col-6">
+                      <p className="text-muted text-sm">: {data?.unit}</p>
+                    </div>
+                  </div>
+                </div>
                 <div className="col-12">
                   <div className="row mb-3">
                     <div className="col-3 d-flex justify-content-start align-items-center">
