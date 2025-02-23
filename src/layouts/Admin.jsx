@@ -33,7 +33,7 @@ function Admin({ handleLogout }) {
   return (
     <div>
       <div>
-        <BrowserRouter>
+        <BrowserRouter basename="/cartonBoxAdmin">
           <div className="d-flex flex-column flex-lg-row bg-surface-secondary ">
             <AdminSideBar handleLogout={handleLogout} />
 

@@ -1,6 +1,7 @@
 {
   "name": "carton_box_guru",
   "private": true,
+  "homepage": "/cartonBoxAdmin",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
