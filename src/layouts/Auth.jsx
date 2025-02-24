@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 function Auth({ loginAsAdmin }) {
   return (
     <div>
-      <BrowserRouter>
+      <BrowserRouter basename="/cartonBoxAdmin">
         <Routes>
           <Route path="/" element={<Login loginAsAdmin={loginAsAdmin} />} />
           <Route path="*" element={<Login loginAsAdmin={loginAsAdmin} />} />
