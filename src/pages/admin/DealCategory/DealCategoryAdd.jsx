@@ -17,6 +17,7 @@ function DealCategoryAdd() {
   const [showCropper, setShowCropper] = useState(false);
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
+  const [allCountry, setAllCountry] = useState([]);
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const SUPPORTED_FORMATS = [
@@ -40,6 +41,9 @@ function DealCategoryAdd() {
       .max(45, "Name must be 45 characters or less")
       .required("Name is required"),
     image: imageValidation,
+    slug: Yup.string().required("Slug is required"),
+    description: Yup.string().max(825, "Maximum 825 characters allowed"),
+    country_id: Yup.string().required("Country is required"),
   });
 
   const formik = useFormik({
@@ -49,10 +53,11 @@ function DealCategoryAdd() {
       image: null,
       // active: "",
       description: "",
+      country_id: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values, { resetForm }) => {
-      console.log("Category Group Data:", values);
+    onSubmit: async (values) => {
+      console.log("Form Data:", values);
 
       const formData = new FormData();
       formData.append("name", values.name);
@@ -60,24 +65,23 @@ function DealCategoryAdd() {
       formData.append("image", values.image);
       // formData.append("active", values.active);
       formData.append("description", values.description);
+      formData.append("country_id", values.country_id);
 
       setLoadIndicator(true);
-
       try {
         const response = await api.post(`dealCategory`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
           toast.success(response.data.message);
           navigate("/dealcategories");
-          resetForm();
-        } else {
+        } else if (response.status === 422) {
           toast.error(response.data.message);
         }
       } catch (error) {
-        if (error.response && error.response.status === 422) {
+        if (error.response.status === 422) {
           const errors = error.response.data.errors;
           if (errors) {
             Object.keys(errors).forEach((key) => {
@@ -89,14 +93,28 @@ function DealCategoryAdd() {
             });
           }
         } else {
-          console.error("API Error", error);
-          toast.error("An unexpected error occurred.");
+          toast.error(
+            error.response.data.message || "An unexpected error occurred."
+          );
         }
       } finally {
         setLoadIndicator(false);
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const slug = formik.values.name.toLowerCase().replace(/\s+/g, "_");
@@ -302,6 +320,35 @@ function DealCategoryAdd() {
                     >
                       Cancel
                     </button>
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Country<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select form-select-sm ${
+                    formik.touched.country_id && formik.errors.country_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("country_id")}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                  }}
+                >
+                  <option value="">Select a Country</option>
+                  {allCountry &&
+                    allCountry.map((country) => (
+                      <option key={country.id} value={country.id}>
+                        {country.country_name}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.country_id && formik.errors.country_id && (
+                  <div className="invalid-feedback">
+                    {formik.errors.country_id}
                   </div>
                 )}
               </div>

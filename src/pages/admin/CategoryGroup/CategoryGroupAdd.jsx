@@ -17,6 +17,7 @@ function CategoryGroupAdd() {
   const [showCropper, setShowCropper] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
+  const [allCountry, setAllCountry] = useState([]);
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
 
@@ -46,6 +47,7 @@ function CategoryGroupAdd() {
     // active: Yup.string().required("*Select an active"),
     description: Yup.string().max(825, "Maximum 825 characters allowed"),
     icon: Yup.string().required("*Icon is required"),
+    country_id: Yup.string().required("*Select a country"),
   });
 
   const formik = useFormik({
@@ -56,6 +58,7 @@ function CategoryGroupAdd() {
       image: null,
       order: "",
       description: "",
+      country_id: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
@@ -68,6 +71,7 @@ function CategoryGroupAdd() {
       formData.append("image", values.image);
       formData.append("order", values.order);
       formData.append("description", values.description);
+      formData.append("country_id", values.country_id);
 
       setLoadIndicator(true);
 
@@ -110,13 +114,34 @@ function CategoryGroupAdd() {
   });
 
   useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
     const slug = formik.values.name
       .toLowerCase()
       .trim()
       .replace(/\s+/g, "_")
-      .replace(/[^\w\-]+/g, "");
+      .replace(/[^\w]+/g, "");
     formik.setFieldValue("slug", slug);
   }, [formik.values.name]);
+
+  useEffect(() => {
+    return () => {
+      if (previewImage && previewImage.startsWith("blob:")) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   // Handle canceling the cropper
   const handleFileChange = (event) => {
@@ -419,6 +444,35 @@ function CategoryGroupAdd() {
                     >
                       Cancel
                     </button>
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Country<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select form-select-sm ${
+                    formik.touched.country_id && formik.errors.country_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("country_id")}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                  }}
+                >
+                  <option value="">Select a Country</option>
+                  {allCountry &&
+                    allCountry.map((country) => (
+                      <option key={country.id} value={country.id}>
+                        {country.country_name}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.country_id && formik.errors.country_id && (
+                  <div className="invalid-feedback">
+                    {formik.errors.country_id}
                   </div>
                 )}
               </div>

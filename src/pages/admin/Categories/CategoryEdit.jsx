@@ -22,6 +22,7 @@ function CategoryEdit() {
   const [previewImage, setPreviewImage] = useState(null);
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
+  const [allCountry, setAllCountry] = useState([]);
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const SUPPORTED_FORMATS = [
@@ -48,6 +49,7 @@ function CategoryEdit() {
       .required("Name is required"),
     icon: imageValidation,
     description: Yup.string().max(250, "Maximum 250 characters allowed"),
+    country_id: Yup.string().required("Country is required"),
   });
 
   const formik = useFormik({
@@ -58,6 +60,7 @@ function CategoryEdit() {
       name: "",
       slug: "",
       icon: null,
+      country_id: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -68,6 +71,8 @@ function CategoryEdit() {
       formData.append("description", values.description);
       formData.append("name", values.name);
       formData.append("slug", values.slug);
+      formData.append("country_id", values.country_id);
+
       if (values.icon) {
         formData.append("icon", values.icon);
       }
@@ -83,6 +88,7 @@ function CategoryEdit() {
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/categories");
+          setPreviewImage(null);
         } else {
           toast.error(response.data.message);
         }
@@ -115,8 +121,20 @@ function CategoryEdit() {
       try {
         const response = await api.get(`categories/${id}`);
         const rest = response.data.data;
-        formik.setValues(rest);
-        setPreviewImage(`${ImageURL}${response.data.data.icon}`);
+
+        formik.setValues({
+          category_group_id: rest.category_group_id || "",
+          active: rest.active || "",
+          description: rest.description || "",
+          name: rest.name || "",
+          slug: rest.slug || "",
+          country_id: rest.country_id || "",
+          icon: null,
+        });
+
+        if (rest.icon) {
+          setPreviewImage(`${ImageURL}${rest.icon}`);
+        }
       } catch (error) {
         console.error("Error fetching data ", error);
       }
@@ -125,6 +143,19 @@ function CategoryEdit() {
 
     getData();
   }, [id]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -324,81 +355,6 @@ function CategoryEdit() {
                       </div>
                     )}
                   </div>
-                  {/* <div className="col-md-6 col-12 mb-3">
-                    <label className="form-label">
-                      Icon<span className="text-danger">*</span>
-                    </label>
-                    <input
-                      type="file"
-                      accept=".png, .jpg, .jpeg, .svg, .webp"
-                      className={`form-control ${
-                        formik.touched.image && formik.errors.image
-                          ? "is-invalid"
-                          : ""
-                      }`}
-                      onChange={handleFileChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    <p style={{ fontSize: "13px" }}>
-                      Note: Maximum file size is 2MB. Allowed: .png, .jpg,
-                      .jpeg, .svg, .webp.
-                    </p>
-
-                    {formik.touched.image && formik.errors.image && (
-                      <div className="invalid-feedback">
-                        {formik.errors.image}
-                      </div>
-                    )}
-
-                    {previewImage && (
-                      <div className="my-3">
-                        <img
-                          src={previewImage}
-                          alt="Selected"
-                          style={{ maxWidth: "100px", maxHeight: "100px" }}
-                        />
-                      </div>
-                    )}
-
-                    {showCropper && (
-                      <div
-                        className="position-relative"
-                        style={{ height: 400 }}
-                      >
-                        <Cropper
-                          image={imageSrc}
-                          crop={crop}
-                          zoom={zoom}
-                          aspect={300 / 200}
-                          onCropChange={setCrop}
-                          onZoomChange={setZoom}
-                          onCropComplete={onCropComplete}
-                          cropShape="box"
-                          showGrid={false}
-                        />
-                      </div>
-                    )}
-
-                    {previewImage && showCropper && (
-                      <div className="d-flex justify-content-start mt-3 gap-2">
-                        <button
-                          type="button"
-                          className="btn btn-primary mt-3"
-                          onClick={handleCropSave}
-                        >
-                          Save Cropped Image
-                        </button>
-
-                        <button
-                          type="button"
-                          className="btn btn-secondary mt-3"
-                          onClick={handleCropCancel}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    )}
-                  </div> */}
                   <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Icon
@@ -467,6 +423,35 @@ function CategoryEdit() {
                         >
                           Cancel
                         </button>
+                      </div>
+                    )}
+                  </div>
+                  <div className="col-md-6 col-12 mb-3">
+                    <label className="form-label">
+                      Country<span className="text-danger">*</span>
+                    </label>
+                    <select
+                      className={`form-select form-select-sm ${
+                        formik.touched.country_id && formik.errors.country_id
+                          ? "is-invalid"
+                          : ""
+                      }`}
+                      {...formik.getFieldProps("country_id")}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                      }}
+                    >
+                      <option value="">Select a Country</option>
+                      {allCountry &&
+                        allCountry.map((country) => (
+                          <option key={country.id} value={country.id}>
+                            {country.country_name}
+                          </option>
+                        ))}
+                    </select>
+                    {formik.touched.country_id && formik.errors.country_id && (
+                      <div className="invalid-feedback">
+                        {formik.errors.country_id}
                       </div>
                     )}
                   </div>

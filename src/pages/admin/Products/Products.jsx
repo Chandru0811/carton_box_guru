@@ -140,7 +140,13 @@ function Products() {
           <MenuItem onClick={() => navigate(`/products/edit/${selectedId}`)}>
             Edit
           </MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem>
+            <AdminDelete
+              path={`product/${selectedId}/delete`}
+              onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </div>
@@ -148,6 +154,7 @@ function Products() {
 }
 
 import PropTypes from "prop-types";
+import AdminDelete from "../../../components/admin/AdminDelete";
 
 Products.propTypes = {
   row: PropTypes.shape({

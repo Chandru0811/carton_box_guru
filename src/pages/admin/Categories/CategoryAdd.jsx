@@ -16,6 +16,7 @@ function CategoriesAdd() {
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [showCropper, setShowCropper] = useState(false);
   const navigate = useNavigate();
+  const [allCountry, setAllCountry] = useState([]);
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -45,6 +46,7 @@ function CategoriesAdd() {
       .required("Name is required"),
     icon: imageValidation,
     description: Yup.string().max(250, "Maximum 250 characters allowed"),
+    country_id: Yup.string().required("Country is required"),
   });
 
   const formik = useFormik({
@@ -55,6 +57,7 @@ function CategoriesAdd() {
       name: "",
       slug: "",
       icon: null,
+      country_id: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -66,6 +69,7 @@ function CategoriesAdd() {
       formData.append("name", values.name);
       formData.append("slug", values.slug);
       formData.append("icon", values.icon);
+      formData.append("country_id", values.country_id);
 
       setLoadIndicator(true);
       try {
@@ -102,6 +106,19 @@ function CategoriesAdd() {
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -338,6 +355,35 @@ function CategoriesAdd() {
                     >
                       Cancel
                     </button>
+                  </div>
+                )}
+              </div>
+              <div className="col-md-6 col-12 mb-3">
+                <label className="form-label">
+                  Country<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select form-select-sm ${
+                    formik.touched.country_id && formik.errors.country_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("country_id")}
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                  }}
+                >
+                  <option value="">Select a Country</option>
+                  {allCountry &&
+                    allCountry.map((country) => (
+                      <option key={country.id} value={country.id}>
+                        {country.country_name}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.country_id && formik.errors.country_id && (
+                  <div className="invalid-feedback">
+                    {formik.errors.country_id}
                   </div>
                 )}
               </div>

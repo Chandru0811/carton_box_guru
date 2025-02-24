@@ -21,6 +21,7 @@ function SliderEdit() {
   const [loading, setLoading] = useState(false);
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
+  const [allCountry, setAllCountry] = useState([]);
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const SUPPORTED_FORMATS = [
@@ -43,12 +44,14 @@ function SliderEdit() {
   const validationSchema = Yup.object({
     order: Yup.string().required("*Select an Order"),
     image: imageValidation,
+    country_id: Yup.string().required("*Select an Country"),
   });
 
   const formik = useFormik({
     initialValues: {
       order: "",
       image: null,
+      country_id: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -56,6 +59,7 @@ function SliderEdit() {
       const formData = new FormData();
       formData.append("_method", "PUT");
       formData.append("order", values.order);
+      formData.append("country_id", values.country_id);
 
       if (values.image) {
         formData.append("image", values.image);
@@ -81,18 +85,22 @@ function SliderEdit() {
 
   useEffect(() => {
     const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found");
-        }
-
-        const response = await api.get(`slider/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await api.get(`slider/${id}`);
         const sliderData = response.data.data;
 
         formik.setValues({
@@ -340,6 +348,35 @@ function SliderEdit() {
                   {formik.touched.order && formik.errors.order && (
                     <div className="invalid-feedback">
                       {formik.errors.order}
+                    </div>
+                  )}
+                </div>
+                <div className="col-md-6 col-12 mb-3">
+                  <label className="form-label">
+                    Country<span className="text-danger">*</span>
+                  </label>
+                  <select
+                    className={`form-select form-select-sm ${
+                      formik.touched.country_id && formik.errors.country_id
+                        ? "is-invalid"
+                        : ""
+                    }`}
+                    {...formik.getFieldProps("country_id")}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                    }}
+                  >
+                    <option value="">Select a Country</option>
+                    {allCountry &&
+                      allCountry.map((country) => (
+                        <option key={country.id} value={country.id}>
+                          {country.country_name}
+                        </option>
+                      ))}
+                  </select>
+                  {formik.touched.country_id && formik.errors.country_id && (
+                    <div className="invalid-feedback">
+                      {formik.errors.country_id}
                     </div>
                   )}
                 </div>

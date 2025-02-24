@@ -47,7 +47,17 @@ function Categories() {
       },
       { accessorKey: "name", header: "Name" },
       { accessorKey: "description", header: "Description" },
-      { accessorKey: "active", header: "Status" },
+      {
+        accessorKey: "active",
+        enableHiding: false,
+        header: "Status",
+        Cell: ({ row }) =>
+          row.original.active === 1 ? (
+            <span className="badge cb_badges_status1 fw-light">Active</span>
+          ) : row.original.active === 0 ? (
+            <span className="badge cb_badges_status2  fw-light">In Active</span>
+          ) : null,
+      },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -139,7 +149,13 @@ function Categories() {
           <MenuItem onClick={() => navigate(`/categories/edit/${selectedId}`)}>
             Edit
           </MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem>
+            <AdminDelete
+              path={`categories/${selectedId}`}
+              onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </div>
@@ -147,11 +163,13 @@ function Categories() {
 }
 
 import PropTypes from "prop-types";
+import AdminDelete from "../../../components/admin/AdminDelete";
 
 Categories.propTypes = {
   row: PropTypes.shape({
     original: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }).isRequired,
   }).isRequired,
 };

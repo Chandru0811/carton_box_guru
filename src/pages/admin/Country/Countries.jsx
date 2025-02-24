@@ -138,7 +138,13 @@ function Countries() {
           <MenuItem onClick={() => navigate(`/country/edit/${selectedId}`)}>
             Edit
           </MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem>
+            <AdminDelete
+              path={`country/${selectedId}`}
+              onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </div>
@@ -146,6 +152,7 @@ function Countries() {
 }
 
 import PropTypes from "prop-types";
+import AdminDelete from "../../../components/admin/AdminDelete";
 
 Countries.propTypes = {
   row: PropTypes.shape({

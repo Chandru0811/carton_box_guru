@@ -7,9 +7,9 @@
 
 :root {
   --admin-primary-color: #cd8245;
-  --admin-secondary-color: #7f3bdd;
+  --admin-secondary-color: #edd0b7;
   --admin-text-color: #fff;
-  --admin-border-color: #5c04d8;
+  --admin-border-color: #edd0b7;
 }
 
 .card {
@@ -337,7 +337,6 @@
 
 .btn-button {
   color: white;
-  background-color: #007bff;
 }
 
 .hstack {

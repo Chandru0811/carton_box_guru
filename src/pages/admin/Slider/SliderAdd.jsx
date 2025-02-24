@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -18,6 +18,7 @@ function SliderAdd() {
   const [originalFileName, setOriginalFileName] = useState("");
   const [originalFileType, setOriginalFileType] = useState("");
   const navigate = useNavigate();
+  const [allCountry, setAllCountry] = useState([]);
 
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const SUPPORTED_FORMATS = [
@@ -40,18 +41,21 @@ function SliderAdd() {
   const validationSchema = Yup.object({
     order: Yup.string().required("*Select an Order"),
     image: imageValidation,
+    country_id: Yup.string().required("*Select a Country"),
   });
 
   const formik = useFormik({
     initialValues: {
       order: "",
       image: null,
+      country_id: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
       const formData = new FormData();
       formData.append("order", values.order);
       formData.append("image", values.image);
+      formData.append("country_id", values.country_id);
 
       setLoadIndicator(true);
 
@@ -94,6 +98,19 @@ function SliderAdd() {
       }
     },
   });
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`country`);
+
+        setAllCountry(response.data.data);
+      } catch (error) {
+        toast.error("Error Fetching Data ", error);
+      }
+    };
+    getData();
+  }, []);
 
   const handleFileChange = (event) => {
     const file = event?.target?.files[0];
@@ -287,6 +304,35 @@ function SliderAdd() {
               </select>
               {formik.touched.order && formik.errors.order && (
                 <div className="invalid-feedback">{formik.errors.order}</div>
+              )}
+            </div>
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                Country<span className="text-danger">*</span>
+              </label>
+              <select
+                className={`form-select form-select-sm ${
+                  formik.touched.country_id && formik.errors.country_id
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("country_id")}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                }}
+              >
+                <option value="">Select a Country</option>
+                {allCountry &&
+                  allCountry.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.country_name}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.country_id && formik.errors.country_id && (
+                <div className="invalid-feedback">
+                  {formik.errors.country_id}
+                </div>
               )}
             </div>
           </div>

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { MoreVert as MoreVertIcon } from "@mui/icons-material";
 import api from "../../../config/URL";
+import ImageURL from "../../../config/ImageURL";
 import toast from "react-hot-toast";
 
 function Slider() {
@@ -45,7 +46,22 @@ function Slider() {
           </IconButton>
         ),
       },
-      { accessorKey: "image", header: "Image" },
+      {
+        accessorKey: "image_path",
+        header: "Image",
+        Cell: ({ row }) => (
+          <img
+            src={`${ImageURL}${row.original.image_path}`}
+            alt="Thumbnail"
+            style={{
+              width: 100,
+              height: 50,
+              objectFit: "cover",
+              borderRadius: 5,
+            }}
+          />
+        ),
+      },
       { accessorKey: "order", header: "Order" },
       {
         accessorKey: "created_at",
@@ -81,7 +97,8 @@ function Slider() {
     try {
       setLoading(true);
       const response = await api.get("sliders");
-      setData(response.data.data);
+      const sliderData = response.data.data;
+      setData(sliderData);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
     } finally {
@@ -138,7 +155,13 @@ function Slider() {
           <MenuItem onClick={() => navigate(`/slider/edit/${selectedId}`)}>
             Edit
           </MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem>
+            <AdminDelete
+              path={`slider/delete/${selectedId}`}
+              onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </div>
@@ -146,11 +169,13 @@ function Slider() {
 }
 
 import PropTypes from "prop-types";
+import AdminDelete from "../../../components/admin/AdminDelete";
 
 Slider.propTypes = {
   row: PropTypes.shape({
     original: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      image_path: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
 };

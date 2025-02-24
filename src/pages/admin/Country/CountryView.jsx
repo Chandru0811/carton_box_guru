@@ -30,7 +30,7 @@ function CountryView() {
         <div className="row p-3">
           <div className="d-flex justify-content-between align-items-center w-100">
             <h3 className="mb-0 ls-tight">View Country</h3>
-            <Link to="/categorygroup">
+            <Link to="/countries">
               <button type="button" className="btn btn-light btn-sm me-2">
                 <span>Back</span>
               </button>

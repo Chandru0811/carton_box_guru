@@ -38,6 +38,11 @@
   color: var(--primary-color);
   border: 1px solid var(--primary-color);
 }
+.cb_badges_status1 {
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 2px 4px;
+}
 /* input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px white inset;
   box-shadow: 0 0 0 30px white inset;
