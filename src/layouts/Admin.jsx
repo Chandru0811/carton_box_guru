@@ -28,6 +28,8 @@ import Countries from "../pages/admin/Country/Countries";
 import CountryAdd from "../pages/admin/Country/CountryAdd";
 import CountryEdit from "../pages/admin/Country/CountryEdit";
 import CountryView from "../pages/admin/Country/CountryView";
+import Orders from "../pages/admin/Orders/Orders";
+import OrderView from "../pages/admin/Orders/OrderView";
 
 function Admin({ handleLogout }) {
   return (
@@ -111,6 +113,13 @@ function Admin({ handleLogout }) {
                     <Route path="/country/add" element={<CountryAdd />} />
                     <Route path="/country/edit/:id" element={<CountryEdit />} />
                     <Route path="/country/view/:id" element={<CountryView />} />
+
+                    {/* Orders */}
+                    <Route path="/orders" element={<Orders />} />
+                    <Route
+                      path="/order/:order_id/:product_id"
+                      element={<OrderView />}
+                    />
                   </Routes>
                 </div>
                 <AdminFooter />

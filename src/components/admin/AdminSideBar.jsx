@@ -6,7 +6,7 @@ import { BiLogOut, BiSolidCategory, BiSolidCategoryAlt } from "react-icons/bi";
 import { TbShoppingCartFilled, TbWorld } from "react-icons/tb";
 import { BsBarChartFill } from "react-icons/bs";
 import headerlogo from "../../assets/images/cb_logo.png";
-import { FaSliders } from "react-icons/fa6";
+import { FaBoxOpen, FaSliders } from "react-icons/fa6";
 import { MdCategory } from "react-icons/md";
 
 function AdminSideBar({ handleLogout }) {
@@ -99,6 +99,12 @@ function AdminSideBar({ handleLogout }) {
               <NavLink className="nav-link title_nav" to="/countries">
                 <TbWorld />
                 Countries
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link title_nav" to="/orders">
+                <FaBoxOpen />
+                Oders
               </NavLink>
             </li>
           </ul>
