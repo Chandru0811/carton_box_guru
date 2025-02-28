@@ -66,6 +66,12 @@ function AdminSideBar({ handleLogout }) {
               </NavLink>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link title_nav" to="/countries">
+                <TbWorld />
+                Countries
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link title_nav" to="/slider">
                 <FaSliders />
                 Slider
@@ -93,12 +99,6 @@ function AdminSideBar({ handleLogout }) {
               <NavLink className="nav-link title_nav" to="/products">
                 <TbShoppingCartFilled />
                 Deals
-              </NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link title_nav" to="/countries">
-                <TbWorld />
-                Countries
               </NavLink>
             </li>
             <li className="nav-item">

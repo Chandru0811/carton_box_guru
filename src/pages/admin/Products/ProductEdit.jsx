@@ -97,11 +97,11 @@ function ProductEdit() {
     description: Yup.string()
       .required("Description is required")
       .min(10, "Description must be at least 10 characters long")
-      .max(250, "Description cannot be more than 250 characters long"),
+      .max(350, "Description cannot be more than 350 characters long"),
     specifications: Yup.string()
       .notRequired("Specification is required")
       .min(10, "Specification must be at least 10 characters long")
-      .max(250, "Specification cannot be more than 250 characters long"),
+      .max(350, "Specification cannot be more than 350 characters long"),
     brand: Yup.string()
       .notRequired()
       .max(250, "Brand cannot be more than 250 characters long"),

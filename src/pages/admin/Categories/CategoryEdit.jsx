@@ -45,10 +45,10 @@ function CategoryEdit() {
   const validationSchema = Yup.object({
     category_group_id: Yup.string().required("*Select an groupId"),
     name: Yup.string()
-      .max(25, "Name must be 25 characters or less")
+      .max(30, "Name must be 30 characters or less")
       .required("Name is required"),
     icon: imageValidation,
-    description: Yup.string().max(250, "Maximum 250 characters allowed"),
+    description: Yup.string().max(300, "Maximum 300 characters allowed"),
     country_id: Yup.string().required("Country is required"),
   });
 
