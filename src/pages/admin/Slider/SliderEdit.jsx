@@ -106,7 +106,8 @@ function SliderEdit() {
         formik.setValues({
           order: sliderData.order || "",
           image: null,
-        });
+          country_id: sliderData.country_id || "",
+        });        
         setPreviewImage(`${ImageURL}${sliderData.image_path}`);
       } catch (error) {
         const errorMessage =

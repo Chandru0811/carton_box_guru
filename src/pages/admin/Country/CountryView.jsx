@@ -14,6 +14,7 @@ function CountryView() {
     try {
       const response = await api.get(`country/${id}`);
       setData(response.data.data);
+      // console.log( "responseData",response.data.data);
     } catch {
       toast.error("Error Fetching Data");
     }
@@ -68,7 +69,11 @@ function CountryView() {
                   </div>
                   <div className="col-6">
                     <img
-                      src={`${ImageURL}${data.flag}`}
+                      src={
+                        data.flag
+                          ? `${ImageURL}${data.flag}`
+                          : "/default-flag.png"
+                      }
                       alt="Country Flag"
                       style={{ maxWidth: "100px", maxHeight: "100px" }}
                     />

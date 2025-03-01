@@ -72,7 +72,7 @@ function ProductView() {
                     <span>Edit</span>
                   </button>
                 </Link>
-                <Link to="/product">
+                <Link to="/products">
                   <button type="button" className="btn btn-light btn-sm">
                     <span>Back</span>
                   </button>

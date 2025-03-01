@@ -46,17 +46,29 @@ function Products() {
         ),
       },
       { accessorKey: "name", header: "Title" },
-      { accessorKey: "original_price", header: "Original Price" },
-      { accessorKey: "discounted_price", header: "Discount Price" },
-      { accessorKey: "description", header: "Description" },
+      { accessorKey: "original_price", header: "Original Price",Cell: ({ cell }) => {
+        const value = parseFloat(cell.getValue());
+        return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
+      },},
+      { accessorKey: "discounted_price", header: "Discount Price" ,Cell: ({ cell }) => {
+        const value = parseFloat(cell.getValue());
+        return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
+      },},
+      { accessorKey: "description", header: "Description" , Cell: ({ cell }) => (
+        <div className="truncate-text" title={cell.getValue()}>
+          {cell.getValue()}
+        </div>
+      ),},
       {
         accessorKey: "created_at",
         header: "Created At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },
     ],
@@ -121,10 +133,16 @@ function Products() {
             <MaterialReactTable
               columns={columns}
               data={data}
-              enableColumnActions={false}
+              enableColumnActions={true}
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  created_at: false,
+                  updated_at: false
+                },
+              }}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () => navigate(`/products/view/${row.original.id}`),
                 style: { cursor: "pointer" },

@@ -46,7 +46,15 @@ function Categories() {
         ),
       },
       { accessorKey: "name", header: "Name" },
-      { accessorKey: "description", header: "Description" },
+      {
+        accessorKey: "description",
+        header: "Description",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
+      },      
       {
         accessorKey: "active",
         enableHiding: false,
@@ -61,11 +69,13 @@ function Categories() {
       {
         accessorKey: "created_at",
         header: "Created At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },
     ],
@@ -130,10 +140,16 @@ function Categories() {
             <MaterialReactTable
               columns={columns}
               data={data}
-              enableColumnActions={false}
+              enableColumnActions={true}
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  created_at: false,
+                  updated_at: false
+                },
+              }}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () => navigate(`/categories/view/${row.original.id}`),
                 style: { cursor: "pointer" },

@@ -23,19 +23,37 @@ function Orders() {
         accessorFn: (row) => row.order.customer.name,
         header: "Customer Name",
       },
-      { accessorKey: "unit_price", header: "Total" },
-      { accessorKey: "item_description", header: "Proudct Name" },
+      {
+        accessorKey: "unit_price",
+        header: "Total",
+        Cell: ({ cell }) => {
+          const value = parseFloat(cell.getValue());
+          return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
+        },
+      },      
+      { accessorKey: "item_description", header: "Proudct Name" ,Cell: ({ cell }) => (
+        <div className="truncate-text" title={cell.getValue()}>
+          {cell.getValue()}
+        </div>
+      ),},
       {
         accessorFn: (row) => row.shop.legal_name,
         header: "Shop Name",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
       },
       {
         accessorKey: "created_at",
+        enableHiding: true,
         header: "Created At",
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
+        enableHiding: true,
         header: "Updated At",
         Cell: ({ cell }) =>
           cell.getValue() ? cell.getValue().substring(0, 10) : "",
@@ -97,10 +115,16 @@ function Orders() {
             <MaterialReactTable
               columns={columns}
               data={data}
-              enableColumnActions={false}
+              enableColumnActions={true}
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  created_at: false,
+                  updated_at: false
+                },
+              }}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () =>
                   navigate(

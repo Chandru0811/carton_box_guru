@@ -59,3 +59,13 @@ input:-webkit-autofill:focus-within {
   box-shadow: 0 0 0 30px white inset;
   -webkit-text-fill-color: black;
 } */
+
+.truncate-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  min-width: 230px;
+}

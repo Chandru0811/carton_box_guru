@@ -119,17 +119,6 @@ const Login = ({ loginAsAdmin }) => {
 
             <div className="d-flex justify-content-between align-items-center py-2">
               <Form.Label>Password</Form.Label>
-              <Link
-                to="/forgot"
-                className="ml-auto"
-                style={{
-                  fontSize: "0.9em",
-                  textDecoration: "none",
-                  color: "#cd8245",
-                }}
-              >
-                Forgot Password?
-              </Link>
             </div>
             <Form.Group controlId="formPassword" className="mb-3">
               <div style={{ position: "relative" }}>
@@ -175,19 +164,6 @@ const Login = ({ loginAsAdmin }) => {
               )}
               Login
             </Button>
-
-            <div className="text-center mt-4">
-              <p className="mb-3">or</p>
-              <Link to="/register">
-                <Button
-                  variant="light"
-                  className="border shadow-none"
-                  style={{ width: "100%" }}
-                >
-                  Register
-                </Button>
-              </Link>
-            </div>
           </Form>
         </div>
       </div>

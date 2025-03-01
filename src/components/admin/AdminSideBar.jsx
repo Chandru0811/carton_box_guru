@@ -104,7 +104,7 @@ function AdminSideBar({ handleLogout }) {
             <li className="nav-item">
               <NavLink className="nav-link title_nav" to="/orders">
                 <FaBoxOpen />
-                Oders
+                Orders
               </NavLink>
             </li>
           </ul>

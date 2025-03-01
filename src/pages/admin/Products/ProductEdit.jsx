@@ -82,18 +82,6 @@ function ProductEdit() {
         return true;
       })
       .notRequired(),
-    start_date: Yup.string().required("Start Date is required"),
-    end_date: Yup.date()
-      .required("End date is required")
-      .test(
-        "endDateValidation",
-        "End date must be the same or after the start date",
-        function (value) {
-          const { start_date } = this.parent;
-          if (!start_date || !value) return true;
-          return new Date(value) >= new Date(start_date);
-        }
-      ),
     description: Yup.string()
       .required("Description is required")
       .min(10, "Description must be at least 10 characters long")
@@ -105,7 +93,9 @@ function ProductEdit() {
     brand: Yup.string()
       .notRequired()
       .max(250, "Brand cannot be more than 250 characters long"),
-    pack: Yup.string().required("Pack is required*"),
+    pack: Yup.string()
+      .matches(/^[0-9]+$/, "Only numbers are allowed*")
+      .required("Pack is required*"),
     box_length: Yup.number()
       .typeError("Box length must be a number")
       .positive("Box length must be greater than zero")
@@ -195,7 +185,7 @@ function ProductEdit() {
       original_price: "",
       discounted_price: "",
       discounted_percentage: "",
-      start_date: getCurrentDate(),
+      start_date: "",
       end_date: "",
       coupon_code: couponCode,
       image: null,
@@ -1033,45 +1023,6 @@ function ProductEdit() {
                 </div>
               )}
               <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  Start Date <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="date"
-                  className={`form-control form-control-sm ${
-                    formik.touched.start_date && formik.errors.start_date
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("start_date")}
-                />
-                {formik.touched.start_date && formik.errors.start_date && (
-                  <div className="invalid-feedback">
-                    {formik.errors.start_date}
-                  </div>
-                )}
-              </div>
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">
-                  End Date <span className="text-danger">*</span>
-                </label>
-                <input
-                  type="date"
-                  className={`form-control form-control-sm ${
-                    formik?.touched?.end_date && formik.errors.end_date
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("end_date")}
-                />
-                {formik.touched.end_date && formik.errors.end_date && (
-                  <div className="invalid-feedback">
-                    {formik.errors.end_date}
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">SKU</label>
                 <input
                   type="text"
@@ -1092,6 +1043,10 @@ function ProductEdit() {
                     formik.touched.sku && formik.errors.sku ? "is-invalid" : ""
                   }`}
                   {...formik.getFieldProps("sku")}
+                  onInput={(event) => {
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    formik.setFieldValue("sku", event.target.value);
+                  }}
                 />
                 {formik.touched.sku && formik.errors.sku && (
                   <div className="invalid-feedback">{formik.errors.sku}</div>
@@ -1107,6 +1062,10 @@ function ProductEdit() {
                       : ""
                   }`}
                   {...formik.getFieldProps("pack")}
+                  onInput={(event) => {
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    formik.setFieldValue("pack", event.target.value);
+                  }}
                 />
                 {formik.touched.pack && formik.errors.pack && (
                   <div className="invalid-feedback">{formik.errors.pack}</div>
@@ -1123,6 +1082,10 @@ function ProductEdit() {
                       : ""
                   }`}
                   {...formik.getFieldProps("stock_quantity")}
+                  onInput={(event) => {
+                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    formik.setFieldValue("stock_quantity", event.target.value);
+                  }}
                 />
                 {formik.touched.stock_quantity &&
                   formik.errors.stock_quantity && (
@@ -1548,7 +1511,7 @@ function ProductEdit() {
                   </button>
                 </div>
               )}
-              <div className="col-md-6 col-12 mt-5 d-flex align-items-center">
+              {/* <div className="col-md-6 col-12 mt-5 d-flex align-items-center">
                 <div className="d-flex align-items-center">
                   <div className="form-check mb-3">
                     <input
@@ -1590,7 +1553,7 @@ function ProductEdit() {
                     </label>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Coupon Code</label>
                 <input

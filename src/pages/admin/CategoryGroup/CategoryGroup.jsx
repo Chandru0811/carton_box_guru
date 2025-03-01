@@ -61,11 +61,13 @@ function CategoryGroup() {
       {
         accessorKey: "created_at",
         header: "Created At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
       },
     ],
@@ -130,10 +132,16 @@ function CategoryGroup() {
             <MaterialReactTable
               columns={columns}
               data={data}
-              enableColumnActions={false}
+              enableColumnActions={true}
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  created_at: false,
+                  updated_at: false
+                },
+              }}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () =>
                   navigate(`/categorygroup/view/${row.original.id}`),
