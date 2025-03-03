@@ -160,16 +160,6 @@ function ProductView() {
                 <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
-                      <p className="text-sm">Brand</p>
-                    </div>
-                    <div className="col-6">
-                      <p className="text-muted text-sm">: {data?.brand}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6 col-12">
-                  <div className="row mb-3">
-                    <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">Name</p>
                     </div>
                     <div className="col-6">
@@ -255,37 +245,6 @@ function ProductView() {
                     </div>
                   </div>
                 )}
-
-                <div className="col-md-6 col-12">
-                  <div className="row mb-3">
-                    <div className="col-6 d-flex justify-content-start align-items-center">
-                      <p className="text-sm">Start Date</p>
-                    </div>
-                    <div className="col-6">
-                      <p className="text-muted text-sm">
-                        :{" "}
-                        {data?.start_date
-                          ? new Date(data?.start_date).toLocaleDateString()
-                          : ""}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-md-6 col-12">
-                  <div className="row mb-3">
-                    <div className="col-6 d-flex justify-content-start align-items-center">
-                      <p className="text-sm">End Date</p>
-                    </div>
-                    <div className="col-6">
-                      <p className="text-muted text-sm">
-                        :{" "}
-                        {data?.end_date
-                          ? new Date(data?.end_date).toLocaleDateString()
-                          : ""}
-                      </p>
-                    </div>
-                  </div>
-                </div>
                 {data?.deal_type !== 2 && data?.deal_type !== "2" && (
                   <div className="col-md-6 col-12">
                     <div className="row mb-3">

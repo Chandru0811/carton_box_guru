@@ -64,14 +64,22 @@ function Slider() {
       },
       { accessorKey: "order", header: "Order" },
       {
+        accessorKey: "country",
+        header: "Country",
+        Cell: ({ row }) => row.original.country?.country_name || "N/A", 
+      },
+      {
         accessorKey: "created_at",
         header: "Created At",
+        enableHiding: true,
         Cell: ({ cell }) => cell.getValue()?.substring(0, 10),
       },
       {
         accessorKey: "updated_at",
         header: "Updated At",
-        Cell: ({ cell }) => cell.getValue()?.substring(0, 10) || "",
+        enableHiding: true,
+        Cell: ({ cell }) =>
+          cell.getValue() ? cell.getValue().substring(0, 10) : "",
       },
     ],
     []
@@ -136,10 +144,16 @@ function Slider() {
             <MaterialReactTable
               columns={columns}
               data={data}
-              enableColumnActions={false}
+              enableColumnActions={true}
               enableColumnFilters={false}
               enableDensityToggle={false}
               enableFullScreenToggle={false}
+              initialState={{
+                columnVisibility: {
+                  created_at: false,
+                  updated_at: false
+                },
+              }}
               muiTableBodyRowProps={({ row }) => ({
                 onClick: () => navigate(`/slider/view/${row.original.id}`),
                 style: { cursor: "pointer" },

@@ -45,7 +45,7 @@ function CountryAdd() {
       flag: null,
       currency_symbol: "",
       currency_code: "",
-      social_links: "",
+      social_links: [""],
       address: "",
       phone: "",
       email: "",
@@ -58,10 +58,19 @@ function CountryAdd() {
       Object.keys(values).forEach((key) => {
         formData.append(key, values[key]);
       });
+      Object.keys(values).forEach((key) => {
+        if (key === "social_links") {
+          // Append each social link individually
+          values.social_links.forEach((link, index) => {
+            formData.append(`social_links[${index}]`, link);
+          });
+        } else {
+          formData.append(key, values[key]);
+        }
+      });
       formData.append("order", values.country_name);
       formData.append("currency_symbol", values.currency_symbol);
       formData.append("currency_code", values.currency_code);
-      formData.append("social_links", values.social_links);
       formData.append("address", values.address);
       formData.append("phone", values.phone);
       formData.append("email", values.email);
@@ -114,6 +123,19 @@ function CountryAdd() {
       }
     },
   });
+
+  const addSocialLink = () => {
+    formik.setFieldValue("social_links", [...formik.values.social_links, ""]);
+  };
+
+  // Function to handle changes in social links
+  const handleSocialLinkChange = (index, value) => {
+    const newSocialLinks = [...formik.values.social_links];
+    newSocialLinks[index] = value;
+    formik.setFieldValue("social_links", newSocialLinks);
+  };
+
+
 
   return (
     <section className="px-4">

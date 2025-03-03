@@ -87,7 +87,7 @@ const Login = ({ loginAsAdmin }) => {
       >
         <img
           src={headerlogo}
-          className="img-fluid"
+          className="img-fluid mt-5"
           alt="Logo"
           style={{ height: "70px" }}
         />

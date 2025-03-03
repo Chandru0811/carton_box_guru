@@ -56,21 +56,21 @@ function ProductAdd() {
         }
       )
       .notRequired(),
-      original_price: Yup.number()
-  .typeError("Original Price must be a valid number")
-  .test("is-required", "Original Price is required*", function (value) {
-    const { deal_type } = this.parent;
-    if (deal_type === "1") {
-      return value !== undefined && value !== null && value !== "";
-    }
-    return true;
-  })
-  .positive("Original Price must be a positive number")
-  .test("valid-decimal", "Invalid price format", function (value) {
-    if (value === undefined || value === null) return true; // Allow null values
-    return /^[0-9]+(\.\d{1,2})?$/.test(value.toString()); // Allow numbers with up to 2 decimal places
-  })
-  .nullable(),
+    original_price: Yup.number()
+      .typeError("Original Price must be a valid number")
+      .test("is-required", "Original Price is required*", function (value) {
+        const { deal_type } = this.parent;
+        if (deal_type === "1") {
+          return value !== undefined && value !== null && value !== "";
+        }
+        return true;
+      })
+      .positive("Original Price must be a positive number")
+      .test("valid-decimal", "Invalid price format", function (value) {
+        if (value === undefined || value === null) return true; // Allow null values
+        return /^[0-9]+(\.\d{1,2})?$/.test(value.toString()); // Allow numbers with up to 2 decimal places
+      })
+      .nullable(),
     discounted_price: Yup.string()
       .test("Discounted Price is required*", function (value) {
         const { deal_type } = this.parent;
@@ -97,10 +97,6 @@ function ProductAdd() {
       .notRequired("Specification is required*")
       .min(10, "Specification must be at least 10 characters long")
       .max(350, "Specification cannot be more than 350 characters long"),
-    brand: Yup.string()
-      .notRequired()
-      .max(250, "Brand cannot be more than 250 characters long"),
-    // (1)
     variants: Yup.array().of(
       Yup.object().shape({
         value: Yup.string()
@@ -109,8 +105,8 @@ function ProductAdd() {
       })
     ),
     pack: Yup.string()
-  .matches(/^[0-9]+$/, "Only numbers are allowed*")
-  .required("Pack is required*"),
+      .matches(/^[0-9]+$/, "Only numbers are allowed*")
+      .required("Pack is required*"),
     box_length: Yup.number()
       .typeError("Box length must be a number")
       .positive("Box length must be greater than zero")
@@ -150,13 +146,12 @@ function ProductAdd() {
     }, {}),
   });
 
-  const formik = useFormik({
+ const formik = useFormik({
     initialValues: {
       shop_id: "",
       name: "",
       category_id: "",
-      deal_type: "",
-      brand: "",
+      deal_type: "1", 
       original_price: "",
       discounted_price: "",
       discounted_percentage: "",
@@ -194,7 +189,6 @@ function ProductAdd() {
       formData.append("name", values.name);
       formData.append("category_id", values.category_id);
       formData.append("deal_type", values.deal_type);
-      formData.append("brand", values.brand);
       formData.append("original_price", values.original_price || 0);
       formData.append("discounted_price", values.discounted_price || 0);
       formData.append("discount_percentage", values.discounted_percentage || 0);
@@ -202,7 +196,6 @@ function ProductAdd() {
       formData.append("end_date", values.end_date);
       formData.append("coupon_code", values.coupon_code);
       formData.append("varient", formattedVariants);
-      // formData.append("image-${index}", imageFile);
       formData.append("sku", values.sku);
       formData.append("description", values.description);
       formData.append("delivery_days", values.delivery_days);
@@ -270,7 +263,6 @@ function ProductAdd() {
         category_id: true,
         deal_type: true,
         delivery_days: true,
-        brand: true,
         original_price: true,
         discounted_price: true,
         discounted_percentage: true,
@@ -303,7 +295,6 @@ function ProductAdd() {
           category_id: "Category",
           deal_type: "Deal Type",
           delivery_days: "Delivery Days",
-          brand: "Brand cannot be more than 250 characters long",
           original_price: "Original Price",
           discounted_price: "Discounted Price",
           discounted_percentage: "Discounted Percentage",
@@ -666,6 +657,7 @@ function ProductAdd() {
         </div>
         <div className="container card shadow border-0 pb-5">
           <div className="row mt-3">
+          <input type="hidden" name="deal_type" value="1" />
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 Category Group<span className="text-danger">*</span>
@@ -719,7 +711,7 @@ function ProductAdd() {
                 </div>
               )}
             </div>
-            <div className="col-md-6 col-12 mb-3">
+            <div className="col-md-6 col-12 mb-3 d-none">
               <label className="form-label">
                 Deal Type<span className="text-danger">*</span>
               </label>
@@ -894,21 +886,6 @@ function ProductAdd() {
                   )}
               </div>
             )}
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">Brand</label>
-              <input
-                type="text"
-                className={`form-control form-control-sm ${
-                  formik.touched.brand && formik.errors.brand
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("brand")}
-              />
-              {formik.touched.brand && formik.errors.brand && (
-                <div className="invalid-feedback">{formik.errors.brand}</div>
-              )}
-            </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">SKU</label>
               <input

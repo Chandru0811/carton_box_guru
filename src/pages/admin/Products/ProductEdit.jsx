@@ -15,7 +15,6 @@ function ProductEdit() {
   const { id } = useParams();
   const [cropperStates, setCropperStates] = useState([]);
   const [imageSrc, setImageSrc] = useState([]);
-  console.log("Image is ", imageSrc);
   const [crop, setCrop] = useState([]);
   const [zoom, setZoom] = useState([]);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState([]);
@@ -26,14 +25,6 @@ function ProductEdit() {
   const [couponCode, setCouponCode] = useState("CBG");
   const [isCouponChecked, setIsCouponChecked] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const getCurrentDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
 
   const validationSchema = Yup.object({
     categoryGroupId: Yup.string().required("Category Group is required"),
@@ -90,9 +81,6 @@ function ProductEdit() {
       .notRequired("Specification is required")
       .min(10, "Specification must be at least 10 characters long")
       .max(350, "Specification cannot be more than 350 characters long"),
-    brand: Yup.string()
-      .notRequired()
-      .max(250, "Brand cannot be more than 250 characters long"),
     pack: Yup.string()
       .matches(/^[0-9]+$/, "Only numbers are allowed*")
       .required("Pack is required*"),
@@ -181,7 +169,6 @@ function ProductEdit() {
       name: "",
       category_id: "",
       deal_type: "",
-      brand: "",
       original_price: "",
       discounted_price: "",
       discounted_percentage: "",
@@ -333,7 +320,6 @@ function ProductEdit() {
           category_id: "Category",
           deal_type: "Deal Type",
           delivery_days: "Delivery Days",
-          brand: "Brand cannot be more than 250 characters long",
           original_price: "Original Price",
           discounted_price: "Discounted Price",
           discounted_percentage: "Discounted Percentage",
@@ -420,13 +406,17 @@ function ProductEdit() {
   }, []);
 
   const fetchCategory = async (categoryId) => {
+    setLoading(true);
     try {
       const category = await api.get(`categories/categorygroups/${categoryId}`);
       setCategory(category.data.data);
     } catch (error) {
       toast.error(error);
+    } finally{
+      setLoading(false);
     }
   };
+
   const handleCategorygroupChange = (event) => {
     const categoryGroup = event.target.value;
     setCategory([]);
@@ -460,6 +450,7 @@ function ProductEdit() {
   }, [formik.values.discounted_price, formik.values.original_price]);
 
   const getData = async () => {
+    setLoading(true);
     try {
       const response = await api.get(`product/${id}/get`);
 
@@ -475,12 +466,11 @@ function ProductEdit() {
         categoryGroupId: data.categoryGroupId || "",
         deal_type: data.deal_type || "",
         delivery_days: data.delivery_days || "",
-        brand: data.brand || "",
         original_price: data.original_price || "",
         discounted_price: data.discounted_price || "",
         discounted_percentage: data.discount_percentage || "",
-        start_date: data.start_date.slice(0, 10) || "",
-        end_date: data.end_date.slice(0, 10) || "",
+        start_date: data.start_date ? data.start_date.slice(0, 10) : "",
+        end_date: data.end_date ? data.end_date.slice(0, 10) : "",
         coupon_code: data.coupon_code || "",
         description: data.description || "",
         pack: data.pack || "",
@@ -512,7 +502,10 @@ function ProductEdit() {
       fetchCategory(data.categoryGroupId);
     } catch (error) {
       toast.error(error.message);
+    } finally{
+      setLoading(false);
     }
+
   };
 
   useEffect(() => {
@@ -821,7 +814,7 @@ function ProductEdit() {
                   </div>
                 )}
               </div>
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-md-6 col-12 mb-3 d-none">
                 <label className="form-label">
                   Deal Type<span className="text-danger">*</span>
                 </label>
@@ -894,21 +887,6 @@ function ProductEdit() {
                 </div>
               )}
 
-              <div className="col-md-6 col-12 mb-3">
-                <label className="form-label">Brand</label>
-                <input
-                  type="text"
-                  className={`form-control form-control-sm ${
-                    formik.touched.brand && formik.errors.brand
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("brand")}
-                />
-                {formik.touched.brand && formik.errors.brand && (
-                  <div className="invalid-feedback">{formik.errors.brand}</div>
-                )}
-              </div>
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Name<span className="text-danger">*</span>
