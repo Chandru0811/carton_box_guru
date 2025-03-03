@@ -33,14 +33,14 @@ function CountryEdit() {
     currency_symbol: Yup.string().required("Currency symbol is required*"),
     currency_code: Yup.string().required("Currency code is required*"),
     address: Yup.string().required("Address is required*"),
-        phone: Yup.string()
+    phone: Yup.string()
       .min(8, "Phone number must be at least 8 digits*")
       .max(10, "Phone number cannot exceed 10 digits*")
-      .required("Phone number is required*")
-    ,
+      .required("Phone number is required*"),
     email: Yup.string().email("Invalid email").required("Email is required*"),
     color_code: Yup.string().required("Color code is required*"),
     country_code: Yup.string().required("Country code is required*"),
+    social_links: Yup.array().of(Yup.string().url("Invalid URL")), // Validate each URL
   });
 
   const formik = useFormik({
@@ -49,7 +49,7 @@ function CountryEdit() {
       flag: null,
       currency_symbol: "",
       currency_code: "",
-      social_links: "",
+      social_links: [""], // Initialize with one empty social link
       address: "",
       phone: "",
       email: "",
@@ -61,15 +61,22 @@ function CountryEdit() {
       setLoading(true);
       const formData = new FormData();
       formData.append("_method", "PUT");
+
+      // Append all fields to formData
       Object.keys(values).forEach((key) => {
         if (key === "flag") {
           if (values.flag instanceof File) {
-            formData.append("flag", values.flag); 
+            formData.append("flag", values.flag);
           }
+        } else if (key === "social_links") {
+          // Convert the array of social links into a single string (if backend expects a string)
+          const socialLinksString = values.social_links.join(",");
+          formData.append(key, socialLinksString);
         } else {
           formData.append(key, values[key]);
         }
       });
+
       setLoadIndicator(true);
       try {
         const response = await api.post(`country/update/${id}`, formData, {
@@ -88,6 +95,35 @@ function CountryEdit() {
     },
   });
 
+  // Function to add a new social link input
+  const addSocialLink = () => {
+    formik.setValues({
+      ...formik.values,
+      social_links: [...formik.values.social_links, ""],
+    });
+  };
+
+  // Function to delete a social link
+  const deleteSocialLink = (index) => {
+    const newSocialLinks = formik.values.social_links.filter(
+      (_, i) => i !== index
+    );
+    formik.setValues({
+      ...formik.values,
+      social_links: newSocialLinks,
+    });
+  };
+
+  // Function to handle changes in social links
+  const handleSocialLinkChange = (index, value) => {
+    const newSocialLinks = [...formik.values.social_links];
+    newSocialLinks[index] = value;
+    formik.setValues({
+      ...formik.values,
+      social_links: newSocialLinks,
+    });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -95,12 +131,18 @@ function CountryEdit() {
         const response = await api.get(`country/${id}`);
         const data = response.data.data;
 
+        // Convert social_links from string to array (if necessary)
+        const socialLinksArray =
+          typeof data.social_links === "string"
+            ? data.social_links.split(",")
+            : data.social_links;
+
         formik.setValues({
           country_name: data.country_name || "",
           flag: null,
           currency_symbol: data.currency_symbol || "",
           currency_code: data.currency_code || "",
-          social_links: data.social_links || "",
+          social_links: socialLinksArray || [""],
           address: data.address || "",
           phone: data.phone || "",
           email: data.email || "",
@@ -260,16 +302,44 @@ function CountryEdit() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Social Links</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    {...formik.getFieldProps("social_links")}
-                  />
-                </div>
+            <div className="col-12 mb-3">
+                <label className="form-label">Social Links</label>
+                {formik.values.social_links.map((link, index) => (
+                  <div key={index} className="mb-2 d-flex align-items-center">
+                    <input
+                      type="text"
+                      className="form-control form-control-sm me-2"
+                      value={link}
+                      onChange={(e) =>
+                        handleSocialLinkChange(index, e.target.value)
+                      }
+                      placeholder="Enter social link"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm"
+                      onClick={() => deleteSocialLink(index)}
+                    >
+                      Delete
+                    </button>
+                    {formik.touched.social_links &&
+                      formik.errors.social_links &&
+                      formik.errors.social_links[index] && (
+                        <div className="text-danger">
+                          {formik.errors.social_links[index]}
+                        </div>
+                      )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary mt-2"
+                  onClick={addSocialLink}
+                >
+                  Add More
+                </button>
               </div>
+
 
               <div className="col-md-6 col-12 mb-3">
                 <div className="mb-3">

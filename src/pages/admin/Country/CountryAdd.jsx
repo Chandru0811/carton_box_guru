@@ -58,16 +58,16 @@ function CountryAdd() {
       Object.keys(values).forEach((key) => {
         formData.append(key, values[key]);
       });
+      const socialLinksString = values.social_links.join(",");
+
       Object.keys(values).forEach((key) => {
         if (key === "social_links") {
-          // Append each social link individually
-          values.social_links.forEach((link, index) => {
-            formData.append(`social_links[${index}]`, link);
-          });
+          formData.append(key, socialLinksString); // Append as a string
         } else {
           formData.append(key, values[key]);
         }
       });
+      
       formData.append("order", values.country_name);
       formData.append("currency_symbol", values.currency_symbol);
       formData.append("currency_code", values.currency_code);
@@ -135,6 +135,12 @@ function CountryAdd() {
     formik.setFieldValue("social_links", newSocialLinks);
   };
 
+  const deleteSocialLink = (index) => {
+    const newSocialLinks = formik.values.social_links.filter(
+      (_, i) => i !== index
+    );
+    formik.setFieldValue("social_links", newSocialLinks);
+  };
 
 
   return (
@@ -260,16 +266,42 @@ function CountryAdd() {
                 ) : null}
               </div>
             </div>
-
-            <div className="col-md-6 col-12 mb-3">
-              <div className="mb-3">
-                <label className="form-label">Social Links</label>
-                <input
-                  type="text"
-                  className="form-control form-control-sm"
-                  {...formik.getFieldProps("social_links")}
-                />
-              </div>
+            <div className="col-12 mb-3">
+              <label className="form-label">Social Links</label>
+              {formik.values.social_links.map((link, index) => (
+                <div key={index} className="mb-2 d-flex align-items-center">
+                  <input
+                    type="text"
+                    className="form-control form-control-sm me-2"
+                    value={link}
+                    onChange={(e) =>
+                      handleSocialLinkChange(index, e.target.value)
+                    }
+                    placeholder="Enter social link"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={() => deleteSocialLink(index)}
+                  >
+                    Delete
+                  </button>
+                  {formik.touched.social_links &&
+                    formik.errors.social_links &&
+                    formik.errors.social_links[index] && (
+                      <div className="text-danger">
+                        {formik.errors.social_links[index]}
+                      </div>
+                    )}
+                </div>
+              ))}
+              <button
+                type="button"
+                className="btn btn-sm btn-secondary mt-2"
+                onClick={addSocialLink}
+              >
+                Add More
+              </button>
             </div>
 
             <div className="col-md-6 col-12 mb-3">

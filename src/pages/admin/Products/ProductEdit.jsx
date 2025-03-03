@@ -1021,10 +1021,6 @@ function ProductEdit() {
                     formik.touched.sku && formik.errors.sku ? "is-invalid" : ""
                   }`}
                   {...formik.getFieldProps("sku")}
-                  onInput={(event) => {
-                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
-                    formik.setFieldValue("sku", event.target.value);
-                  }}
                 />
                 {formik.touched.sku && formik.errors.sku && (
                   <div className="invalid-feedback">{formik.errors.sku}</div>
