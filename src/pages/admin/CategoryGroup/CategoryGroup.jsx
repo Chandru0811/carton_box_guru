@@ -139,7 +139,7 @@ function CategoryGroup() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -160,13 +160,13 @@ function CategoryGroup() {
           >
             Edit
           </MenuItem>
-          <MenuItem>
+          {/* <MenuItem>
             <AdminDelete
               path={`categoryGroup/${selectedId}`}
               onDeleteSuccess={getData}
               onOpen={handleMenuClose}
             />
-          </MenuItem>
+          </MenuItem> */}
         </Menu>
       </div>
     </div>
@@ -174,7 +174,7 @@ function CategoryGroup() {
 }
 
 import PropTypes from "prop-types";
-import AdminDelete from "../../../components/admin/AdminDelete";
+// import AdminDelete from "../../../components/admin/AdminDelete";
 
 CategoryGroup.propTypes = {
   row: PropTypes.shape({

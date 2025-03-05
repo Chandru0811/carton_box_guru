@@ -30,10 +30,8 @@ function CountryAdd() {
     currency_code: Yup.string().required("Currency code is required*"),
     address: Yup.string().required("Address is required*"),
     phone: Yup.string()
-  .min(8, "Phone number must be at least 8 digits*")
-  .max(10, "Phone number cannot exceed 10 digits*")
-  .required("Phone number is required*")
-,
+      .min(8, "Phone number must be at least 8 digits*")
+      .required("Phone number is required*"),
     email: Yup.string().email("Invalid email").required("Email is required*"),
     color_code: Yup.string().required("Color code is required*"),
     country_code: Yup.string().required("Country code is required*"),
@@ -67,7 +65,7 @@ function CountryAdd() {
           formData.append(key, values[key]);
         }
       });
-      
+
       formData.append("order", values.country_name);
       formData.append("currency_symbol", values.currency_symbol);
       formData.append("currency_code", values.currency_code);
@@ -142,7 +140,6 @@ function CountryAdd() {
     formik.setFieldValue("social_links", newSocialLinks);
   };
 
-
   return (
     <section className="px-4">
       <form onSubmit={formik.handleSubmit}>
@@ -200,7 +197,10 @@ function CountryAdd() {
                   className="form-control form-control-sm"
                   {...formik.getFieldProps("phone")}
                   onInput={(event) => {
-                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    event.target.value = event.target.value.replace(
+                      /[^0-9]/g,
+                      ""
+                    );
                     formik.setFieldValue("phone", event.target.value);
                   }}
                 />
@@ -318,8 +318,6 @@ function CountryAdd() {
               </div>
             </div>
 
-            
-
             <div className="col-md-6 col-12 mb-3">
               <div className="mb-3">
                 <label className="form-label">Email</label>
@@ -359,22 +357,20 @@ function CountryAdd() {
               </div>
             </div>
 
-
-
             <div className="hstack p-2 mt-5">
-            <button
-              type="submit"
-              className="btn btn-sm btn-button mt-5"
-              disabled={loadIndicator}
-            >
-              {loadIndicator && (
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  aria-hidden="true"
-                ></span>
-              )}
-              Submit
-            </button>
+              <button
+                type="submit"
+                className="btn btn-sm btn-button mt-5"
+                disabled={loadIndicator}
+              >
+                {loadIndicator && (
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    aria-hidden="true"
+                  ></span>
+                )}
+                Submit
+              </button>
             </div>
           </div>
         </div>

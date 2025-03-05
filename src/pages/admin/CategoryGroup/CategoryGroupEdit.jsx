@@ -154,6 +154,7 @@ function CategoryGroupEdit() {
           order: categoryGroupData.order || "",
           active: categoryGroupData.active || "",
           description: categoryGroupData.description || "",
+          country_id: categoryGroupData.country_id || "",
           image: null,
         });
         setPreviewImage(`${ImageURL}${categoryGroupData.image_path}`);
@@ -317,7 +318,7 @@ function CategoryGroupEdit() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control ${
+                      className={`form-control form-control-sm ${
                         formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
@@ -363,7 +364,7 @@ function CategoryGroupEdit() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control ${
+                      className={`form-control form-control-sm ${
                         formik.touched.icon && formik.errors.icon
                           ? "is-invalid"
                           : ""
@@ -384,7 +385,7 @@ function CategoryGroupEdit() {
                     <input
                       type="file"
                       accept=".png,.jpeg,.jpg,.svg,.webp"
-                      className={`form-control ${
+                      className={`form-control form-control-sm ${
                         formik.touched.image && formik.errors.image
                           ? "is-invalid"
                           : ""
@@ -480,7 +481,7 @@ function CategoryGroupEdit() {
                     <label className="form-label">Description</label>
                     <textarea
                       rows={5}
-                      className="form-control"
+                      className="form-control form-control-sm"
                       {...formik.getFieldProps("description")}
                       maxLength={825}
                     />

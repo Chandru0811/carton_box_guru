@@ -35,7 +35,6 @@ function CountryEdit() {
     address: Yup.string().required("Address is required*"),
     phone: Yup.string()
       .min(8, "Phone number must be at least 8 digits*")
-      .max(10, "Phone number cannot exceed 10 digits*")
       .required("Phone number is required*"),
     email: Yup.string().email("Invalid email").required("Email is required*"),
     color_code: Yup.string().required("Color code is required*"),
@@ -204,7 +203,7 @@ function CountryEdit() {
                   ) : null}
                 </div>
               </div>
-              
+
               <div className="col-md-6 col-12 mb-3">
                 <div className="mb-3">
                   <label className="form-label">Country Code</label>
@@ -229,7 +228,10 @@ function CountryEdit() {
                     className="form-control"
                     {...formik.getFieldProps("phone")}
                     onInput={(event) => {
-                      event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
                       formik.setFieldValue("phone", event.target.value);
                     }}
                   />
@@ -240,33 +242,33 @@ function CountryEdit() {
               </div>
 
               <div className="col-md-6 col-12 mb-3">
-  <label className="form-label">Flag</label>
-  <input
-    type="file"
-    accept="image/*"
-    className="form-control"
-    onChange={(event) => {
-      const file = event.currentTarget.files[0];
-      if (file) {
-        formik.setFieldValue("flag", file);
-        setPreview(URL.createObjectURL(file)); // Set preview for the new file
-      }
-    }}
-  />
-  {formik.touched.flag && formik.errors.flag && (
-    <div className="text-danger">{formik.errors.flag}</div>
-  )}
-  
-  {/* Display preview */}
-  {preview && (
-    <img
-      src={preview}
-      alt="Flag Preview"
-      className="img-fluid mt-2"
-      style={{ maxHeight: "100px" }}
-    />
-  )}
-</div>
+                <label className="form-label">Flag</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="form-control"
+                  onChange={(event) => {
+                    const file = event.currentTarget.files[0];
+                    if (file) {
+                      formik.setFieldValue("flag", file);
+                      setPreview(URL.createObjectURL(file)); // Set preview for the new file
+                    }
+                  }}
+                />
+                {formik.touched.flag && formik.errors.flag && (
+                  <div className="text-danger">{formik.errors.flag}</div>
+                )}
+
+                {/* Display preview */}
+                {preview && (
+                  <img
+                    src={preview}
+                    alt="Flag Preview"
+                    className="img-fluid mt-2"
+                    style={{ maxHeight: "100px" }}
+                  />
+                )}
+              </div>
 
               <div className="col-md-6 col-12 mb-3">
                 <div className="mb-3">
@@ -302,7 +304,7 @@ function CountryEdit() {
                 </div>
               </div>
 
-            <div className="col-12 mb-3">
+              <div className="col-12 mb-3">
                 <label className="form-label">Social Links</label>
                 {formik.values.social_links.map((link, index) => (
                   <div key={index} className="mb-2 d-flex align-items-center">
@@ -340,7 +342,6 @@ function CountryEdit() {
                 </button>
               </div>
 
-
               <div className="col-md-6 col-12 mb-3">
                 <div className="mb-3">
                   <label className="form-label">Address</label>
@@ -354,8 +355,6 @@ function CountryEdit() {
                   ) : null}
                 </div>
               </div>
-
-
 
               <div className="col-md-6 col-12 mb-3">
                 <div className="mb-3">
@@ -397,7 +396,6 @@ function CountryEdit() {
                   ) : null}
                 </div>
               </div>
-
 
               <div className="hstack p-2 mt-5">
                 <button

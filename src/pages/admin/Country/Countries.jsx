@@ -45,11 +45,15 @@ function Countries() {
       { accessorKey: "country_name", header: "Country Name" },
       { accessorKey: "email", header: "Email" },
       { accessorKey: "phone", header: "Phone" },
-      { accessorKey: "address", header: "Address" , Cell: ({ cell }) => (
-        <div className="truncate-text" title={cell.getValue()}>
-          {cell.getValue()}
-        </div>
-      ),},
+      {
+        accessorKey: "address",
+        header: "Address",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
+      },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -132,7 +136,7 @@ function Countries() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -172,6 +176,9 @@ Countries.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired,
   }).isRequired,
+  cell: PropTypes.shape({
+    getValue: PropTypes.func.isRequired,
+  }),
 };
 
 export default Countries;

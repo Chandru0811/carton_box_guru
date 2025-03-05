@@ -54,7 +54,7 @@ function Categories() {
             {cell.getValue()}
           </div>
         ),
-      },      
+      },
       {
         accessorKey: "active",
         enableHiding: false,
@@ -147,7 +147,7 @@ function Categories() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -165,13 +165,13 @@ function Categories() {
           <MenuItem onClick={() => navigate(`/categories/edit/${selectedId}`)}>
             Edit
           </MenuItem>
-          <MenuItem>
+          {/* <MenuItem>
             <AdminDelete
               path={`categories/${selectedId}`}
               onDeleteSuccess={getData}
               onOpen={handleMenuClose}
             />
-          </MenuItem>
+          </MenuItem> */}
         </Menu>
       </div>
     </div>
@@ -179,7 +179,7 @@ function Categories() {
 }
 
 import PropTypes from "prop-types";
-import AdminDelete from "../../../components/admin/AdminDelete";
+// import AdminDelete from "../../../components/admin/AdminDelete";
 
 Categories.propTypes = {
   row: PropTypes.shape({
@@ -188,6 +188,9 @@ Categories.propTypes = {
       active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     }).isRequired,
   }).isRequired,
+  cell: PropTypes.shape({
+    getValue: PropTypes.func.isRequired,
+  }),
 };
 
 export default Categories;

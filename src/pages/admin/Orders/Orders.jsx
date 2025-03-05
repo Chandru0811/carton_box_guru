@@ -30,12 +30,16 @@ function Orders() {
           const value = parseFloat(cell.getValue());
           return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
         },
-      },      
-      { accessorKey: "item_description", header: "Proudct Name" ,Cell: ({ cell }) => (
-        <div className="truncate-text" title={cell.getValue()}>
-          {cell.getValue()}
-        </div>
-      ),},
+      },
+      {
+        accessorKey: "item_description",
+        header: "Proudct Name",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
+      },
       {
         accessorFn: (row) => row.shop.legal_name,
         header: "Shop Name",
@@ -122,7 +126,7 @@ function Orders() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -148,6 +152,9 @@ Orders.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired,
   }).isRequired,
+  cell: PropTypes.shape({
+    getValue: PropTypes.func.isRequired,
+  }),
 };
 
 export default Orders;
