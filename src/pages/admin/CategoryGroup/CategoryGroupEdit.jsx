@@ -337,7 +337,7 @@ function CategoryGroupEdit() {
                       Order<span className="text-danger">*</span>
                     </label>
                     <select
-                      className={`form-select ${
+                      className={`form-select form-select-sm ${
                         formik.touched.order && formik.errors.order
                           ? "is-invalid"
                           : ""

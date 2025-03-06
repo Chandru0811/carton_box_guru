@@ -230,7 +230,7 @@ function SliderAdd() {
               <input
                 type="file"
                 accept=".png,.jpeg,.jpg,.svg,.webp"
-                className={`form-control ${
+                className={`form-control form-control-sm ${
                   formik.touched.image && formik.errors.image
                     ? "is-invalid"
                     : ""
@@ -288,7 +288,7 @@ function SliderAdd() {
               </label>
               <select
                 aria-label="Default select example"
-                className={`form-select ${
+                className={`form-select form-select-sm ${
                   formik.touched.order && formik.errors.order
                     ? "is-invalid"
                     : ""

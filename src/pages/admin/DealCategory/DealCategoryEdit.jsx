@@ -110,17 +110,19 @@ function DealCategoryEdit() {
       setLoading(true);
       try {
         const response = await api.get(`dealCategory/${id}`);
+        const dealcategoryData = response.data.data;
         formik.setValues({
-          name: response.data.data.name || "",
-          // active: response.data.data.active || "",
-          slug: response.data.data.slug || "",
-          description: response.data.data.description || "",
+          name: dealcategoryData.name || "",
+          slug: dealcategoryData.slug || "",
+          description: dealcategoryData.description || "",
+          country_id: dealcategoryData.country_id || "",
         });
-        setPreviewImage(`${ImageURL}${response.data.data.image_path}`);
+        setPreviewImage(`${ImageURL}${dealcategoryData.image_path}`);
       } catch (error) {
-        toast.error("Error Fetching Data", error.message);
+        toast.error(`Error Fetching Data: ${error.message}`);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     getData();
   }, [id]);
@@ -286,7 +288,7 @@ function DealCategoryEdit() {
                     </label>
                     <input
                       type="text"
-                      className={`form-control ${
+                      className={`form-control form-control-sm ${
                         formik.touched.name && formik.errors.name
                           ? "is-invalid"
                           : ""
@@ -307,7 +309,7 @@ function DealCategoryEdit() {
                     <input
                       type="file"
                       // accept=".png, .jpg, .jpeg, .svg, .webp"
-                      className={`form-control ${
+                      className={`form-control form-control-sm ${
                         formik.touched.image_path && formik.errors.image_path
                           ? "is-invalid"
                           : ""
@@ -408,7 +410,7 @@ function DealCategoryEdit() {
                     <label className="form-label">Description</label>
                     <textarea
                       rows={5}
-                      className="form-control"
+                      className="form-control form-control-sm"
                       {...formik.getFieldProps("description")}
                       maxLength={825}
                     />

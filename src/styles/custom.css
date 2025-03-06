@@ -17,6 +17,16 @@
   --black: #000000;
   --green: #00d46f;
 }
+.btn-cbg-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: 1px solid var(--primary-color);
+}
+.btn-cbg-primary:hover {
+  background-color: var(--white);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+}
 .User__icon i {
   font-size: 20px;
   color: var(--secondary-color);

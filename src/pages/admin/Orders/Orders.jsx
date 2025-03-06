@@ -33,16 +33,7 @@ function Orders() {
       },
       {
         accessorKey: "item_description",
-        header: "Proudct Name",
-        Cell: ({ cell }) => (
-          <div className="truncate-text" title={cell.getValue()}>
-            {cell.getValue()}
-          </div>
-        ),
-      },
-      {
-        accessorFn: (row) => row.shop.legal_name,
-        header: "Shop Name",
+        header: "Product Name",
         Cell: ({ cell }) => (
           <div className="truncate-text" title={cell.getValue()}>
             {cell.getValue()}

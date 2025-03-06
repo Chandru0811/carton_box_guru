@@ -17,6 +17,7 @@ function ProductView() {
       try {
         const response = await api.get(`product/${id}/get`);
         const { additional_details, ...rest } = response.data.data;
+        console.log(response.data.data, "Response Data"); // Debugging
 
         const decodedAdditionalDetails = additional_details
           ? JSON.parse(additional_details)

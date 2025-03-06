@@ -257,7 +257,7 @@ function CategoriesAdd() {
                 </label>
                 <select
                   aria-label="Default select example"
-                  className={`form-select ${
+                  className={`form-select form-select-sm ${
                     formik.touched.category_group_id &&
                     formik.errors.category_group_id
                       ? "is-invalid"
@@ -286,7 +286,7 @@ function CategoriesAdd() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
@@ -306,7 +306,7 @@ function CategoriesAdd() {
                 <input
                   type="file"
                   accept=".png,.jpeg,.jpg,.svg,.webp"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.icon && formik.errors.icon
                       ? "is-invalid"
                       : ""
@@ -393,7 +393,7 @@ function CategoriesAdd() {
                 </label>
                 <textarea
                   rows={5}
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.description && formik.errors.description
                       ? "is-invalid"
                       : ""

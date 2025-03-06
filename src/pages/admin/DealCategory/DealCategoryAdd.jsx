@@ -75,6 +75,7 @@ function DealCategoryAdd() {
           },
         });
         if (response.status === 200 || response.status === 201) {
+          console.log("Navigating to /dealcategories");
           toast.success(response.data.message);
           navigate("/dealcategories");
         } else if (response.status === 422) {
@@ -119,7 +120,7 @@ function DealCategoryAdd() {
   useEffect(() => {
     const slug = formik.values.name.toLowerCase().replace(/\s+/g, "_");
     formik.setFieldValue("slug", slug);
-  }, [formik.values.name, formik]);
+  }, [formik.values.name]);
   const handleFileChange = (event) => {
     const file = event?.target?.files[0];
     if (file) {
@@ -251,7 +252,7 @@ function DealCategoryAdd() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
@@ -271,7 +272,7 @@ function DealCategoryAdd() {
                 <input
                   type="file"
                   accept=".png,.jpeg,.jpg,.svg,.webp"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.image && formik.errors.image
                       ? "is-invalid"
                       : ""
@@ -356,7 +357,7 @@ function DealCategoryAdd() {
                 <label className="form-label">Description</label>
                 <textarea
                   rows={5}
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.errors.description && formik.touched.description
                       ? "is-invalid"
                       : ""

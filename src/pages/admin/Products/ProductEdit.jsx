@@ -24,6 +24,7 @@ function ProductEdit() {
   const shopId = localStorage.getItem("carton_box_guru_shop_id");
   const [couponCode, setCouponCode] = useState("CBG");
   const [isCouponChecked, setIsCouponChecked] = useState(false);
+  console.log(setIsCouponChecked);
   const [loading, setLoading] = useState(false);
 
   const validationSchema = Yup.object({
@@ -412,7 +413,7 @@ function ProductEdit() {
       setCategory(category.data.data);
     } catch (error) {
       toast.error(error);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -502,10 +503,9 @@ function ProductEdit() {
       fetchCategory(data.categoryGroupId);
     } catch (error) {
       toast.error(error.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
-
   };
 
   useEffect(() => {
@@ -686,21 +686,21 @@ function ProductEdit() {
     return roundedDiscount < 10 ? `0${roundedDiscount}` : `${roundedDiscount}`;
   };
 
-  const handleRadioChange = (e) => {
-    const selectedValue = e.target.value;
-    setIsCouponChecked(selectedValue === "discount");
+  // const handleRadioChange = (e) => {
+  //   const selectedValue = e.target.value;
+  //   setIsCouponChecked(selectedValue === "discount");
 
-    const formattedDiscount = formatDiscountPercentage(
-      formik.values.discounted_percentage
-    );
-    const newCouponCode =
-      selectedValue === "discount"
-        ? `CBG${formattedDiscount}`
-        : `CBGV${shopId.padStart(2, "0")}`;
+  //   const formattedDiscount = formatDiscountPercentage(
+  //     formik.values.discounted_percentage
+  //   );
+  //   const newCouponCode =
+  //     selectedValue === "discount"
+  //       ? `CBG${formattedDiscount}`
+  //       : `CBGV${shopId.padStart(2, "0")}`;
 
-    setCouponCode(newCouponCode);
-    formik.setFieldValue("coupon_code", newCouponCode);
-  };
+  //   setCouponCode(newCouponCode);
+  //   formik.setFieldValue("coupon_code", newCouponCode);
+  // };
 
   useEffect(() => {
     const formattedDiscount = formatDiscountPercentage(
@@ -1037,7 +1037,10 @@ function ProductEdit() {
                   }`}
                   {...formik.getFieldProps("pack")}
                   onInput={(event) => {
-                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    event.target.value = event.target.value.replace(
+                      /[^0-9]/g,
+                      ""
+                    );
                     formik.setFieldValue("pack", event.target.value);
                   }}
                 />
@@ -1057,7 +1060,10 @@ function ProductEdit() {
                   }`}
                   {...formik.getFieldProps("stock_quantity")}
                   onInput={(event) => {
-                    event.target.value = event.target.value.replace(/[^0-9]/g, "");
+                    event.target.value = event.target.value.replace(
+                      /[^0-9]/g,
+                      ""
+                    );
                     formik.setFieldValue("stock_quantity", event.target.value);
                   }}
                 />
@@ -1485,28 +1491,8 @@ function ProductEdit() {
                   </button>
                 </div>
               )}
-              {/* <div className="col-md-6 col-12 mt-5 d-flex align-items-center">
+              <div className="col-md-6 col-12 mt-5 d-flex align-items-center d-none">
                 <div className="d-flex align-items-center">
-                  <div className="form-check mb-3">
-                    <input
-                      type="radio"
-                      name="changeCouponCode"
-                      id="vendorCoupon"
-                      value="fixed"
-                      className="form-check-input"
-                      style={{ boxShadow: "none" }}
-                      checked={!isCouponChecked}
-                      onChange={handleRadioChange}
-                      disabled={
-                        formik.values.deal_type === 2 ||
-                        formik.values.deal_type === "2"
-                      }
-                    />
-                    <label htmlFor="vendorCoupon" className="form-label ms-2">
-                      Vendor Coupon code
-                    </label>
-                  </div>
-                  &nbsp; &nbsp; &nbsp;
                   <div className="form-check mb-3">
                     <input
                       type="radio"
@@ -1516,18 +1502,15 @@ function ProductEdit() {
                       className="form-check-input"
                       style={{ boxShadow: "none" }}
                       checked={isCouponChecked}
-                      onChange={handleRadioChange}
-                      disabled={
-                        formik.values.deal_type === 2 ||
-                        formik.values.deal_type === "2"
-                      }
+                      onChange={() => {}}
+                      disabled
                     />
                     <label htmlFor="genricCoupon" className="form-label ms-2">
                       Generic Coupon Code
                     </label>
                   </div>
                 </div>
-              </div> */}
+              </div>
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">Coupon Code</label>
                 <input

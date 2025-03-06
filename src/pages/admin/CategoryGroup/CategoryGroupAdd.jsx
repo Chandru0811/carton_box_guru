@@ -275,7 +275,7 @@ function CategoryGroupAdd() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.name && formik.errors.name
                       ? "is-invalid"
                       : ""
@@ -293,7 +293,7 @@ function CategoryGroupAdd() {
                 </label>
                 <select
                   aria-label="Default select example"
-                  className={`form-select ${
+                  className={`form-select form-select-sm ${
                     formik.touched.order && formik.errors.order
                       ? "is-invalid"
                       : ""
@@ -318,7 +318,7 @@ function CategoryGroupAdd() {
                 </label>
                 <input
                   type="text"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.icon && formik.errors.icon
                       ? "is-invalid"
                       : ""
@@ -337,7 +337,7 @@ function CategoryGroupAdd() {
                 <input
                   type="file"
                   accept=".png, .jpg, .jpeg, .svg, .webp"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.image && formik.errors.image
                       ? "is-invalid"
                       : ""
@@ -395,7 +395,7 @@ function CategoryGroupAdd() {
                 <input
                   type="file"
                   accept=".png,.jpeg,.jpg,.svg,.webp"
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.image && formik.errors.image
                       ? "is-invalid"
                       : ""
@@ -482,7 +482,7 @@ function CategoryGroupAdd() {
                 </label>
                 <textarea
                   rows={4}
-                  className={`form-control ${
+                  className={`form-control form-control-sm ${
                     formik.touched.description && formik.errors.description
                       ? "is-invalid"
                       : ""

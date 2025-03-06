@@ -281,7 +281,7 @@ function CountryAdd() {
                   />
                   <button
                     type="button"
-                    className="btn btn-danger btn-sm"
+                    className="btn btn-cbg-primary btn-sm"
                     onClick={() => deleteSocialLink(index)}
                   >
                     Delete

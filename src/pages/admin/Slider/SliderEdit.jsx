@@ -107,7 +107,7 @@ function SliderEdit() {
           order: sliderData.order || "",
           image: null,
           country_id: sliderData.country_id || "",
-        });        
+        });
         setPreviewImage(`${ImageURL}${sliderData.image_path}`);
       } catch (error) {
         const errorMessage =
@@ -262,7 +262,7 @@ function SliderEdit() {
                   <input
                     type="file"
                     accept=".png,.jpeg,.jpg,.svg,.webp"
-                    className={`form-control ${
+                    className={`form-control form-control-sm ${
                       formik.touched.image && formik.errors.image
                         ? "is-invalid"
                         : ""
@@ -332,7 +332,7 @@ function SliderEdit() {
                   </label>
                   <select
                     aria-label="Default select example"
-                    className={`form-select ${
+                    className={`form-select form-select-sm ${
                       formik.touched.order && formik.errors.order
                         ? "is-invalid"
                         : ""

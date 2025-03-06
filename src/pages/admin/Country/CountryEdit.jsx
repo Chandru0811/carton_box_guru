@@ -193,7 +193,7 @@ function CountryEdit() {
                   <label className="form-label">Country Name</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("country_name")}
                   />
                   {formik.touched.country_name && formik.errors.country_name ? (
@@ -209,7 +209,7 @@ function CountryEdit() {
                   <label className="form-label">Country Code</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("country_code")}
                   />
                   {formik.touched.country_code && formik.errors.country_code ? (
@@ -225,7 +225,7 @@ function CountryEdit() {
                   <label className="form-label">Phone</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("phone")}
                     onInput={(event) => {
                       event.target.value = event.target.value.replace(
@@ -246,7 +246,7 @@ function CountryEdit() {
                 <input
                   type="file"
                   accept="image/*"
-                  className="form-control"
+                  className="form-control form-control-sm"
                   onChange={(event) => {
                     const file = event.currentTarget.files[0];
                     if (file) {
@@ -275,7 +275,7 @@ function CountryEdit() {
                   <label className="form-label">Currency Symbol</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("currency_symbol")}
                   />
                   {formik.touched.currency_symbol &&
@@ -292,7 +292,7 @@ function CountryEdit() {
                   <label className="form-label">Currency Code</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("currency_code")}
                   />
                   {formik.touched.currency_code &&
@@ -310,7 +310,7 @@ function CountryEdit() {
                   <div key={index} className="mb-2 d-flex align-items-center">
                     <input
                       type="text"
-                      className="form-control form-control-sm me-2"
+                      className="form-control form-control-sm form-control form-control-sm-sm me-2"
                       value={link}
                       onChange={(e) =>
                         handleSocialLinkChange(index, e.target.value)
@@ -319,7 +319,7 @@ function CountryEdit() {
                     />
                     <button
                       type="button"
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-cbg-primary btn-sm"
                       onClick={() => deleteSocialLink(index)}
                     >
                       Delete
@@ -347,7 +347,7 @@ function CountryEdit() {
                   <label className="form-label">Address</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("address")}
                   />
                   {formik.touched.address && formik.errors.address ? (
@@ -361,7 +361,7 @@ function CountryEdit() {
                   <label className="form-label">Email</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="form-control form-control-sm"
                     {...formik.getFieldProps("email")}
                   />
                   {formik.touched.email && formik.errors.email ? (
@@ -376,7 +376,7 @@ function CountryEdit() {
                   <div className="d-flex align-items-center">
                     <input
                       type="color"
-                      className="form-control form-control-sm me-2"
+                      className="form-control form-control-sm form-control form-control-sm-sm me-2"
                       value={formik.values.color_code}
                       onChange={(e) =>
                         formik.setFieldValue("color_code", e.target.value)
@@ -385,7 +385,7 @@ function CountryEdit() {
                     />
                     <input
                       type="text"
-                      className="form-control form-control-sm"
+                      className="form-control form-control-sm form-control form-control-sm-sm"
                       {...formik.getFieldProps("color_code")}
                     />
                   </div>

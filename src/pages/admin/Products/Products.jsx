@@ -46,19 +46,31 @@ function Products() {
         ),
       },
       { accessorKey: "name", header: "Title" },
-      { accessorKey: "original_price", header: "Original Price",Cell: ({ cell }) => {
-        const value = parseFloat(cell.getValue());
-        return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
-      },},
-      { accessorKey: "discounted_price", header: "Discount Price" ,Cell: ({ cell }) => {
-        const value = parseFloat(cell.getValue());
-        return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
-      },},
-      { accessorKey: "description", header: "Description" , Cell: ({ cell }) => (
-        <div className="truncate-text" title={cell.getValue()}>
-          {cell.getValue()}
-        </div>
-      ),},
+      {
+        accessorKey: "original_price",
+        header: "Original Price",
+        Cell: ({ cell }) => {
+          const value = parseFloat(cell.getValue());
+          return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
+        },
+      },
+      {
+        accessorKey: "discounted_price",
+        header: "Discount Price",
+        Cell: ({ cell }) => {
+          const value = parseFloat(cell.getValue());
+          return value % 1 === 0 ? value.toFixed(0) : value.toFixed(2);
+        },
+      },
+      {
+        accessorKey: "description",
+        header: "Description",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
+      },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -140,7 +152,7 @@ function Products() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -179,6 +191,9 @@ Products.propTypes = {
     original: PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired,
+  }).isRequired,
+  cell: PropTypes.shape({
+    getValue: PropTypes.func.isRequired,
   }).isRequired,
 };
 
