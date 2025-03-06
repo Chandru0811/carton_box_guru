@@ -479,3 +479,10 @@ input:-webkit-autofill:focus-within {
   box-shadow: 0 0 0 30px white inset;
   -webkit-text-fill-color: black;
 }
+
+.sticky-top-header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  box-shadow: 2px 2px 4px var(--admin-secondary-color);
+}
