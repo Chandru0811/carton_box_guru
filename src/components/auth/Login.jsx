@@ -40,7 +40,7 @@ const Login = ({ loginAsAdmin }) => {
           values.email === "admin@gmail.com"
             ? { ...values, role: "1" }
             : values;
-        const response = await api.post("admin/login", payload);
+        const response = await api.post("login", payload);
 
         if (response.status === 200) {
           const userDetails = response.data.data.userDetails;
