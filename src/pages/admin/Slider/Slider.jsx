@@ -66,7 +66,7 @@ function Slider() {
       {
         accessorKey: "country",
         header: "Country",
-        Cell: ({ row }) => row.original.country?.country_name || "N/A", 
+        Cell: ({ row }) => row.original.country?.country_name || "N/A",
       },
       {
         accessorKey: "created_at",
@@ -104,7 +104,7 @@ function Slider() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("sliders");
+      const response = await api.get("admin/sliders");
       const sliderData = response.data.data;
       setData(sliderData);
     } catch (e) {
@@ -151,7 +151,7 @@ function Slider() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -171,7 +171,7 @@ function Slider() {
           </MenuItem>
           <MenuItem>
             <AdminDelete
-              path={`slider/delete/${selectedId}`}
+              path={`admin/slider/delete/${selectedId}`}
               onDeleteSuccess={getData}
               onOpen={handleMenuClose}
             />

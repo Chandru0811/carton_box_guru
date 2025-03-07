@@ -12,7 +12,7 @@ function SliderView() {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`slider/${id}`);
+      const response = await api.get(`admin/slider/${id}`);
       setData(response.data.data);
     } catch {
       toast.error("Error Fetching Data");

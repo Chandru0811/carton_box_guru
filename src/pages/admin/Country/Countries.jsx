@@ -90,7 +90,7 @@ function Countries() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("country");
+      const response = await api.get("admin/country");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
@@ -156,7 +156,7 @@ function Countries() {
           </MenuItem>
           <MenuItem>
             <AdminDelete
-              path={`country/${selectedId}`}
+              path={`admin/country/${selectedId}`}
               onDeleteSuccess={getData}
               onOpen={handleMenuClose}
             />

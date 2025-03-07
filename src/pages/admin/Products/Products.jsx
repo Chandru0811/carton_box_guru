@@ -105,7 +105,7 @@ function Products() {
   const getData = async (shopId) => {
     try {
       setLoading(true);
-      const response = await api.get(`product/${shopId}`);
+      const response = await api.get(`admin/product/${shopId}`);
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
@@ -172,8 +172,8 @@ function Products() {
           </MenuItem>
           <MenuItem>
             <AdminDelete
-              path={`product/${selectedId}/delete`}
-              onDeleteSuccess={getData}
+              path={`admin/product/${selectedId}/delete`}
+              onDeleteSuccess={() => getData(1)}
               onOpen={handleMenuClose}
             />
           </MenuItem>

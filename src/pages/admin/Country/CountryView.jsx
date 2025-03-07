@@ -12,7 +12,7 @@ function CountryView() {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`country/${id}`);
+      const response = await api.get(`admin/country/${id}`);
       setData(response.data.data);
       // console.log( "responseData",response.data.data);
     } catch {

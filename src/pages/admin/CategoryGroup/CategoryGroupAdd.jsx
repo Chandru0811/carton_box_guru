@@ -76,7 +76,7 @@ function CategoryGroupAdd() {
       setLoadIndicator(true);
 
       try {
-        const response = await api.post(`categoryGroup`, formData, {
+        const response = await api.post(`admin/categoryGroup`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -116,7 +116,7 @@ function CategoryGroupAdd() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {

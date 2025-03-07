@@ -13,7 +13,7 @@ function CategoryView() {
   // Fetch category data by id
   const getData = async () => {
     try {
-      const response = await api.get(`categories/${id}`);
+      const response = await api.get(`admin/categories/${id}`);
 
       console.log("Category data response:", response);
       setData(response.data.data);
@@ -32,7 +32,7 @@ function CategoryView() {
   const handleActivate = async () => {
     setLoading(true);
     try {
-      const response = await api.post(`category/${id}/approve`, {});
+      const response = await api.post(`admin/category/${id}/approve`, {});
 
       if (response.status === 200) {
         getData();

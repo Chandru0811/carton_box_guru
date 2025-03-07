@@ -93,7 +93,7 @@ function CategoryGroup() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("categoryGroup");
+      const response = await api.get("admin/categoryGroup");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");

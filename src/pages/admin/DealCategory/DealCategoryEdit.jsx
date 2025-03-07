@@ -75,11 +75,15 @@ function DealCategoryEdit() {
       }
 
       try {
-        const response = await api.post(`dealCategory/update/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await api.post(
+          `admin/dealCategory/update/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/dealcategories");
@@ -95,7 +99,7 @@ function DealCategoryEdit() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -109,7 +113,7 @@ function DealCategoryEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`dealCategory/${id}`);
+        const response = await api.get(`admin/dealCategory/${id}`);
         const dealcategoryData = response.data.data;
         formik.setValues({
           name: dealcategoryData.name || "",

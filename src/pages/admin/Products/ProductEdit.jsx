@@ -249,11 +249,15 @@ function ProductEdit() {
       formData.append("_method", "PUT");
       setLoadIndicator(true);
       try {
-        const response = await api.post(`product/${id}/update`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await api.post(
+          `admin/product/${id}/update`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         console.log("Response", response);
         if (response.status === 200) {
           toast.success(response.data.message);
@@ -380,7 +384,7 @@ function ProductEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -395,7 +399,7 @@ function ProductEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`categorygroups`);
+        const response = await api.get(`admin/categorygroups`);
 
         setAllCategorgroup(response.data.data);
       } catch (error) {
@@ -409,7 +413,9 @@ function ProductEdit() {
   const fetchCategory = async (categoryId) => {
     setLoading(true);
     try {
-      const category = await api.get(`categories/categorygroups/${categoryId}`);
+      const category = await api.get(
+        `admin/categories/categorygroups/${categoryId}`
+      );
       setCategory(category.data.data);
     } catch (error) {
       toast.error(error);
@@ -453,7 +459,7 @@ function ProductEdit() {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`product/${id}/get`);
+      const response = await api.get(`admin/product/${id}/get`);
 
       const data = response.data.data;
       const isDiscountCoupon =
@@ -558,7 +564,9 @@ function ProductEdit() {
   const handleDelete = async (index, mediaId) => {
     if (mediaId) {
       try {
-        const response = await api.delete(`product/media/${mediaId}/delete`);
+        const response = await api.delete(
+          `admin/product/media/${mediaId}/delete`
+        );
 
         if (response.status === 200) {
           const updatedFields = [...formik.values.mediaFields];

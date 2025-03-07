@@ -15,7 +15,7 @@ function ProductView() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`product/${id}/get`);
+        const response = await api.get(`admin/product/${id}/get`);
         const { additional_details, ...rest } = response.data.data;
         console.log(response.data.data, "Response Data"); // Debugging
 

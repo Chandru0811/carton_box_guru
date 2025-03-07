@@ -83,7 +83,7 @@ function CategoryGroupEdit() {
       setLoadIndicator(true);
       try {
         const response = await api.post(
-          `categoryGroup/update/${id}`,
+          `admin/categoryGroup/update/${id}`,
           formData,
           {
             headers: {
@@ -122,7 +122,7 @@ function CategoryGroupEdit() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -145,7 +145,7 @@ function CategoryGroupEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`categoryGroup/${id}`);
+        const response = await api.get(`admin/categoryGroup/${id}`);
         const categoryGroupData = response.data.data;
         formik.setValues({
           name: categoryGroupData.name || "",

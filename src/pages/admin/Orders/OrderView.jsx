@@ -13,7 +13,7 @@ function OrderView() {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`order/${order_id}/${product_id}`);
+      const response = await api.get(`admin/order/${order_id}/${product_id}`);
       setData(response.data.data);
     } catch (error) {
       toast.error("Error Fetching Data ", error);

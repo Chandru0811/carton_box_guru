@@ -67,7 +67,7 @@ function SliderEdit() {
 
       setLoadIndicator(true);
       try {
-        const response = await api.post(`slider/update/${id}`, formData);
+        const response = await api.post(`admin/slider/update/${id}`, formData);
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/slider");
@@ -86,7 +86,7 @@ function SliderEdit() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -100,7 +100,7 @@ function SliderEdit() {
     const getData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`slider/${id}`);
+        const response = await api.get(`admin/slider/${id}`);
         const sliderData = response.data.data;
 
         formik.setValues({

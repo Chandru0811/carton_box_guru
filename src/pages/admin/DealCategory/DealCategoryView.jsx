@@ -14,7 +14,7 @@ function DealCategoryView() {
     if (id) {
       setLoading(true);
       try {
-        const response = await api.get(`dealCategory/${id}`);
+        const response = await api.get(`admin/dealCategory/${id}`);
         setData(response.data.data);
       } catch (error) {
         toast.error("Error Fetching Data ", error);

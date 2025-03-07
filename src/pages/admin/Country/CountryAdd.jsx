@@ -83,7 +83,7 @@ function CountryAdd() {
       setLoadIndicator(true);
 
       try {
-        const response = await api.post(`country`, formData, {
+        const response = await api.post(`admin/country`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

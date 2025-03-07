@@ -47,11 +47,15 @@ function DealCategory() {
       },
       { accessorKey: "name", header: "Name" },
       { accessorKey: "slug", header: "Slug" },
-      { accessorKey: "description", header: "Description", Cell: ({ cell }) => (
-        <div className="truncate-text" title={cell.getValue()}>
-          {cell.getValue()}
-        </div>
-      ), },
+      {
+        accessorKey: "description",
+        header: "Description",
+        Cell: ({ cell }) => (
+          <div className="truncate-text" title={cell.getValue()}>
+            {cell.getValue()}
+          </div>
+        ),
+      },
       {
         accessorKey: "created_at",
         header: "Created At",
@@ -87,7 +91,7 @@ function DealCategory() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("dealCategory");
+      const response = await api.get("admin/dealCategory");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
@@ -133,7 +137,7 @@ function DealCategory() {
               initialState={{
                 columnVisibility: {
                   created_at: false,
-                  updated_at: false
+                  updated_at: false,
                 },
               }}
               muiTableBodyRowProps={({ row }) => ({
@@ -154,7 +158,13 @@ function DealCategory() {
           >
             Edit
           </MenuItem>
-          <MenuItem>Delete</MenuItem>
+          <MenuItem>
+            <AdminDelete
+              path={`admin/dealCategory/remove/${selectedId}`}
+              onDeleteSuccess={getData}
+              onOpen={handleMenuClose}
+            />
+          </MenuItem>
         </Menu>
       </div>
     </div>
@@ -162,6 +172,7 @@ function DealCategory() {
 }
 
 import PropTypes from "prop-types";
+import AdminDelete from "../../../components/admin/AdminDelete";
 
 DealCategory.propTypes = {
   row: PropTypes.shape({
@@ -169,6 +180,9 @@ DealCategory.propTypes = {
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     }).isRequired,
   }).isRequired,
+  cell: PropTypes.shape({
+    getValue: PropTypes.func.isRequired,
+  }),
 };
 
 export default DealCategory;

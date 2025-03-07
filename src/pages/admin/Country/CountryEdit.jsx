@@ -78,11 +78,15 @@ function CountryEdit() {
 
       setLoadIndicator(true);
       try {
-        const response = await api.post(`country/update/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const response = await api.post(
+          `admin/country/update/${id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
         toast.success(response.data.message);
         navigate("/countries");
       } catch (error) {
@@ -127,7 +131,7 @@ function CountryEdit() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`country/${id}`);
+        const response = await api.get(`admin/country/${id}`);
         const data = response.data.data;
 
         // Convert social_links from string to array (if necessary)

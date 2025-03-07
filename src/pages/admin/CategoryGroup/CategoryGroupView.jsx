@@ -12,7 +12,7 @@ function CategoryGroupView() {
   const getData = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`categoryGroup/${id}`);
+      const response = await api.get(`admin/categoryGroup/${id}`);
       setData(response.data.data);
     } catch {
       toast.error("Error Fetching Data");

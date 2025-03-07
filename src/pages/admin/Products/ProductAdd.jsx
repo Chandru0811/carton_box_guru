@@ -213,7 +213,7 @@ function ProductAdd() {
       formData.append("slug", finalSlug);
       setLoadIndicator(true);
       try {
-        const response = await api.post(`product`, formData, {
+        const response = await api.post(`admin/product`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -345,7 +345,7 @@ function ProductAdd() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`categorygroups`);
+        const response = await api.get(`admin/categorygroups`);
 
         setAllCategorgroup(response.data.data);
       } catch (error) {
@@ -358,7 +358,7 @@ function ProductAdd() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -370,7 +370,9 @@ function ProductAdd() {
 
   const fetchCategory = async (categoryId) => {
     try {
-      const category = await api.get(`categories/categorygroups/${categoryId}`);
+      const category = await api.get(
+        `admin/categories/categorygroups/${categoryId}`
+      );
       setCategory(category.data.data);
     } catch (error) {
       toast.error(error);

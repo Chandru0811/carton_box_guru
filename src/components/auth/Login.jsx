@@ -4,7 +4,7 @@ import { Form, Button } from "react-bootstrap";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as Yup from "yup";
 import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import headerlogo from "../../assets/images/cb_logo.png";
 import toast from "react-hot-toast";
 import api from "../../config/URL";
@@ -40,7 +40,7 @@ const Login = ({ loginAsAdmin }) => {
           values.email === "admin@gmail.com"
             ? { ...values, role: "1" }
             : values;
-        const response = await api.post("login", payload);
+        const response = await api.post("admin/login", payload);
 
         if (response.status === 200) {
           const userDetails = response.data.data.userDetails;

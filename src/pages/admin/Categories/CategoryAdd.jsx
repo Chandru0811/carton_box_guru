@@ -73,7 +73,7 @@ function CategoriesAdd() {
 
       setLoadIndicator(true);
       try {
-        const response = await api.post(`categories`, formData, {
+        const response = await api.post(`admin/categories`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -110,7 +110,7 @@ function CategoriesAdd() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await api.get(`country`);
+        const response = await api.get(`admin/country`);
 
         setAllCountry(response.data.data);
       } catch (error) {
@@ -123,7 +123,7 @@ function CategoriesAdd() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.get("categoryGroup");
+        const response = await api.get("admin/categoryGroup");
         setDatas(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -101,7 +101,7 @@ function Categories() {
   const getData = async () => {
     try {
       setLoading(true);
-      const response = await api.get("categories");
+      const response = await api.get("admin/categories");
       setData(response.data.data);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
