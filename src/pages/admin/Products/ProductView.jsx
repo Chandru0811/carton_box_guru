@@ -5,34 +5,78 @@ import api from "../../../config/URL";
 import ImageURL from "../../../config/ImageURL";
 import { FaRegCopy } from "react-icons/fa";
 import { LuCopyCheck } from "react-icons/lu";
+import { Modal } from "react-bootstrap";
 
 function ProductView() {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [shopStatus, setShopStatus] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const handleOpenModal = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+  const [loadIndicator, setLoadIndicator] = useState(false);
+
+  const handleActivate = async () => {
+    setLoadIndicator(true);
+    try {
+      const response = await api.post(`admin/deal/${id}/approve`);
+      if (response.status === 200) {
+        getData();
+        toast.success("Product Activated Successfully!");
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while activating the product.");
+      console.error("Activation Error:", error);
+    } finally {
+      setLoadIndicator(false);
+    }
+  };
+
+  const handleDeActive = async () => {
+    setLoading(true);
+    try {
+      const response = await api.post(`admin/deal/${id}/disapprove`);
+      if (response.status === 200) {
+        getData();
+        toast.success("Product DeActivated Successfully!");
+        handleClose();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("An error occurred while activating the product.");
+      console.error("DeActivation Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const response = await api.get(`admin/product/${id}/get`);
+      const { additional_details, ...rest } = response.data.data;
+      console.log(response.data.data, "Response Data"); // Debugging
+
+      const decodedAdditionalDetails = additional_details
+        ? JSON.parse(additional_details)
+        : [];
+
+      setData({
+        ...rest,
+        additional_details: decodedAdditionalDetails,
+      });
+      setShopStatus(response.data.data.active);
+    } catch {
+      toast.error("Error Fetching Data");
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get(`admin/product/${id}/get`);
-        const { additional_details, ...rest } = response.data.data;
-        console.log(response.data.data, "Response Data"); // Debugging
-
-        const decodedAdditionalDetails = additional_details
-          ? JSON.parse(additional_details)
-          : [];
-
-        setData({
-          ...rest,
-          additional_details: decodedAdditionalDetails,
-        });
-      } catch {
-        toast.error("Error Fetching Data");
-      }
-      setLoading(false);
-    };
-
     getData();
   }, [id]);
 
@@ -68,16 +112,39 @@ function ProductView() {
             <div className="d-flex justify-content-between align-items-center">
               <h1 className="h4 ls-tight">View Deals</h1>
               <div>
-                <Link to={`/products/edit/${id}`}>
+                {/* <Link to={`/products/edit/${id}`}>
                   <button type="button" className="btn btn-light btn-sm me-2">
                     <span>Edit</span>
                   </button>
-                </Link>
+                </Link> */}
                 <Link to="/products">
                   <button type="button" className="btn btn-light btn-sm">
                     <span>Back</span>
                   </button>
                 </Link>
+                {shopStatus === 0 || shopStatus === "0" ? (
+                  <button
+                    type="button"
+                    onClick={handleActivate}
+                    className="btn btn-success btn-sm mx-2"
+                    disabled={loadIndicator}
+                  >
+                    {loadIndicator && (
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        aria-hidden="true"
+                      ></span>
+                    )}
+                    Activate
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleOpenModal}
+                    className="btn btn-danger btn-sm mx-2"
+                  >
+                    Deactivate
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -437,6 +504,37 @@ function ProductView() {
           )}
         </div>
       </>
+
+      <Modal
+        show={showModal}
+        backdrop="static"
+        keyboard={false}
+        onHide={handleClose}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Deactivate Deal</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to deactivate this Deal?</Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-sm btn-button" onClick={handleClose}>
+            Close
+          </button>
+          <button
+            className="btn-sm btn-danger"
+            type="submit"
+            onClick={handleDeActive}
+            disabled={loading}
+          >
+            {loading && (
+              <span
+                className="spinner-border spinner-border-sm me-2"
+                aria-hidden="true"
+              ></span>
+            )}
+            Deactivate
+          </button>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 }

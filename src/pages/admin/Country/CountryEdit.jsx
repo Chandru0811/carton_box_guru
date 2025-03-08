@@ -40,6 +40,7 @@ function CountryEdit() {
     color_code: Yup.string().required("Color code is required*"),
     country_code: Yup.string().required("Country code is required*"),
     social_links: Yup.array().of(Yup.string().url("Invalid URL")), // Validate each URL
+    phone_number_code: Yup.string().required("Phone number code is required*"),
   });
 
   const formik = useFormik({
@@ -48,12 +49,13 @@ function CountryEdit() {
       flag: null,
       currency_symbol: "",
       currency_code: "",
-      social_links: [""], // Initialize with one empty social link
+      social_links: [""],
       address: "",
       phone: "",
       email: "",
       color_code: "",
       country_code: "",
+      phone_number_code: "",
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -63,15 +65,16 @@ function CountryEdit() {
 
       // Append all fields to formData
       Object.keys(values).forEach((key) => {
-        if (key === "flag") {
-          if (values.flag instanceof File) {
-            formData.append("flag", values.flag);
-          }
-        } else if (key === "social_links") {
+        if (key === "flag" && values.flag instanceof File) {
+          formData.append("flag", values.flag);
+        } else if (
+          key === "social_links" &&
+          Array.isArray(values.social_links)
+        ) {
           // Convert the array of social links into a single string (if backend expects a string)
           const socialLinksString = values.social_links.join(",");
           formData.append(key, socialLinksString);
-        } else {
+        } else if (values[key] !== undefined && values[key] !== null) {
           formData.append(key, values[key]);
         }
       });
@@ -90,7 +93,9 @@ function CountryEdit() {
         toast.success(response.data.message);
         navigate("/countries");
       } catch (error) {
-        toast.error(error.response?.data?.message || "An error occurred");
+        const errorMessage =
+          error.response?.data?.message || "An error occurred";
+        toast.error(errorMessage);
       } finally {
         setLoadIndicator(false);
         setLoading(false);
@@ -151,6 +156,7 @@ function CountryEdit() {
           email: data.email || "",
           color_code: data.color_code || "",
           country_code: data.country_code || "",
+          phone_number_code: data.phone_number_code || "",
         });
 
         if (data.flag_path) {
@@ -192,7 +198,7 @@ function CountryEdit() {
             </div>
           ) : (
             <div className="row mt-3">
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-md-4 col-12 mb-3">
                 <div className="mb-3">
                   <label className="form-label">Country Name</label>
                   <input
@@ -208,23 +214,34 @@ function CountryEdit() {
                 </div>
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-md-4 col-12 mb-3">
                 <div className="mb-3">
-                  <label className="form-label">Country Code</label>
+                  <label className="form-label">Phone Code</label>
                   <input
                     type="text"
                     className="form-control form-control-sm"
-                    {...formik.getFieldProps("country_code")}
+                    {...formik.getFieldProps("phone_number_code")}
+                    onInput={(event) => {
+                      event.target.value = event.target.value.replace(
+                        /[^0-9]/g,
+                        ""
+                      );
+                      formik.setFieldValue(
+                        "phone_number_code",
+                        event.target.value
+                      );
+                    }}
                   />
-                  {formik.touched.country_code && formik.errors.country_code ? (
+                  {formik.touched.phone_number_code &&
+                  formik.errors.phone_number_code ? (
                     <div className="text-danger">
-                      {formik.errors.country_code}
+                      {formik.errors.phone_number_code}
                     </div>
                   ) : null}
                 </div>
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              <div className="col-md-4 col-12 mb-3">
                 <div className="mb-3">
                   <label className="form-label">Phone</label>
                   <input
@@ -241,6 +258,111 @@ function CountryEdit() {
                   />
                   {formik.touched.phone && formik.errors.phone ? (
                     <div className="text-danger">{formik.errors.phone}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Country Code</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    {...formik.getFieldProps("country_code")}
+                  />
+                  {formik.touched.country_code && formik.errors.country_code ? (
+                    <div className="text-danger">
+                      {formik.errors.country_code}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Currency Symbol</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    {...formik.getFieldProps("currency_symbol")}
+                  />
+                  {formik.touched.currency_symbol &&
+                  formik.errors.currency_symbol ? (
+                    <div className="text-danger">
+                      {formik.errors.currency_symbol}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Currency Code</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    {...formik.getFieldProps("currency_code")}
+                  />
+                  {formik.touched.currency_code &&
+                  formik.errors.currency_code ? (
+                    <div className="text-danger">
+                      {formik.errors.currency_code}
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Address</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm"
+                    {...formik.getFieldProps("address")}
+                  />
+                  {formik.touched.address && formik.errors.address ? (
+                    <div className="text-danger">{formik.errors.address}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control form-control-sm"
+                    {...formik.getFieldProps("email")}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <div className="text-danger">{formik.errors.email}</div>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="col-md-4 col-12 mb-3">
+                <div className="mb-3">
+                  <label className="form-label">Color Code</label>
+                  <div className="d-flex align-items-center">
+                    <input
+                      type="color"
+                      className="form-control form-control-sm form-control form-control-sm-sm me-2"
+                      value={formik.values.color_code}
+                      onChange={(e) =>
+                        formik.setFieldValue("color_code", e.target.value)
+                      }
+                      style={{ width: "50px", height: "38px", padding: "2px" }}
+                    />
+                    <input
+                      type="text"
+                      className="form-control form-control-sm form-control form-control-sm-sm"
+                      {...formik.getFieldProps("color_code")}
+                    />
+                  </div>
+                  {formik.touched.color_code && formik.errors.color_code ? (
+                    <div className="text-danger">
+                      {formik.errors.color_code}
+                    </div>
                   ) : null}
                 </div>
               </div>
@@ -273,48 +395,13 @@ function CountryEdit() {
                   />
                 )}
               </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Currency Symbol</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    {...formik.getFieldProps("currency_symbol")}
-                  />
-                  {formik.touched.currency_symbol &&
-                  formik.errors.currency_symbol ? (
-                    <div className="text-danger">
-                      {formik.errors.currency_symbol}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Currency Code</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    {...formik.getFieldProps("currency_code")}
-                  />
-                  {formik.touched.currency_code &&
-                  formik.errors.currency_code ? (
-                    <div className="text-danger">
-                      {formik.errors.currency_code}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="col-12 mb-3">
-                <label className="form-label">Social Links</label>
-                {formik.values.social_links.map((link, index) => (
-                  <div key={index} className="mb-2 d-flex align-items-center">
+              {formik.values.social_links.map((link, index) => (
+                <div className="col-md-6 col-12 mb-3" key={index}>
+                  <label className="form-label">Social Links</label>
+                  <div className="mb-2 d-flex align-items-center">
                     <input
                       type="text"
-                      className="form-control form-control-sm form-control form-control-sm-sm me-2"
+                      className="form-control form-control-sm me-2"
                       value={link}
                       onChange={(e) =>
                         handleSocialLinkChange(index, e.target.value)
@@ -328,77 +415,25 @@ function CountryEdit() {
                     >
                       Delete
                     </button>
-                    {formik.touched.social_links &&
-                      formik.errors.social_links &&
-                      formik.errors.social_links[index] && (
-                        <div className="text-danger">
-                          {formik.errors.social_links[index]}
-                        </div>
-                      )}
                   </div>
-                ))}
+                  {formik.touched.social_links &&
+                    formik.errors.social_links &&
+                    formik.errors.social_links[index] && (
+                      <div className="text-danger">
+                        {formik.errors.social_links[index]}
+                      </div>
+                    )}
+                </div>
+              ))}
+
+              <div className="d-flex justify-content-end align-items-center">
                 <button
                   type="button"
-                  className="btn btn-sm btn-secondary mt-2"
+                  className="btn btn-sm btn-cbg-primary-outline mt-2"
                   onClick={addSocialLink}
                 >
                   Add More
                 </button>
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Address</label>
-                  <input
-                    type="text"
-                    className="form-control form-control-sm"
-                    {...formik.getFieldProps("address")}
-                  />
-                  {formik.touched.address && formik.errors.address ? (
-                    <div className="text-danger">{formik.errors.address}</div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    className="form-control form-control-sm"
-                    {...formik.getFieldProps("email")}
-                  />
-                  {formik.touched.email && formik.errors.email ? (
-                    <div className="text-danger">{formik.errors.email}</div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="col-md-6 col-12 mb-3">
-                <div className="mb-3">
-                  <label className="form-label">Color Code</label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      type="color"
-                      className="form-control form-control-sm form-control form-control-sm-sm me-2"
-                      value={formik.values.color_code}
-                      onChange={(e) =>
-                        formik.setFieldValue("color_code", e.target.value)
-                      }
-                      style={{ width: "50px", height: "38px", padding: "2px" }}
-                    />
-                    <input
-                      type="text"
-                      className="form-control form-control-sm form-control form-control-sm-sm"
-                      {...formik.getFieldProps("color_code")}
-                    />
-                  </div>
-                  {formik.touched.color_code && formik.errors.color_code ? (
-                    <div className="text-danger">
-                      {formik.errors.color_code}
-                    </div>
-                  ) : null}
-                </div>
               </div>
 
               <div className="hstack p-2 mt-5">

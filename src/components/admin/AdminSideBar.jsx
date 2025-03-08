@@ -7,7 +7,8 @@ import { TbShoppingCartFilled, TbWorld } from "react-icons/tb";
 import { BsBarChartFill } from "react-icons/bs";
 import headerlogo from "../../assets/images/cb_logo.png";
 import { FaBoxOpen, FaSliders } from "react-icons/fa6";
-import { MdCategory } from "react-icons/md";
+// import { MdCategory } from "react-icons/md";
+import { FaUser } from "react-icons/fa";
 
 function AdminSideBar({ handleLogout }) {
   const navigate = useNavigate();
@@ -89,12 +90,12 @@ function AdminSideBar({ handleLogout }) {
                 Categories
               </NavLink>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <NavLink className="nav-link title_nav" to="/dealcategories">
                 <MdCategory />
                 Deal Categories
               </NavLink>
-            </li>
+            </li> */}
             <li className="nav-item">
               <NavLink className="nav-link title_nav" to="/products">
                 <TbShoppingCartFilled />
@@ -105,6 +106,12 @@ function AdminSideBar({ handleLogout }) {
               <NavLink className="nav-link title_nav" to="/orders">
                 <FaBoxOpen />
                 Orders
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link title_nav" to="/user">
+                <FaUser />
+                User
               </NavLink>
             </li>
           </ul>

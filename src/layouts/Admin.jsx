@@ -30,6 +30,8 @@ import CountryEdit from "../pages/admin/Country/CountryEdit";
 import CountryView from "../pages/admin/Country/CountryView";
 import Orders from "../pages/admin/Orders/Orders";
 import OrderView from "../pages/admin/Orders/OrderView";
+import User from "../pages/admin/User/User";
+import UserView from "../pages/admin/User/UserView";
 
 function Admin({ handleLogout }) {
   return (
@@ -120,6 +122,10 @@ function Admin({ handleLogout }) {
                       path="/order/:order_id/:product_id"
                       element={<OrderView />}
                     />
+
+                    {/* {/ Slider /} */}
+                    <Route path="/user" element={<User />} />
+                    <Route path="/user/view/:id" element={<UserView />} />
                   </Routes>
                 </div>
                 <AdminFooter />
