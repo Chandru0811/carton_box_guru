@@ -4,38 +4,38 @@ import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../../config/URL";
 import toast from "react-hot-toast";
-import Cropper from "react-easy-crop";
+// import Cropper from "react-easy-crop";
 import { FiAlertTriangle } from "react-icons/fi";
 
 function CategoriesAdd() {
   const [loadIndicator, setLoadIndicator] = useState(false);
-  const [imageSrc, setImageSrc] = useState(null);
+  // const [imageSrc, setImageSrc] = useState(null);
   const [datas, setDatas] = useState([]);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [showCropper, setShowCropper] = useState(false);
+  // const [crop, setCrop] = useState({ x: 0, y: 0 });
+  // const [zoom, setZoom] = useState(1);
+  // const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  // const [showCropper, setShowCropper] = useState(false);
   const navigate = useNavigate();
   const [allCountry, setAllCountry] = useState([]);
-  const [originalFileName, setOriginalFileName] = useState("");
-  const [originalFileType, setOriginalFileType] = useState("");
-  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-  const SUPPORTED_FORMATS = [
-    "image/png",
-    "image/jpeg",
-    "image/jpg",
-    "image/svg+xml",
-    "image/webp",
-  ];
+  // const [originalFileName, setOriginalFileName] = useState("");
+  // const [originalFileType, setOriginalFileType] = useState("");
+  // const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+  // const SUPPORTED_FORMATS = [
+  //   "image/png",
+  //   "image/jpeg",
+  //   "image/jpg",
+  //   "image/svg+xml",
+  //   "image/webp",
+  // ];
 
-  const imageValidation = Yup.mixed()
-    .required("*Image is required")
-    .test("fileFormat", "Unsupported format", (value) => {
-      return !value || (value && SUPPORTED_FORMATS.includes(value.type));
-    })
-    .test("fileSize", "File size is too large. Max 2MB.", (value) => {
-      return !value || (value && value.size <= MAX_FILE_SIZE);
-    });
+  // const imageValidation = Yup.mixed()
+  //   .required("*Image is required")
+  //   .test("fileFormat", "Unsupported format", (value) => {
+  //     return !value || (value && SUPPORTED_FORMATS.includes(value.type));
+  //   })
+  //   .test("fileSize", "File size is too large. Max 2MB.", (value) => {
+  //     return !value || (value && value.size <= MAX_FILE_SIZE);
+  //   });
 
   const validationSchema = Yup.object({
     category_group_id: Yup.string().required("*Select an groupId"),
@@ -44,7 +44,7 @@ function CategoriesAdd() {
     name: Yup.string()
       .max(30, "Name must be 30 characters or less")
       .required("Name is required"),
-    icon: imageValidation,
+    // icon: imageValidation,
     description: Yup.string().max(300, "Maximum 300 characters allowed"),
     country_id: Yup.string().required("Country is required"),
   });
@@ -56,7 +56,7 @@ function CategoriesAdd() {
       description: "",
       name: "",
       slug: "",
-      icon: null,
+      // icon: null,
       country_id: "",
     },
     validationSchema: validationSchema,
@@ -68,7 +68,7 @@ function CategoriesAdd() {
       formData.append("description", values.description);
       formData.append("name", values.name);
       formData.append("slug", values.slug);
-      formData.append("icon", values.icon);
+      // formData.append("icon", values.icon);
       formData.append("country_id", values.country_id);
 
       setLoadIndicator(true);
@@ -137,95 +137,96 @@ function CategoriesAdd() {
     const slug = formik.values.name.toLowerCase().replace(/\s+/g, "_");
     formik.setFieldValue("slug", slug);
   }, [formik.values.name]);
-  const handleFileChange = (event) => {
-    const file = event?.target?.files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
-        return;
-      }
 
-      // Read file as data URL for cropping
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImageSrc(reader.result); // Set imageSrc for the cropper
-        setOriginalFileName(file.name);
-        setOriginalFileType(file.type);
-        setShowCropper(true); // Show cropper when image is loaded
-      };
-      reader.readAsDataURL(file);
+  // const handleFileChange = (event) => {
+  //   const file = event?.target?.files[0];
+  //   if (file) {
+  //     if (file.size > MAX_FILE_SIZE) {
+  //       formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
+  //       return;
+  //     }
 
-      if (file.size > MAX_FILE_SIZE) {
-        formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
-      }
-    }
-  };
+  //     // Read file as data URL for cropping
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setImageSrc(reader.result); // Set imageSrc for the cropper
+  //       setOriginalFileName(file.name);
+  //       setOriginalFileType(file.type);
+  //       setShowCropper(true); // Show cropper when image is loaded
+  //     };
+  //     reader.readAsDataURL(file);
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
+  //     if (file.size > MAX_FILE_SIZE) {
+  //       formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
+  //     }
+  //   }
+  // };
 
-  const getCroppedImg = (imageSrc, crop, croppedAreaPixels) => {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      image.src = imageSrc;
-      image.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+  // const onCropComplete = (croppedArea, croppedAreaPixels) => {
+  //   setCroppedAreaPixels(croppedAreaPixels);
+  // };
 
-        const targetWidth = 300;
-        const targetHeight = 300;
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+  // const getCroppedImg = (imageSrc, crop, croppedAreaPixels) => {
+  //   return new Promise((resolve, reject) => {
+  //     const image = new Image();
+  //     image.src = imageSrc;
+  //     image.onload = () => {
+  //       const canvas = document.createElement("canvas");
+  //       const ctx = canvas.getContext("2d");
 
-        ctx.drawImage(
-          image,
-          croppedAreaPixels.x,
-          croppedAreaPixels.y,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height,
-          0,
-          0,
-          targetWidth,
-          targetHeight
-        );
+  //       const targetWidth = 300;
+  //       const targetHeight = 300;
+  //       canvas.width = targetWidth;
+  //       canvas.height = targetHeight;
 
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            reject(new Error("Canvas is empty"));
-            return;
-          }
-          blob.name = "croppedImage.jpeg";
-          resolve(blob);
-        }, "image/jpeg");
-      };
-    });
-  };
+  //       ctx.drawImage(
+  //         image,
+  //         croppedAreaPixels.x,
+  //         croppedAreaPixels.y,
+  //         croppedAreaPixels.width,
+  //         croppedAreaPixels.height,
+  //         0,
+  //         0,
+  //         targetWidth,
+  //         targetHeight
+  //       );
 
-  const handleCropSave = async () => {
-    try {
-      const croppedImageBlob = await getCroppedImg(
-        imageSrc,
-        crop,
-        croppedAreaPixels
-      );
-      const file = new File([croppedImageBlob], originalFileName, {
-        type: originalFileType,
-      });
+  //       canvas.toBlob((blob) => {
+  //         if (!blob) {
+  //           reject(new Error("Canvas is empty"));
+  //           return;
+  //         }
+  //         blob.name = "croppedImage.jpeg";
+  //         resolve(blob);
+  //       }, "image/jpeg");
+  //     };
+  //   });
+  // };
 
-      formik.setFieldValue("icon", file);
-      setShowCropper(false);
-    } catch (error) {
-      console.error("Error cropping the image:", error);
-    }
-  };
+  // const handleCropSave = async () => {
+  //   try {
+  //     const croppedImageBlob = await getCroppedImg(
+  //       imageSrc,
+  //       crop,
+  //       croppedAreaPixels
+  //     );
+  //     const file = new File([croppedImageBlob], originalFileName, {
+  //       type: originalFileType,
+  //     });
 
-  const handleCropCancel = () => {
-    setShowCropper(false);
-    setImageSrc(null);
-    formik.setFieldValue("icon", "");
-    document.querySelector("input[type='file']").value = "";
-  };
+  //     formik.setFieldValue("icon", file);
+  //     setShowCropper(false);
+  //   } catch (error) {
+  //     console.error("Error cropping the image:", error);
+  //   }
+  // };
+
+  // const handleCropCancel = () => {
+  //   setShowCropper(false);
+  //   setImageSrc(null);
+  //   formik.setFieldValue("icon", "");
+  //   document.querySelector("input[type='file']").value = "";
+  // };
 
   return (
     <section className="px-4">
@@ -298,7 +299,7 @@ function CategoriesAdd() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Icon
                   <span className="text-danger">*</span>
@@ -357,7 +358,7 @@ function CategoriesAdd() {
                     </button>
                   </div>
                 )}
-              </div>
+              </div> */}
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Country<span className="text-danger">*</span>

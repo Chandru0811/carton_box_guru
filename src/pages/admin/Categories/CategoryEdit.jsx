@@ -4,8 +4,8 @@ import * as Yup from "yup";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import toast from "react-hot-toast";
-import ImageURL from "../../../config/ImageURL";
-import Cropper from "react-easy-crop";
+// import ImageURL from "../../../config/ImageURL";
+// import Cropper from "react-easy-crop";
 import { FiAlertTriangle } from "react-icons/fi";
 
 function CategoryEdit() {
@@ -14,40 +14,40 @@ function CategoryEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [datas, setDatas] = useState([]);
-  const [imageSrc, setImageSrc] = useState(null);
-  const [crop, setCrop] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [showCropper, setShowCropper] = useState(false);
-  const [previewImage, setPreviewImage] = useState(null);
-  const [originalFileName, setOriginalFileName] = useState("");
-  const [originalFileType, setOriginalFileType] = useState("");
+  // const [imageSrc, setImageSrc] = useState(null);
+  // const [crop, setCrop] = useState({ x: 0, y: 0 });
+  // const [zoom, setZoom] = useState(1);
+  // const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  // const [showCropper, setShowCropper] = useState(false);
+  // const [previewImage, setPreviewImage] = useState(null);
+  // const [originalFileName, setOriginalFileName] = useState("");
+  // const [originalFileType, setOriginalFileType] = useState("");
   const [allCountry, setAllCountry] = useState([]);
 
-  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
-  const SUPPORTED_FORMATS = [
-    "image/png",
-    "image/jpeg",
-    "image/jpg",
-    "image/svg+xml",
-    "image/webp",
-  ];
+  // const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+  // const SUPPORTED_FORMATS = [
+  //   "image/png",
+  //   "image/jpeg",
+  //   "image/jpg",
+  //   "image/svg+xml",
+  //   "image/webp",
+  // ];
 
-  const imageValidation = Yup.mixed()
-    .nullable()
-    .test("fileFormat", "Unsupported format", (value) => {
-      return !value || (value && SUPPORTED_FORMATS.includes(value.type));
-    })
-    .test("fileSize", "File size is too large. Max 2MB.", (value) => {
-      return !value || (value && value.size <= MAX_FILE_SIZE);
-    });
+  // const imageValidation = Yup.mixed()
+  //   .nullable()
+  //   .test("fileFormat", "Unsupported format", (value) => {
+  //     return !value || (value && SUPPORTED_FORMATS.includes(value.type));
+  //   })
+  //   .test("fileSize", "File size is too large. Max 2MB.", (value) => {
+  //     return !value || (value && value.size <= MAX_FILE_SIZE);
+  //   });
 
   const validationSchema = Yup.object({
     category_group_id: Yup.string().required("*Select an groupId"),
     name: Yup.string()
       .max(30, "Name must be 30 characters or less")
       .required("Name is required"),
-    icon: imageValidation,
+    // icon: imageValidation,
     description: Yup.string().max(300, "Maximum 300 characters allowed"),
     country_id: Yup.string().required("Country is required"),
   });
@@ -59,7 +59,7 @@ function CategoryEdit() {
       description: "",
       name: "",
       slug: "",
-      icon: null,
+      // icon: null,
       country_id: "",
     },
     validationSchema: validationSchema,
@@ -73,9 +73,9 @@ function CategoryEdit() {
       formData.append("slug", values.slug);
       formData.append("country_id", values.country_id);
 
-      if (values.icon) {
-        formData.append("icon", values.icon);
-      }
+      // if (values.icon) {
+      //   formData.append("icon", values.icon);
+      // }
 
       setLoadIndicator(true);
       try {
@@ -92,7 +92,7 @@ function CategoryEdit() {
         if (response.status === 200) {
           toast.success(response.data.message);
           navigate("/categories");
-          setPreviewImage(null);
+          // setPreviewImage(null);
         } else {
           toast.error(response.data.message);
         }
@@ -133,12 +133,12 @@ function CategoryEdit() {
           name: rest.name || "",
           slug: rest.slug || "",
           country_id: rest.country_id || "",
-          icon: null,
+          // icon: null,
         });
 
-        if (rest.icon) {
-          setPreviewImage(`${ImageURL}${rest.icon}`);
-        }
+        // if (rest.icon) {
+        //   setPreviewImage(`${ImageURL}${rest.icon}`);
+        // }
       } catch (error) {
         console.error("Error fetching data ", error);
       }
@@ -180,102 +180,102 @@ function CategoryEdit() {
     formik.setFieldValue("slug", slug);
   }, [formik.values.name]);
 
-  const handleFileChange = (event) => {
-    const file = event?.target?.files[0];
-    if (file) {
-      if (file.size > MAX_FILE_SIZE) {
-        formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
-        return;
-      }
-      formik.setFieldError(`icon`, "");
+  // const handleFileChange = (event) => {
+  //   const file = event?.target?.files[0];
+  //   if (file) {
+  //     if (file.size > MAX_FILE_SIZE) {
+  //       formik.setFieldError(`icon`, "File size is too large. Max 2MB.");
+  //       return;
+  //     }
+  //     formik.setFieldError(`icon`, "");
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImageSrc(reader.result);
-        setOriginalFileName(file.name);
-        setOriginalFileType(file.type);
-        setShowCropper(true);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       setImageSrc(reader.result);
+  //       setOriginalFileName(file.name);
+  //       setOriginalFileType(file.type);
+  //       setShowCropper(true);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
-    setCroppedAreaPixels(croppedAreaPixels);
-  };
+  // const onCropComplete = (croppedArea, croppedAreaPixels) => {
+  //   setCroppedAreaPixels(croppedAreaPixels);
+  // };
 
-  const getCroppedImg = (imageSrc, crop, croppedAreaPixels) => {
-    return new Promise((resolve, reject) => {
-      const image = new Image();
-      image.src = imageSrc;
-      image.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
+  // const getCroppedImg = (imageSrc, crop, croppedAreaPixels) => {
+  //   return new Promise((resolve, reject) => {
+  //     const image = new Image();
+  //     image.src = imageSrc;
+  //     image.onload = () => {
+  //       const canvas = document.createElement("canvas");
+  //       const ctx = canvas.getContext("2d");
 
-        const targetWidth = 300;
-        const targetHeight = 300;
-        canvas.width = targetWidth;
-        canvas.height = targetHeight;
+  //       const targetWidth = 300;
+  //       const targetHeight = 300;
+  //       canvas.width = targetWidth;
+  //       canvas.height = targetHeight;
 
-        ctx.drawImage(
-          image,
-          croppedAreaPixels.x,
-          croppedAreaPixels.y,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height,
-          0,
-          0,
-          targetWidth,
-          targetHeight
-        );
+  //       ctx.drawImage(
+  //         image,
+  //         croppedAreaPixels.x,
+  //         croppedAreaPixels.y,
+  //         croppedAreaPixels.width,
+  //         croppedAreaPixels.height,
+  //         0,
+  //         0,
+  //         targetWidth,
+  //         targetHeight
+  //       );
 
-        canvas.toBlob((blob) => {
-          if (!blob) {
-            reject(new Error("Canvas is empty"));
-            return;
-          }
-          blob.name = "croppedImage.jpeg";
-          resolve(blob);
-        }, "image/jpeg");
-      };
-    });
-  };
+  //       canvas.toBlob((blob) => {
+  //         if (!blob) {
+  //           reject(new Error("Canvas is empty"));
+  //           return;
+  //         }
+  //         blob.name = "croppedImage.jpeg";
+  //         resolve(blob);
+  //       }, "image/jpeg");
+  //     };
+  //   });
+  // };
 
-  const handleCropSave = async () => {
-    try {
-      const croppedImageBlob = await getCroppedImg(
-        imageSrc,
-        crop,
-        croppedAreaPixels
-      );
-      const file = new File([croppedImageBlob], originalFileName, {
-        type: originalFileType,
-      });
+  // const handleCropSave = async () => {
+  //   try {
+  //     const croppedImageBlob = await getCroppedImg(
+  //       imageSrc,
+  //       crop,
+  //       croppedAreaPixels
+  //     );
+  //     const file = new File([croppedImageBlob], originalFileName, {
+  //       type: originalFileType,
+  //     });
 
-      formik.setFieldValue("icon", file);
-      // Create a URL for the cropped image and set it as the preview image
-      const croppedImageURL = URL.createObjectURL(croppedImageBlob);
-      setPreviewImage(croppedImageURL);
-      setShowCropper(false);
-    } catch (error) {
-      console.error("Error cropping the image:", error);
-    }
-  };
+  //     formik.setFieldValue("icon", file);
+  //     // Create a URL for the cropped image and set it as the preview image
+  //     const croppedImageURL = URL.createObjectURL(croppedImageBlob);
+  //     setPreviewImage(croppedImageURL);
+  //     setShowCropper(false);
+  //   } catch (error) {
+  //     console.error("Error cropping the image:", error);
+  //   }
+  // };
 
-  const handleCropCancel = () => {
-    setShowCropper(false);
-    setImageSrc(null);
-    formik.setFieldValue("icon", "");
-    document.querySelector("input[type='file']").value = "";
-  };
+  // const handleCropCancel = () => {
+  //   setShowCropper(false);
+  //   setImageSrc(null);
+  //   formik.setFieldValue("icon", "");
+  //   document.querySelector("input[type='file']").value = "";
+  // };
 
-  useEffect(() => {
-    return () => {
-      if (previewImage && previewImage.startsWith("blob:")) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage]);
+  // useEffect(() => {
+  //   return () => {
+  //     if (previewImage && previewImage.startsWith("blob:")) {
+  //       URL.revokeObjectURL(previewImage);
+  //     }
+  //   };
+  // }, [previewImage]);
 
   return (
     <section className="px-4">
@@ -359,7 +359,7 @@ function CategoryEdit() {
                       </div>
                     )}
                   </div>
-                  <div className="col-md-6 col-12 mb-3">
+                  {/* <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Icon
                       <span className="text-danger">*</span>
@@ -429,7 +429,7 @@ function CategoryEdit() {
                         </button>
                       </div>
                     )}
-                  </div>
+                  </div> */}
                   <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Country<span className="text-danger">*</span>
