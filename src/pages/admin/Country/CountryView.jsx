@@ -13,7 +13,9 @@ function CountryView() {
     setLoading(true);
     try {
       const response = await api.get(`admin/country/${id}`);
-      setData(response.data.data);
+      const countryData = response.data.data;
+      setData(countryData);
+      console.log(`${ImageURL}${countryData.flag}`);
       // console.log( "responseData",response.data.data);
     } catch {
       toast.error("Error Fetching Data");
@@ -24,7 +26,6 @@ function CountryView() {
   useEffect(() => {
     getData();
   }, [id]);
-
   return (
     <div className="container-fluid minHeight">
       <div className="card shadow border-0 mb-3">
@@ -69,11 +70,7 @@ function CountryView() {
                   </div>
                   <div className="col-6">
                     <img
-                      src={
-                        data.flag
-                          ? `${ImageURL}${data.flag}`
-                          : "/default-flag.png"
-                      }
+                      src={`${ImageURL}${data.flag}`}
                       alt="Country Flag"
                       style={{ maxWidth: "100px", maxHeight: "100px" }}
                     />

@@ -923,8 +923,16 @@ function ProductEdit() {
                     type="text"
                     onInput={(event) => {
                       event.target.value = event.target.value.replace(
-                        /[^0-9]/g,
+                        /[^0-9.]/g,
                         ""
+                      );
+                      event.target.value = event.target.value.replace(
+                        /(\..*)\./g,
+                        "$1"
+                      );
+                      event.target.value = event.target.value.replace(
+                        /^(\d*\.\d{0,2}).*$/,
+                        "$1"
                       );
                     }}
                     className={`form-control form-control-sm ${
@@ -953,8 +961,16 @@ function ProductEdit() {
                     type="text"
                     onInput={(event) => {
                       event.target.value = event.target.value.replace(
-                        /[^0-9]/g,
+                        /[^0-9.]/g,
                         ""
+                      );
+                      event.target.value = event.target.value.replace(
+                        /(\..*)\./g,
+                        "$1"
+                      );
+                      event.target.value = event.target.value.replace(
+                        /^(\d*\.\d{0,2}).*$/,
+                        "$1"
                       );
                     }}
                     className={`form-control form-control-sm ${

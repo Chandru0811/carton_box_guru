@@ -159,8 +159,8 @@ function CountryEdit() {
           phone_number_code: data.phone_number_code || "",
         });
 
-        if (data.flag_path) {
-          setPreview(`${ImageURL}${data.flag_path}`);
+        if (data.flag) {
+          setPreview(`${ImageURL}${data.flag}`);
         }
       } catch (error) {
         toast.error(error.response?.data?.message || "Error Fetching Data");
