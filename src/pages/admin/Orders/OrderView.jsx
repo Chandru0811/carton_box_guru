@@ -424,8 +424,7 @@ function OrderView() {
                         );
                         return (
                           <p>
-                            {deliveryAddress.address}, {deliveryAddress.city},{" "}
-                            {deliveryAddress.state},{" "}
+                            {deliveryAddress.address},
                             {deliveryAddress.postalcode}{" "}
                             {deliveryAddress.unit &&
                               deliveryAddress.unit !== "null" &&

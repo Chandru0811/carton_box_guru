@@ -469,7 +469,7 @@ function AdminDashboard() {
                 onClick={toggleShowProducts}
                 className="btn m-4"
                 style={{
-                  background: "#ef4444",
+                  background: "#cd8245",
                   color: "#fff",
                   boxShadow: "none",
                 }}

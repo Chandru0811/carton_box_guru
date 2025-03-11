@@ -85,25 +85,12 @@ function ProductEdit() {
     pack: Yup.string()
       .matches(/^[0-9]+$/, "Only numbers are allowed*")
       .required("Pack is required*"),
-    box_length: Yup.number()
-      .typeError("Box length must be a number")
-      .positive("Box length must be greater than zero")
-      .required("Box length is required*"),
-    box_width: Yup.number()
-      .typeError("Box width must be a number")
-      .positive("Box width must be greater than zero")
-      .required("Box width is required*"),
-    box_height: Yup.number()
-      .typeError("Box height must be a number")
-      .positive("Box height must be greater than zero")
-      .required("Box height is required*"),
     stock_quantity: Yup.number()
       .typeError("Stock quantity must be a number")
       .integer("Stock quantity must be an integer")
       .positive("Stock quantity must be greater than zero")
       .required("Stock quantity is required*"),
     country_id: Yup.string().required("Country is required*"),
-    unit: Yup.string().required("Unit is required*"),
     coupon_code: Yup.string()
       .matches(
         /^[A-Za-z]+[0-9]{0,4}$/,
@@ -1176,25 +1163,6 @@ function ProductEdit() {
                     inputMode="numeric"
                   />
                 </div>
-
-                {/* Validation Errors */}
-                <div className="d-flex">
-                  {formik.touched.box_length && formik.errors.box_length && (
-                    <div className="invalid-feedback d-block">
-                      {formik.errors.box_length}
-                    </div>
-                  )}
-                  {formik.touched.box_width && formik.errors.box_width && (
-                    <div className="invalid-feedback d-block">
-                      {formik.errors.box_width}
-                    </div>
-                  )}
-                  {formik.touched.box_height && formik.errors.box_height && (
-                    <div className="invalid-feedback d-block">
-                      {formik.errors.box_height}
-                    </div>
-                  )}
-                </div>
               </div>
 
               <div className="col-md-6 col-12 mb-3">
@@ -1216,9 +1184,6 @@ function ProductEdit() {
                   <option value="in">Inches(in)</option>
                   <option value="ft">Feet(ft)</option>
                 </select>
-                {formik.touched.unit && formik.errors.unit && (
-                  <div className="invalid-feedback">{formik.errors.unit}</div>
-                )}
               </div>
 
               <>
