@@ -48,6 +48,11 @@ function CategoryGroup() {
       { accessorKey: "name", header: "Name" },
       { accessorKey: "order", header: "Order" },
       {
+        accessorKey: "country",
+        header: "Country",
+        Cell: ({ row }) => row.original.country?.country_name || "N/A",
+      },
+      {
         accessorKey: "active",
         enableHiding: false,
         header: "Status",
@@ -94,7 +99,9 @@ function CategoryGroup() {
     try {
       setLoading(true);
       const response = await api.get("admin/categoryGroup");
-      setData(response.data.data);
+      const categoryGroupData = response.data.data;
+      setData(categoryGroupData);
+      // console.log("categoryGroupData: ", categoryGroupData);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
     } finally {
@@ -158,7 +165,7 @@ function CategoryGroup() {
           <MenuItem
             onClick={() => navigate(`/categorygroup/edit/${selectedId}`)}
           >
-            Edit
+            <span className="px-4">Edit</span>
           </MenuItem>
           {/* <MenuItem>
             <AdminDelete

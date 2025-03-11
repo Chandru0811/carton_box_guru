@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../../../config/URL";
 import toast from "react-hot-toast";
-import ImageURL from "../../../config/ImageURL";
+// import ImageURL from "../../../config/ImageURL";
 
 function CategoryGroupView() {
   const { id } = useParams();
@@ -92,7 +92,7 @@ function CategoryGroupView() {
                   </div>
                 </div>
 
-                <div className="col-md-6 col-12">
+                {/* <div className="col-md-6 col-12">
                   <div className="row mb-3">
                     <div className="col-6 d-flex justify-content-start align-items-center">
                       <p className="text-sm">Image</p>
@@ -110,7 +110,7 @@ function CategoryGroupView() {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="col-12">
                   <div className="row mb-3">

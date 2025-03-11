@@ -65,8 +65,8 @@ function CountryEdit() {
 
       // Append all fields to formData
       Object.keys(values).forEach((key) => {
-        if (key === "flag" && values.flag instanceof File) {
-          formData.append("flag", values.flag);
+        if (key === "image" && values.image instanceof File) {
+          formData.append("image", values.image);
         } else if (
           key === "social_links" &&
           Array.isArray(values.social_links)
@@ -139,7 +139,6 @@ function CountryEdit() {
         const response = await api.get(`admin/country/${id}`);
         const data = response.data.data;
 
-        // Convert social_links from string to array (if necessary)
         const socialLinksArray =
           typeof data.social_links === "string"
             ? data.social_links.split(",")
@@ -147,7 +146,7 @@ function CountryEdit() {
 
         formik.setValues({
           country_name: data.country_name || "",
-          flag: null,
+          image: null,
           currency_symbol: data.currency_symbol || "",
           currency_code: data.currency_code || "",
           social_links: socialLinksArray || [""],
@@ -160,7 +159,7 @@ function CountryEdit() {
         });
 
         if (data.flag) {
-          setPreview(`${ImageURL}${data.flag}`);
+          setPreview(data.flag ? `${ImageURL}${data.flag}` : data.flag);
         }
       } catch (error) {
         toast.error(error.response?.data?.message || "Error Fetching Data");
@@ -395,6 +394,7 @@ function CountryEdit() {
                   />
                 )}
               </div>
+
               {formik.values.social_links.map((link, index) => (
                 <div className="col-md-6 col-12 mb-3" key={index}>
                   <label className="form-label">Social Links</label>

@@ -63,6 +63,11 @@ function Products() {
         },
       },
       {
+        accessorKey: "country",
+        header: "Country",
+        Cell: ({ row }) => row.original.country?.country_name || "N/A",
+      },
+      {
         accessorKey: "description",
         header: "Description",
         Cell: ({ cell }) => (
@@ -106,7 +111,9 @@ function Products() {
     try {
       setLoading(true);
       const response = await api.get(`admin/product/${shopId}`);
-      setData(response.data.data);
+      const productData = response.data.data;
+      setData(productData);
+      console.log("productData: ", productData);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
     } finally {
@@ -168,7 +175,7 @@ function Products() {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={() => navigate(`/products/edit/${selectedId}`)}>
-            Edit
+            <span className="px-4">Edit</span>
           </MenuItem>
           <MenuItem>
             <AdminDelete

@@ -5,7 +5,7 @@ function AdminFooter() {
         <div className="col">
           <div className="d-flex align-items-center justify-content-center pt-2">
             <p className="text-muted text-sm mb-0">
-              2025 © Copyright Carton Box Guru. All Rights Reserved.
+              2025 © Copyright ECS Cloud Infotech Pte. Ltd. All Rights Reserved.
             </p>
           </div>
         </div>

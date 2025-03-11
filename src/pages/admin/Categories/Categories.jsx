@@ -56,6 +56,11 @@ function Categories() {
         ),
       },
       {
+        accessorKey: "country",
+        header: "Country",
+        Cell: ({ row }) => row.original.country?.country_name || "N/A",
+      },
+      {
         accessorKey: "active",
         enableHiding: false,
         header: "Status",
@@ -102,7 +107,9 @@ function Categories() {
     try {
       setLoading(true);
       const response = await api.get("admin/categories");
-      setData(response.data.data);
+      const categoryData = response.data.data;
+      setData(categoryData);
+      // console.log("categoryData: ", categoryData);
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
     } finally {
@@ -163,7 +170,7 @@ function Categories() {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={() => navigate(`/categories/edit/${selectedId}`)}>
-            Edit
+            <span className="px-4">Edit</span>
           </MenuItem>
           {/* <MenuItem>
             <AdminDelete

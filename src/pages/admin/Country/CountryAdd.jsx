@@ -13,7 +13,7 @@ function CountryAdd() {
 
   const validationSchema = Yup.object({
     country_name: Yup.string().required("Country name is required*"),
-    flag: Yup.mixed()
+    image: Yup.mixed()
       .required("Flag is required*")
       .test(
         "fileFormat",
@@ -42,7 +42,7 @@ function CountryAdd() {
   const formik = useFormik({
     initialValues: {
       country_name: "",
-      flag: null,
+      image: null,
       currency_symbol: "",
       currency_code: "",
       social_links: [""],
@@ -316,13 +316,13 @@ function CountryAdd() {
                 onChange={(event) => {
                   const file = event.currentTarget.files[0];
                   if (file) {
-                    formik.setFieldValue("flag", file);
+                    formik.setFieldValue("image", file);
                     setPreview(URL.createObjectURL(file));
                   }
                 }}
               />
-              {formik.touched.flag && formik.errors.flag && (
-                <div className="text-danger">{formik.errors.flag}</div>
+              {formik.touched.image && formik.errors.image && (
+                <div className="text-danger">{formik.errors.image}</div>
               )}
 
               {preview && (

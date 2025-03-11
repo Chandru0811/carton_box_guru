@@ -481,9 +481,9 @@ function ProductEdit() {
         coupon_code: data.coupon_code || "",
         description: data.description || "",
         pack: data.pack || "",
-        box_length: data.box_length || "",
-        box_width: data.box_width || "",
-        box_height: data.box_height || "",
+        box_length: data.box_length.split(".")[0] || "",
+        box_width: data.box_width.split(".")[0] || "",
+        box_height: data.box_height.split(".")[0] || "",
         stock_quantity: data.stock_quantity || "",
         country_id: data.country_id || "",
         unit: data.unit || "",
@@ -746,7 +746,7 @@ function ProductEdit() {
           <div className="row p-3">
             <div className="d-flex justify-content-between align-items-center">
               <h1 className="h4 ls-tight">Edit Deals</h1>
-              <Link to="/product">
+              <Link to="/products">
                 <button type="button" className="btn btn-light btn-sm">
                   <span>Back</span>
                 </button>

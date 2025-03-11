@@ -111,7 +111,7 @@ function AdminSideBar({ handleLogout }) {
             <li className="nav-item">
               <NavLink className="nav-link title_nav" to="/user">
                 <FaUser />
-                User
+                Users
               </NavLink>
             </li>
           </ul>

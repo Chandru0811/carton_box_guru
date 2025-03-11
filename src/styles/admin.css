@@ -486,3 +486,9 @@ input:-webkit-autofill:focus-within {
   z-index: 99;
   box-shadow: 2px 2px 4px var(--admin-secondary-color);
 }
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root:hover {
+  padding: 0;
+}
+.MuiButtonBase-root {
+  padding: 0 !important;
+}

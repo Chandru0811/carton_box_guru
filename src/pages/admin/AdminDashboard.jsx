@@ -5,12 +5,18 @@ import dashboardcard2 from "../../assets/dashboard card2.webp";
 import dashboardcard3 from "../../assets/dashboard card3.webp";
 import dashboardcard4 from "../../assets/dashboard card4.webp";
 import dashboardcard5 from "../../assets/dashboard card5.webp";
+import toast from "react-hot-toast";
+import api from "../../config/URL";
+import { Link } from "react-router-dom";
+import { MdAddBox } from "react-icons/md";
 
 function AdminDashboard() {
   const [currentWeek, setCurrentWeek] = useState("");
-  const [state] = useState({
+  const [maxWeek, setMaxWeek] = useState("");
+  const [data, setData] = useState(null);
+  const [state, setState] = useState({
     options: {
-      colors: ["#9349ff", "#FFB63A", "#74aef0"],
+      colors: ["#1A2E86", "#237BFF", "#FFB63A", "#eb4034", "#fb8b33"],
       chart: {
         id: "basic-bar",
         toolbar: {
@@ -68,33 +74,10 @@ function AdminDashboard() {
         },
       },
     },
-    series: [
-      {
-        name: "series-1",
-        data: [30, 40, 45, 50, 49, 60, 70],
-      },
-      {
-        name: "series-2",
-        data: [3, 70, 5, 30, 22, 50, 80],
-      },
-      {
-        name: "series-3",
-        data: [30, 40, 45, 30, 49, 60, 70],
-      },
-    ],
+    series: [],
   });
   const [showProducts, setShowProducts] = useState(false);
-  const [products, setProducts] = useState([
-    { name: "Laptop", selected: true },
-    { name: "Mobile", selected: true },
-    { name: "TV", selected: true },
-    { name: "Product 4", selected: true },
-    { name: "Product 5", selected: true },
-    { name: "Product 6", selected: true },
-    { name: "Product 7", selected: true },
-    { name: "Product 8", selected: true },
-    { name: "Product 9", selected: true },
-  ]);
+  const [products, setProducts] = useState([]);
   const [selectAll, setSelectAll] = useState(true);
 
   const toggleShowProducts = () => {
@@ -110,45 +93,164 @@ function AdminDashboard() {
   };
 
   const handleProductSelect = (index) => {
-    const updatedProducts = [...products];
-    updatedProducts[index].selected = !updatedProducts[index].selected;
+    const updatedProducts = products.map((product, i) =>
+      i === index ? { ...product, selected: !product.selected } : product
+    );
     setProducts(updatedProducts);
 
     const allSelected = updatedProducts.every((product) => product.selected);
     setSelectAll(allSelected);
   };
+
+  const fetchDataForWeek = async (week) => {
+    try {
+      const response = await api.post("admin/dashboard", {
+        week: week,
+      });
+      const { series } = response.data;
+
+      // Update chart data
+      setState((prevState) => ({
+        ...prevState,
+        series: series,
+      }));
+    } catch {
+      toast.error("Error Fetching Chart Data");
+    }
+  };
+
   useEffect(() => {
     const getCurrentWeek = () => {
       const currentDate = new Date();
-      const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
-      const pastDaysOfYear =
-        (currentDate - firstDayOfYear) / (24 * 60 * 60 * 1000);
-      const weekNumber = Math.ceil(
-        (pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7
+
+      currentDate.setHours(0, 0, 0, 0);
+
+      const thursday = new Date(currentDate);
+      thursday.setDate(
+        currentDate.getDate() + (3 - ((currentDate.getDay() + 6) % 7))
       );
-      return `${currentDate.getFullYear()}-W${String(weekNumber).padStart(
+
+      const firstThursday = new Date(thursday.getFullYear(), 0, 1);
+      firstThursday.setDate(
+        firstThursday.getDate() + (3 - ((firstThursday.getDay() + 6) % 7))
+      );
+
+      const weekNumber =
+        Math.floor((thursday - firstThursday) / (7 * 24 * 60 * 60 * 1000)) + 1;
+
+      return `${thursday.getFullYear()}-W${String(weekNumber).padStart(
         2,
         "0"
       )}`;
     };
 
     setCurrentWeek(getCurrentWeek());
+    setMaxWeek(getCurrentWeek());
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const response = await api.get(`admin/dashboard`);
+        const { data } = response.data;
+
+        // Set initial chart data
+        setState((prevState) => ({
+          ...prevState,
+          series: data.chatdata.series,
+        }));
+
+        // Set other data (total clicks, views, products)
+        setData(data);
+        setProducts(
+          data.products.map((product) => ({
+            ...product,
+            selected: true, // Initially, all products selected
+          }))
+        );
+      } catch {
+        toast.error("Error Fetching Data");
+      }
+    };
+
+    getData();
+  }, []);
+
+  const getCategories = () => {
+    const width = window.innerWidth;
+    if (width > 1200) {
+      return [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ];
+    } else if (width > 768) {
+      return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    } else {
+      return ["M", "T", "W", "T", "F", "S", "S"];
+    }
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setState((prevState) => ({
+        ...prevState,
+        options: {
+          ...prevState.options,
+          xaxis: {
+            categories: getCategories(),
+          },
+        },
+      }));
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const handleWeekChange = (e) => {
+    const newWeek = e.target.value;
+    setCurrentWeek(newWeek);
+    if (newWeek) {
+      fetchDataForWeek(newWeek); // Fetch data for the selected week
+    }
+  };
 
   return (
     <div className="card shadow border-0 mx-4" style={{ minHeight: "90vh" }}>
+      <div className="d-flex justify-content-between pt-4 pe-5">
+        <p className="px-5">
+          You currently have{" "}
+          {data?.totaldealcount === 0
+            ? data.totaldealcount
+            : data?.totaldealactivecount}
+          {data?.totaldealcount === 0 ? " deals" : " active deals"} registered
+          with us.
+        </p>
+        <Link to="/product/add">
+          <button className="btn btn-sm btn-button shadow-none border-none py-3">
+            <MdAddBox size={20} /> Add Deal
+          </button>
+        </Link>
+      </div>
       <div className="row card-container p-5">
         <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
               background: "#1A2E86",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
+                <h2 className="text-white">{data?.totaldealclicks}</h2>
                 {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
@@ -169,15 +271,15 @@ function AdminDashboard() {
 
         <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
               background: "#237BFF",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
+                <h2 className="text-white">{data?.totaldealviews}</h2>
                 {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
@@ -198,15 +300,15 @@ function AdminDashboard() {
 
         <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
               background: "#FFB63A",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
+                <h2 className="text-white">{data?.totaldiscountcopied}</h2>
                 {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
@@ -227,15 +329,15 @@ function AdminDashboard() {
 
         <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
               background: "#eb4034",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
+                <h2 className="text-white">{data?.totaldealshared}</h2>
                 {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
@@ -256,15 +358,15 @@ function AdminDashboard() {
 
         <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
               background: "#fb8b33",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
+                <h2 className="text-white">{data?.totaldealenquired}</h2>
                 {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
@@ -283,60 +385,91 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* <div className="col-12 col-md-6 col-lg-3 mb-4">
+        <div className="col-12 col-md-6 col-lg-3 mb-4">
           <div
+            className="card h-100"
             style={{
-              background: "#52ae55",
+              background: "#45c457",
               borderRadius: "8px",
             }}
-            className="card h-100"
           >
             <div className="card-content p-2">
               <div className="d-flex justify-content-between">
-                <h2 className="text-white">9.823</h2>
-                <div>
+                <h2 className="text-white">{data?.totalorderscount}</h2>
+                {/* <div>
                   <IoSettingsOutline className="text-white" />
                   <IoMdArrowDropdown className="text-white" />
-                </div>
+                </div> */}
               </div>
-              <p className="text-white">Members Online</p>
+              <p className="text-white">Order Counts</p>
               <div className="flex-grow-1">
                 <img
-                  src={graph7}
+                  src={dashboardcard1}
                   alt=""
                   className="img-fluid"
-                  style={{ width: "100%"}}
+                  style={{ width: "100%" }}
                 />
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
+
+        {/* Uncomment to add more cards */}
+        {/* <div className="col-12 col-md-6 col-lg-3 mb-4">
+    <Card
+      style={{
+        background: "#52ae55",
+        borderRadius: "8px",
+      }}
+      className="h-100"
+    >
+      <div className="card-content p-2">
+        <div className="d-flex justify-content-between">
+          <h2 className="text-white">{data?.totalproductscount}</h2>
+          <div>
+            <IoSettingsOutline className="text-white" />
+            <IoMdArrowDropdown className="text-white" />
+          </div>
+        </div>
+        <p className="text-white mt-3">Active Products</p>
       </div>
+    </Card>
+  </div> */}
+      </div>
+
       <div className="row">
         <input
           type="week"
-          className="form-control week-input  ms-5"
+          className="form-control week-input ms-5"
           style={{ boxShadow: "none", width: "250px" }}
           value={currentWeek}
-          onChange={(e) => setCurrentWeek(e.target.value)}
+          onChange={handleWeekChange} // Call function to fetch data for selected week
+          max={maxWeek} // Disable selection for future weeks
         />
         <div className="col-12">
-          <Chart
-            options={state.options}
-            series={state.series}
-            type="area"
-            width="100%"
-            height="350"
-          />
+          {currentWeek ? (
+            <Chart
+              options={state.options}
+              series={state.series}
+              type="area"
+              width="100%"
+              height={350}
+            />
+          ) : (
+            <p className="d-flex justify-content-center align-items-center py-5">
+              A week has not yet been selected. Kindly select a week to view the
+              chart.
+            </p>
+          )}
         </div>
         <div className="col-12">
           {products.length > 0 ? (
             <>
               <button
                 onClick={toggleShowProducts}
-                className="btn btn-sm m-2"
+                className="btn m-4"
                 style={{
-                  background: "#cd8245",
+                  background: "#ef4444",
                   color: "#fff",
                   boxShadow: "none",
                 }}
@@ -365,6 +498,7 @@ function AdminDashboard() {
                           checked={product.selected}
                           onChange={() => handleProductSelect(index)}
                           id={`product-${index}`}
+                          disabled
                         />
                         <label
                           htmlFor={`product-${index}`}

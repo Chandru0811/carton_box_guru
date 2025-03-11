@@ -32,6 +32,11 @@ function Orders() {
         },
       },
       {
+        accessorKey: "country",
+        header: "Country",
+        Cell: ({ row }) => row.original.country?.country_name || "N/A",
+      },
+      {
         accessorKey: "item_description",
         header: "Product Name",
         Cell: ({ cell }) => (
@@ -93,7 +98,7 @@ function Orders() {
     <div className="p-2">
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
-          <h6>Country</h6>
+          <h6>Orders</h6>
         </div>
       </div>
       <div className="card border-0 p-3" style={{ minHeight: "90vh" }}>

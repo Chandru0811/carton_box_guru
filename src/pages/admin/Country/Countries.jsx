@@ -109,7 +109,7 @@ function Countries() {
     <div className="p-2">
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
-          <h6>Country</h6>
+          <h6>Countries</h6>
           <Link to="/country/add" className="btn btn-sm add_btn">
             Add Country
           </Link>
@@ -152,7 +152,7 @@ function Countries() {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={() => navigate(`/country/edit/${selectedId}`)}>
-            Edit
+            <span className="px-4">Edit</span>
           </MenuItem>
           <MenuItem>
             <AdminDelete

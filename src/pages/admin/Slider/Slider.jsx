@@ -166,8 +166,11 @@ function Slider() {
           open={Boolean(menuAnchor)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={() => navigate(`/slider/edit/${selectedId}`)}>
-            Edit
+          <MenuItem
+            onClick={() => navigate(`/slider/edit/${selectedId}`)}
+            style={{ padding: "0 10px" }}
+          >
+            <span className="px-4">Edit</span>
           </MenuItem>
           <MenuItem>
             <AdminDelete

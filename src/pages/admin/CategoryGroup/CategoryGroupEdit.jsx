@@ -46,7 +46,7 @@ function CategoryGroupEdit() {
       .max(85, "Name must be 85 characters or less")
       .required("Name is required"),
     // image: imageValidation,
-    // icon: Yup.mixed().required("*Icon is required"),
+    icon: Yup.mixed().required("*Icon is required"),
     order: Yup.string().required("*Select an order"),
     // active: Yup.string().required("*Select an active"),
     description: Yup.string().max(825, "Maximum 825 characters allowed"),
@@ -150,7 +150,7 @@ function CategoryGroupEdit() {
         formik.setValues({
           name: categoryGroupData.name || "",
           slug: categoryGroupData.slug || "",
-          icon: categoryGroupData.icon || null,
+          icon: categoryGroupData.icon || "",
           order: categoryGroupData.order || "",
           active: categoryGroupData.active || "",
           description: categoryGroupData.description || "",

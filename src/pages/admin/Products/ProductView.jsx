@@ -382,7 +382,9 @@ function ProductView() {
                       <p className="text-sm">Length</p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data?.box_length}</p>
+                      <p className="text-muted text-sm">
+                        : {Number(data?.box_length).toFixed(0)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -392,7 +394,9 @@ function ProductView() {
                       <p className="text-sm">Width</p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data?.box_width}</p>
+                      <p className="text-muted text-sm">
+                        : {Number(data?.box_width).toFixed(0)}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -402,7 +406,9 @@ function ProductView() {
                       <p className="text-sm">Height</p>
                     </div>
                     <div className="col-6">
-                      <p className="text-muted text-sm">: {data?.box_height}</p>
+                      <p className="text-muted text-sm">
+                        : {Number(data?.box_height).toFixed(0)}
+                      </p>
                     </div>
                   </div>
                 </div>
