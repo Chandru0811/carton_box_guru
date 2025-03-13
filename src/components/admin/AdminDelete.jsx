@@ -62,7 +62,9 @@ function AdminDelete({ path, onDeleteSuccess, onOpen }) {
         style={{ whiteSpace: "nowrap", width: "100%" }}
         onClick={handleOpenDialog}
       >
+        <span className="px-2">
         Delete
+        </span>
       </p>
 
       <Dialog

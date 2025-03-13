@@ -57,7 +57,7 @@ function CategoryGroupEdit() {
     initialValues: {
       name: "",
       slug: "",
-      icon: "",
+      // icon: "",
       // image: null,
       order: "",
       active: "",
@@ -71,7 +71,7 @@ function CategoryGroupEdit() {
 
       formData.append("name", values.name);
       formData.append("slug", values.slug);
-      formData.append("icon", values.icon);
+      // formData.append("icon", values.icon);
       formData.append("order", values.order);
       formData.append("active", values.active);
       formData.append("description", values.description);
@@ -150,7 +150,7 @@ function CategoryGroupEdit() {
         formik.setValues({
           name: categoryGroupData.name || "",
           slug: categoryGroupData.slug || "",
-          icon: categoryGroupData.icon || "",
+          // icon: categoryGroupData.icon || "",
           order: categoryGroupData.order || "",
           active: categoryGroupData.active || "",
           description: categoryGroupData.description || "",
@@ -359,7 +359,7 @@ function CategoryGroupEdit() {
                     )}
                   </div>
 
-                  <div className="col-md-6 col-12 mb-3">
+                  {/* <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Icon<span className="text-danger">*</span>
                     </label>
@@ -377,7 +377,7 @@ function CategoryGroupEdit() {
                         {formik.errors.icon}
                       </div>
                     )}
-                  </div>
+                  </div> */}
                   {/* <div className="col-md-6 col-12 mb-3">
                     <label className="form-label">
                       Image

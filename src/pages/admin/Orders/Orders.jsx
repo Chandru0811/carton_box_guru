@@ -32,11 +32,6 @@ function Orders() {
         },
       },
       {
-        accessorKey: "country",
-        header: "Country",
-        Cell: ({ row }) => row.original.country?.country_name || "N/A",
-      },
-      {
         accessorKey: "item_description",
         header: "Product Name",
         Cell: ({ cell }) => (
@@ -83,6 +78,8 @@ function Orders() {
       setLoading(true);
       const response = await api.get(`admin/orders/${shopId}`);
       setData(response.data.data);
+      // console 
+      console.log("response data:",response.data.data)
     } catch (e) {
       toast.error(e.response?.data?.message || "Error Fetching Data");
     } finally {

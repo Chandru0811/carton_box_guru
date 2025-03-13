@@ -46,7 +46,7 @@ function CategoryGroupAdd() {
     order: Yup.string().required("*Select an order"),
     // active: Yup.string().required("*Select an active"),
     description: Yup.string().max(825, "Maximum 825 characters allowed"),
-    icon: Yup.string().required("*Icon is required"),
+    // icon: Yup.string().required("*Icon is required"),
     country_id: Yup.string().required("*Select a country"),
   });
 
@@ -54,7 +54,7 @@ function CategoryGroupAdd() {
     initialValues: {
       name: "",
       slug: "",
-      icon: "",
+      // icon: "",
       // image: null,
       order: "",
       description: "",
@@ -67,7 +67,7 @@ function CategoryGroupAdd() {
       const formData = new FormData();
       formData.append("name", values.name);
       formData.append("slug", values.slug);
-      formData.append("icon", values.icon);
+      // formData.append("icon", values.icon);
       // formData.append("image", values.image);
       formData.append("order", values.order);
       formData.append("description", values.description);
@@ -312,7 +312,7 @@ function CategoryGroupAdd() {
                 )}
               </div>
 
-              <div className="col-md-6 col-12 mb-3">
+              {/* <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Icon<span className="text-danger">*</span>
                 </label>
@@ -328,7 +328,7 @@ function CategoryGroupAdd() {
                 {formik.touched.icon && formik.errors.icon && (
                   <div className="invalid-feedback">{formik.errors.icon}</div>
                 )}
-              </div>
+              </div> */}
 
               {/* <div className="col-md-6 col-12 file-input">
                 <label className="form-label">
