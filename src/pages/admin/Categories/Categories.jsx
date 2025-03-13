@@ -123,6 +123,13 @@ function Categories() {
 
   const handleMenuClose = () => setMenuAnchor(null);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="p-2">
       <div className="card my-3">

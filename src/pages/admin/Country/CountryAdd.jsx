@@ -36,8 +36,14 @@ function CountryAdd() {
     color_code: Yup.string().required("Color code is required*"),
     country_code: Yup.string().required("Country code is required*"),
     phone_number_code: Yup.string().required("Phone number code is required*"),
-    social_links: Yup.array().of(Yup.string().url("Invalid URL")),
+    social_links: Yup.array().of(
+      Yup.object().shape({
+        s_icon: Yup.string().required("Icon is required*"),
+        s_link: Yup.string().url("Invalid URL").required("Link is required*"),
+      })
+    ),
   });
+
 
   const formik = useFormik({
     initialValues: {
@@ -45,7 +51,7 @@ function CountryAdd() {
       image: null,
       currency_symbol: "",
       currency_code: "",
-      social_links: [""],
+      social_links: [{ s_icon: "", s_link: "" }],
       address: "",
       phone: "",
       email: "",
@@ -58,7 +64,7 @@ function CountryAdd() {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "social_links") {
-          formData.append(key, values[key].join(",")); // Join social links as a comma-separated string
+          formData.append(key, JSON.stringify(values[key]));
         } else {
           formData.append(key, values[key]);
         }
@@ -107,12 +113,15 @@ function CountryAdd() {
   });
 
   const addSocialLink = () => {
-    formik.setFieldValue("social_links", [...formik.values.social_links, ""]);
+    formik.setFieldValue("social_links", [
+      ...formik.values.social_links,
+      { s_icon: "", s_link: "" },
+    ]);
   };
 
-  const handleSocialLinkChange = (index, value) => {
+  const handleSocialLinkChange = (index, field, value) => {
     const newSocialLinks = [...formik.values.social_links];
-    newSocialLinks[index] = value;
+    newSocialLinks[index][field] = value;
     formik.setFieldValue("social_links", newSocialLinks);
   };
 
@@ -342,11 +351,20 @@ function CountryAdd() {
                   <input
                     type="text"
                     className="form-control form-control-sm me-2"
-                    value={link}
+                    value={link.s_icon}
                     onChange={(e) =>
-                      handleSocialLinkChange(index, e.target.value)
+                      handleSocialLinkChange(index, "s_icon", e.target.value)
                     }
-                    placeholder="Enter social link"
+                    placeholder="Enter icon (e.g., fa-solid fa-user)"
+                  />
+                  <input
+                    type="text"
+                    className="form-control form-control-sm me-2"
+                    value={link.s_link}
+                    onChange={(e) =>
+                      handleSocialLinkChange(index, "s_link", e.target.value)
+                    }
+                    placeholder="Enter social link (e.g., https://www.youtube.com)"
                   />
                   <button
                     type="button"
@@ -360,7 +378,8 @@ function CountryAdd() {
                   formik.errors.social_links &&
                   formik.errors.social_links[index] && (
                     <div className="text-danger">
-                      {formik.errors.social_links[index]}
+                      {formik.errors.social_links[index].s_icon ||
+                        formik.errors.social_links[index].s_link}
                     </div>
                   )}
               </div>

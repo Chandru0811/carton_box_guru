@@ -39,8 +39,13 @@ function CountryEdit() {
     email: Yup.string().email("Invalid email").required("Email is required*"),
     color_code: Yup.string().required("Color code is required*"),
     country_code: Yup.string().required("Country code is required*"),
-    social_links: Yup.array().of(Yup.string().url("Invalid URL")), // Validate each URL
     phone_number_code: Yup.string().required("Phone number code is required*"),
+    social_links: Yup.array().of(
+      Yup.object().shape({
+        s_icon: Yup.string().required("Icon is required*"),
+        s_link: Yup.string().url("Invalid URL").required("Link is required*"),
+      })
+    ),
   });
 
   const formik = useFormik({
@@ -49,7 +54,7 @@ function CountryEdit() {
       flag: null,
       currency_symbol: "",
       currency_code: "",
-      social_links: [""],
+      social_links: [{ s_icon: "", s_link: "" }],
       address: "",
       phone: "",
       email: "",
@@ -65,15 +70,11 @@ function CountryEdit() {
 
       // Append all fields to formData
       Object.keys(values).forEach((key) => {
-        if (key === "image" && values.image instanceof File) {
-          formData.append("image", values.image);
-        } else if (
-          key === "social_links" &&
-          Array.isArray(values.social_links)
-        ) {
-          // Convert the array of social links into a single string (if backend expects a string)
-          const socialLinksString = values.social_links.join(",");
-          formData.append(key, socialLinksString);
+        if (key === "flag" && values.flag instanceof File) {
+          formData.append("flag", values.flag);
+        } else if (key === "social_links") {
+          // Convert the array of social links into a JSON string
+          formData.append(key, JSON.stringify(values[key]));
         } else if (values[key] !== undefined && values[key] !== null) {
           formData.append(key, values[key]);
         }
@@ -103,33 +104,24 @@ function CountryEdit() {
     },
   });
 
-  // Function to add a new social link input
   const addSocialLink = () => {
-    formik.setValues({
-      ...formik.values,
-      social_links: [...formik.values.social_links, ""],
-    });
+    formik.setFieldValue("social_links", [
+      ...formik.values.social_links,
+      { s_icon: "", s_link: "" },
+    ]);
   };
 
-  // Function to delete a social link
+  const handleSocialLinkChange = (index, field, value) => {
+    const newSocialLinks = [...formik.values.social_links];
+    newSocialLinks[index][field] = value;
+    formik.setFieldValue("social_links", newSocialLinks);
+  };
+
   const deleteSocialLink = (index) => {
     const newSocialLinks = formik.values.social_links.filter(
       (_, i) => i !== index
     );
-    formik.setValues({
-      ...formik.values,
-      social_links: newSocialLinks,
-    });
-  };
-
-  // Function to handle changes in social links
-  const handleSocialLinkChange = (index, value) => {
-    const newSocialLinks = [...formik.values.social_links];
-    newSocialLinks[index] = value;
-    formik.setValues({
-      ...formik.values,
-      social_links: newSocialLinks,
-    });
+    formik.setFieldValue("social_links", newSocialLinks);
   };
 
   useEffect(() => {
@@ -139,17 +131,27 @@ function CountryEdit() {
         const response = await api.get(`admin/country/${id}`);
         const data = response.data.data;
 
-        const socialLinksArray =
-          typeof data.social_links === "string"
-            ? data.social_links.split(",")
-            : data.social_links;
+        // Initialize social_links as an array of objects
+        let socialLinksArray = [];
+        if (typeof data.social_links === "string") {
+          try {
+            socialLinksArray = JSON.parse(data.social_links);
+          } catch (error) {
+            console.error("Error parsing social_links:", error);
+            socialLinksArray = [{ s_icon: "", s_link: "" }];
+          }
+        } else if (Array.isArray(data.social_links)) {
+          socialLinksArray = data.social_links;
+        } else {
+          socialLinksArray = [{ s_icon: "", s_link: "" }];
+        }
 
         formik.setValues({
           country_name: data.country_name || "",
           image: null,
           currency_symbol: data.currency_symbol || "",
           currency_code: data.currency_code || "",
-          social_links: socialLinksArray || [""],
+          social_links: socialLinksArray,
           address: data.address || "",
           phone: data.phone || "",
           email: data.email || "",
@@ -396,35 +398,45 @@ function CountryEdit() {
               </div>
 
               {formik.values.social_links.map((link, index) => (
-                <div className="col-md-6 col-12 mb-3" key={index}>
-                  <label className="form-label">Social Links</label>
-                  <div className="mb-2 d-flex align-items-center">
-                    <input
-                      type="text"
-                      className="form-control form-control-sm me-2"
-                      value={link}
-                      onChange={(e) =>
-                        handleSocialLinkChange(index, e.target.value)
-                      }
-                      placeholder="Enter social link"
-                    />
-                    <button
-                      type="button"
-                      className="btn btn-cbg-primary btn-sm"
-                      onClick={() => deleteSocialLink(index)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  {formik.touched.social_links &&
-                    formik.errors.social_links &&
-                    formik.errors.social_links[index] && (
-                      <div className="text-danger">
-                        {formik.errors.social_links[index]}
-                      </div>
-                    )}
+              <div className="col-md-6 col-12 mb-3" key={index}>
+                <label className="form-label">Social Links</label>
+                <div className="mb-2 d-flex align-items-center">
+                  <input
+                    type="text"
+                    className="form-control form-control-sm me-2"
+                    value={link.s_icon}
+                    onChange={(e) =>
+                      handleSocialLinkChange(index, "s_icon", e.target.value)
+                    }
+                    placeholder="Enter icon (e.g., fa-solid fa-user)"
+                  />
+                  <input
+                    type="text"
+                    className="form-control form-control-sm me-2"
+                    value={link.s_link}
+                    onChange={(e) =>
+                      handleSocialLinkChange(index, "s_link", e.target.value)
+                    }
+                    placeholder="Enter social link (e.g., https://www.youtube.com)"
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-cbg-primary btn-sm"
+                    onClick={() => deleteSocialLink(index)}
+                  >
+                    Delete
+                  </button>
                 </div>
-              ))}
+                {formik.touched.social_links &&
+                  formik.errors.social_links &&
+                  formik.errors.social_links[index] && (
+                    <div className="text-danger">
+                      {formik.errors.social_links[index].s_icon ||
+                        formik.errors.social_links[index].s_link}
+                    </div>
+                  )}
+              </div>
+            ))}
 
               <div className="d-flex justify-content-end align-items-center">
                 <button

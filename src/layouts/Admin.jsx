@@ -32,12 +32,15 @@ import Orders from "../pages/admin/Orders/Orders";
 import OrderView from "../pages/admin/Orders/OrderView";
 import User from "../pages/admin/User/User";
 import UserView from "../pages/admin/User/UserView";
+import ProductOrder from "../pages/admin/Products/ProductOrder";
+import ScrollToTop from "../pages/ScrollToTop";
 
 function Admin({ handleLogout }) {
   return (
     <div>
       <div>
         <BrowserRouter basename="/cartonBoxAdmin">
+          <ScrollToTop />
           <div className="d-flex flex-column flex-lg-row bg-surface-secondary ">
             <AdminSideBar handleLogout={handleLogout} />
 
@@ -109,6 +112,7 @@ function Admin({ handleLogout }) {
                       path="/products/edit/:id"
                       element={<ProductEdit />}
                     />
+                    <Route path="/products/order" element={<ProductOrder />} />
 
                     {/* countries  */}
                     <Route path="/countries" element={<Countries />} />

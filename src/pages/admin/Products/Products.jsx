@@ -128,14 +128,26 @@ function Products() {
 
   const handleMenuClose = () => setMenuAnchor(null);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   return (
     <div className="p-2">
       <div className="card my-3">
         <div className="d-flex justify-content-between align-items-center p-2">
           <h6>Deals</h6>
-          <Link to="/products/add" className="btn btn-sm add_btn">
-            Add Deal
-          </Link>
+          <div className="d-flex gap-2">
+            <Link to="/products/order">
+              <button className="btn btn-sm add_btn">Select Order</button>
+            </Link>
+            <Link to="/products/add" className="btn btn-sm add_btn">
+              Add Deal
+            </Link>
+          </div>
         </div>
       </div>
       <div className="card border-0 p-3" style={{ minHeight: "90vh" }}>

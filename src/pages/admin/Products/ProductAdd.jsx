@@ -624,7 +624,7 @@ function ProductAdd() {
           <div className="row p-3">
             <div className="d-flex justify-content-between align-items-center">
               <h1 className="h4 ls-tight">Add Deals</h1>
-              <Link to="/product">
+              <Link to="/products">
                 <button type="button" className="btn btn-light btn-sm">
                   <span>Back</span>
                 </button>
@@ -635,6 +635,36 @@ function ProductAdd() {
         <div className="container card shadow border-0 pb-5">
           <div className="row mt-3">
             <input type="hidden" name="deal_type" value="1" />
+            <div className="col-md-6 col-12 mb-3">
+              <label className="form-label">
+                Country<span className="text-danger">*</span>
+              </label>
+              <select
+                className={`form-select form-select-sm ${
+                  formik.touched.country_id && formik.errors.country_id
+                    ? "is-invalid"
+                    : ""
+                }`}
+                {...formik.getFieldProps("country_id")}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  handleCategorygroupChange(e); // Ensure this function is defined
+                }}
+              >
+                <option value="">Select a Country</option>
+                {allCountry &&
+                  allCountry.map((country) => (
+                    <option key={country.id} value={country.id}>
+                      {country.country_name}
+                    </option>
+                  ))}
+              </select>
+              {formik.touched.country_id && formik.errors.country_id && (
+                <div className="invalid-feedback">
+                  {formik.errors.country_id}
+                </div>
+              )}
+            </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">
                 Category Group<span className="text-danger">*</span>
@@ -936,36 +966,6 @@ function ProductAdd() {
                     {formik.errors.stock_quantity}
                   </div>
                 )}
-            </div>
-            <div className="col-md-6 col-12 mb-3">
-              <label className="form-label">
-                Country<span className="text-danger">*</span>
-              </label>
-              <select
-                className={`form-select form-select-sm ${
-                  formik.touched.country_id && formik.errors.country_id
-                    ? "is-invalid"
-                    : ""
-                }`}
-                {...formik.getFieldProps("country_id")}
-                onChange={(e) => {
-                  formik.handleChange(e);
-                  handleCategorygroupChange(e); // Ensure this function is defined
-                }}
-              >
-                <option value="">Select a Country</option>
-                {allCountry &&
-                  allCountry.map((country) => (
-                    <option key={country.id} value={country.id}>
-                      {country.country_name}
-                    </option>
-                  ))}
-              </select>
-              {formik.touched.country_id && formik.errors.country_id && (
-                <div className="invalid-feedback">
-                  {formik.errors.country_id}
-                </div>
-              )}
             </div>
             <div className="col-md-6 col-12 mb-3">
               <label className="form-label">

@@ -752,6 +752,33 @@ function ProductEdit() {
             </div>
           ) : (
             <div className="row mt-3">
+               <div className="col-md-6 col-12 mb-5">
+                <label className="form-label">
+                  Country<span className="text-danger">*</span>
+                </label>
+                <select
+                  className={`form-select form-select-sm ${
+                    formik.touched.country_id && formik.errors.country_id
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                  {...formik.getFieldProps("country_id")}
+                  onChange={handleCategorygroupChange}
+                >
+                  <option value="">Select a Country</option>
+                  {allCountry &&
+                    allCountry.map((country) => (
+                      <option key={country.id} value={country.id}>
+                        {country.country_name}
+                      </option>
+                    ))}
+                </select>
+                {formik.touched.country_id && formik.errors.country_id && (
+                  <div className="invalid-feedback">
+                    {formik.errors.country_id}
+                  </div>
+                )}
+              </div>
               <div className="col-md-6 col-12 mb-3">
                 <label className="form-label">
                   Category Group<span className="text-danger">*</span>
@@ -1084,33 +1111,6 @@ function ProductEdit() {
                       {formik.errors.stock_quantity}
                     </div>
                   )}
-              </div>
-              <div className="col-md-6 col-12 mb-5">
-                <label className="form-label">
-                  Country<span className="text-danger">*</span>
-                </label>
-                <select
-                  className={`form-select form-select-sm ${
-                    formik.touched.country_id && formik.errors.country_id
-                      ? "is-invalid"
-                      : ""
-                  }`}
-                  {...formik.getFieldProps("country_id")}
-                  onChange={handleCategorygroupChange}
-                >
-                  <option value="">Select a Country</option>
-                  {allCountry &&
-                    allCountry.map((country) => (
-                      <option key={country.id} value={country.id}>
-                        {country.country_name}
-                      </option>
-                    ))}
-                </select>
-                {formik.touched.country_id && formik.errors.country_id && (
-                  <div className="invalid-feedback">
-                    {formik.errors.country_id}
-                  </div>
-                )}
               </div>
               <div className="col-md-6 col-12 mb-5">
                 <label className="form-label">
