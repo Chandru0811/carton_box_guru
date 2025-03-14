@@ -60,7 +60,7 @@ function CountryAdd() {
       phone_number_code: "",
     },
     validationSchema,
-    onSubmit: async (values, { resetForm }) => {
+    onSubmit: async  (values, { resetForm, setErrors }) => {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "social_links") {
@@ -89,6 +89,12 @@ function CountryAdd() {
         if (error.response) {
           if (error.response.status === 422) {
             const errors = error.response.data.error;
+            const apiErrors = error.response.data.errors;
+            const formikErrors = {};
+            Object.keys(apiErrors).forEach((key) => {
+              formikErrors[key] = apiErrors[key].join(" ");
+            });
+            setErrors(formikErrors);
             if (errors) {
               Object.keys(errors).forEach((key) => {
                 errors[key].forEach((errorMsg) => {
