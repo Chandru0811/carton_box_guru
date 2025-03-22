@@ -44,7 +44,6 @@ function CountryAdd() {
     ),
   });
 
-
   const formik = useFormik({
     initialValues: {
       country_name: "",
@@ -58,9 +57,10 @@ function CountryAdd() {
       color_code: "",
       country_code: "",
       phone_number_code: "",
+      default: "",
     },
     validationSchema,
-    onSubmit: async  (values, { resetForm, setErrors }) => {
+    onSubmit: async (values, { resetForm, setErrors }) => {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "social_links") {
@@ -401,7 +401,23 @@ function CountryAdd() {
               </button>
             </div>
 
-            <div className="hstack p-2 mt-5">
+            <div className="hstack d-flex justify-content-between p-2 mt-5">
+              <div className="my-3">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    id="default"
+                    checked={formik.values.default}
+                    onChange={(e) =>
+                      formik.setFieldValue("default", e.target.checked)
+                    }
+                  />
+                  <label className="form-check-label" htmlFor="default">
+                    Select the Country as aDefault
+                  </label>
+                </div>
+              </div>
               <button
                 type="submit"
                 className="btn btn-sm btn-button"

@@ -61,6 +61,7 @@ function CountryEdit() {
       color_code: "",
       country_code: "",
       phone_number_code: "",
+      default: false,
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -73,8 +74,9 @@ function CountryEdit() {
         if (key === "flag" && values.flag instanceof File) {
           formData.append("flag", values.flag);
         } else if (key === "social_links") {
-          // Convert the array of social links into a JSON string
           formData.append(key, JSON.stringify(values[key]));
+        } else if (key === "default") {
+          formData.append(key, values[key] ? "1" : "0");
         } else if (values[key] !== undefined && values[key] !== null) {
           formData.append(key, values[key]);
         }
@@ -158,6 +160,7 @@ function CountryEdit() {
           color_code: data.color_code || "",
           country_code: data.country_code || "",
           phone_number_code: data.phone_number_code || "",
+          default: data.default || false,
         });
 
         if (data.flag) {
@@ -398,45 +401,45 @@ function CountryEdit() {
               </div>
 
               {formik.values.social_links.map((link, index) => (
-              <div className="col-md-6 col-12 mb-3" key={index}>
-                <label className="form-label">Social Links</label>
-                <div className="mb-2 d-flex align-items-center">
-                  <input
-                    type="text"
-                    className="form-control form-control-sm me-2"
-                    value={link.s_icon}
-                    onChange={(e) =>
-                      handleSocialLinkChange(index, "s_icon", e.target.value)
-                    }
-                    placeholder="Enter icon (e.g., fa-solid fa-user)"
-                  />
-                  <input
-                    type="text"
-                    className="form-control form-control-sm me-2"
-                    value={link.s_link}
-                    onChange={(e) =>
-                      handleSocialLinkChange(index, "s_link", e.target.value)
-                    }
-                    placeholder="Enter social link (e.g., https://www.youtube.com)"
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-cbg-primary btn-sm"
-                    onClick={() => deleteSocialLink(index)}
-                  >
-                    Delete
-                  </button>
+                <div className="col-md-6 col-12 mb-3" key={index}>
+                  <label className="form-label">Social Links</label>
+                  <div className="mb-2 d-flex align-items-center">
+                    <input
+                      type="text"
+                      className="form-control form-control-sm me-2"
+                      value={link.s_icon}
+                      onChange={(e) =>
+                        handleSocialLinkChange(index, "s_icon", e.target.value)
+                      }
+                      placeholder="Enter icon (e.g., fa-solid fa-user)"
+                    />
+                    <input
+                      type="text"
+                      className="form-control form-control-sm me-2"
+                      value={link.s_link}
+                      onChange={(e) =>
+                        handleSocialLinkChange(index, "s_link", e.target.value)
+                      }
+                      placeholder="Enter social link (e.g., https://www.youtube.com)"
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-cbg-primary btn-sm"
+                      onClick={() => deleteSocialLink(index)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  {formik.touched.social_links &&
+                    formik.errors.social_links &&
+                    formik.errors.social_links[index] && (
+                      <div className="text-danger">
+                        {formik.errors.social_links[index].s_icon ||
+                          formik.errors.social_links[index].s_link}
+                      </div>
+                    )}
                 </div>
-                {formik.touched.social_links &&
-                  formik.errors.social_links &&
-                  formik.errors.social_links[index] && (
-                    <div className="text-danger">
-                      {formik.errors.social_links[index].s_icon ||
-                        formik.errors.social_links[index].s_link}
-                    </div>
-                  )}
-              </div>
-            ))}
+              ))}
 
               <div className="d-flex justify-content-end align-items-center">
                 <button
@@ -448,7 +451,23 @@ function CountryEdit() {
                 </button>
               </div>
 
-              <div className="hstack p-2 mt-5">
+              <div className="hstack d-flex justify-content-between p-2 mt-5">
+                <div className="my-3">
+                  <div className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="default"
+                      checked={formik.values.default}
+                      onChange={(e) =>
+                        formik.setFieldValue("default", e.target.checked)
+                      }
+                    />
+                    <label className="form-check-label" htmlFor="default">
+                      Set as Default Country
+                    </label>
+                  </div>
+                </div>
                 <button
                   type="submit"
                   className="btn btn-sm btn-button"

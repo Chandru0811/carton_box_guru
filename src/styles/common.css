@@ -3612,13 +3612,13 @@ textarea.form-control-lg {
   filter: brightness(90%);
 }
 .form-check-input:focus {
-  border-color: #5c60f5;
+  border-color: #cd8245 ;
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgba(92, 96, 245, 0.25);
 }
 .form-check-input:checked {
-  background-color: #5c60f5;
-  border-color: #5c60f5;
+  background-color: #cd8245;
+  border-color: #cd8245;
 }
 .form-check-input:checked[type="checkbox"] {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23FFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
